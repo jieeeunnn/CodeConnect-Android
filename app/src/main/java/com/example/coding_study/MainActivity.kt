@@ -3,12 +3,14 @@ package com.example.coding_study
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.example.coding_study.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class MainActivity : AppCompatActivity() {
@@ -20,8 +22,8 @@ class MainActivity : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://localhost:8080/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val loginService = retrofit.create(LoginService::class.java)
@@ -32,17 +34,21 @@ class MainActivity : AppCompatActivity() {
             val email = binding.editEmail.toString()
             val password = binding.editPassword.toString()
 
+            val loginRequest = LoginRequest(email, password)
 
-            loginService.requestLogin(email, password).enqueue(object: Callback<LoginResponse> {
+            loginService.requestLogin(loginRequest).enqueue(object: Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) { // 통신에 성공했을 때
                     if (response.isSuccessful) {
                         val loginResponse = response.body() // 서버에서 받아온 응답 데이터
-                        if (loginResponse?.success == true && loginResponse.user != null) {
+                        val code = response.code()
+                        Log.e("login", "is : ${response.body()}")
+                        Log.e("response code", "is : $code")
+                        if (loginResponse?.result == true && loginResponse.Member != null) {
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java)
                             startActivity(nextIntent)
                         }
                     } else {
-                        // 서버로부터 응답이 실패한 경우
+                         //서버로부터 응답이 실패한 경우
                         LoginDialogFragment().show(supportFragmentManager,"")
                     }
                 }

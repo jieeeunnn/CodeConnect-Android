@@ -1,6 +1,7 @@
 package com.example.coding_study
 
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -9,10 +10,10 @@ import retrofit2.http.POST
 //서버를 호출했을 때 받아오는 응답 값
 data class LoginResponse (
     //변수명이 JSON에 있는 키값과 같아야함
-    var success: Boolean,
+    var result: Boolean,
     var email : String,
     var password : String,
-    val user: User? // 로그인 정보가 틀렸거나 회원 정보가 없는 경우 User 객체는 null이 됨
+    val Member: User? // 로그인 정보가 틀렸거나 회원 정보가 없는 경우 User 객체는 null이 됨
     )
 
 data class User (
@@ -20,13 +21,15 @@ data class User (
     var password: String = "",
     var passwordCheck: String = "",
     var nickname: String = "",
-    var createMemberTime: String = "",
-    var address: String = "",
+    var city: String = "",
+    var state: String= "",
+    var street: String = "",
     var field: String = ""
 )
 
 
 //input
+/*
 interface LoginService {
     //input 정의
     @FormUrlEncoded
@@ -36,5 +39,20 @@ interface LoginService {
         @Field("password") password:String
     ) : Call<LoginResponse> // output 정의
 }
+
+
+ */
+
+
+interface LoginService {
+    @POST("members/signIn")
+    fun requestLogin(@Body loginrequest: LoginRequest): Call<LoginResponse>
+}
+
+// 요청 데이터
+data class LoginRequest(
+    val email: String,
+    val password: String
+    )
 
 
