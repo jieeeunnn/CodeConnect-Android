@@ -5,15 +5,18 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import java.util.*
 
 //output
 //서버를 호출했을 때 받아오는 응답 값
 data class LoginResponse (
     //변수명이 JSON에 있는 키값과 같아야함
     var result: Boolean,
-    var email : String,
-    var password : String,
-    val Member: User? // 로그인 정보가 틀렸거나 회원 정보가 없는 경우 User 객체는 null이 됨
+    //var email : String,
+    //var password : String,
+    //val Member: User? // 로그인 정보가 틀렸거나 회원 정보가 없는 경우 User 객체는 null이 됨
+    var message: String,
+    var data: String
     )
 
 data class User (

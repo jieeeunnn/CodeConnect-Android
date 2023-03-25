@@ -31,10 +31,12 @@ class MainActivity : AppCompatActivity() {
 
         //로그인 버튼 누를 때
         binding.logButton.setOnClickListener {
-            val email = binding.editEmail.toString()
-            val password = binding.editPassword.toString()
+            val email = binding.editEmail.text.toString()
+            val password = binding.editPassword.text.toString()
 
             val loginRequest = LoginRequest(email, password)
+
+            Log.e("Login", "email: $email, password: $password")
 
             loginService.requestLogin(loginRequest).enqueue(object: Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) { // 통신에 성공했을 때
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                         val code = response.code()
                         Log.e("login", "is : ${response.body()}")
                         Log.e("response code", "is : $code")
-                        if (loginResponse?.result == true && loginResponse.Member != null) {
+                        if (loginResponse?.result == true ) { //&& loginResponse.Member != null
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java)
                             startActivity(nextIntent)
                         }
