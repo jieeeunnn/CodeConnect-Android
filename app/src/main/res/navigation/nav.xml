@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav"
+    app:startDestination="@id/studyFragment">
+
+    <fragment
+        android:id="@+id/studyFragment"
+        android:name="com.example.coding_study.StudyFragment"
+        android:label="StudyFragment" >
+        <action
+            android:id="@+id/action_studyFragment_to_studyUpload"
+            app:destination="@id/studyUpload" />
+    </fragment>
+    <fragment
+        android:id="@+id/qnAFragment"
+        android:name="com.example.coding_study.QnAFragment"
+        android:label="QnAFragment" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.coding_study.ChatFragment"
+        android:label="ChatFragment" />
+    <fragment
+        android:id="@+id/mypageFragment"
+        android:name="com.example.coding_study.MypageFragment"
+        android:label="MypageFragment" />
+    <fragment
+        android:id="@+id/writeStudyFragment"
+        android:name="com.example.coding_study.WriteStudyFragment"
+        android:label="WriteStudyFragment" />
+    <fragment
+        android:id="@+id/studyUpload"
+        android:name="com.example.coding_study.StudyUpload"
+        android:label="StudyUpload" />
+</navigation>

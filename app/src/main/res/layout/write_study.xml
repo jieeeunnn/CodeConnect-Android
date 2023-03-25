@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent" >
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <EditText
+        android:id="@+id/editTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:ems="15"
+        android:hint="제목"
+        android:inputType="textPersonName"
+        android:textColor="#515151"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.608"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editContent"
+        android:layout_width="wrap_content"
+        android:layout_height="286dp"
+        android:layout_marginTop="16dp"
+        android:ems="15"
+        android:gravity="start|top"
+        android:hint="내용을 입력하세요"
+        android:inputType="textMultiLine"
+        android:lines="15"
+        android:textColor="#515151"
+        app:layout_constraintStart_toStartOf="@+id/spinner"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    <EditText
+        android:id="@+id/editNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="모집인원"
+        android:inputType="number"
+        android:textColor="#515151"
+        app:layout_constraintStart_toStartOf="@+id/editTitle"
+        app:layout_constraintTop_toBottomOf="@+id/editTitle" />
+
+    <Button
+        android:id="@+id/buttonUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="80dp"
+        android:backgroundTint="#CFDCFF"
+        android:text="완료"
+        android:textColor="#515151"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editContent"
+        app:layout_constraintVertical_bias="0.184" />
+
+    <Button
+        android:id="@+id/upButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="#CFDCFF"
+        android:text="+"
+        android:textColor="#515151"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/downButton"
+        app:layout_constraintStart_toEndOf="@+id/downButton" />
+
+    <Button
+        android:id="@+id/downButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:backgroundTint="#CFDCFF"
+        android:text="-"
+        android:textColor="#515151"
+        app:layout_constraintBottom_toBottomOf="@+id/editNumber"
+        app:layout_constraintStart_toEndOf="@+id/editNumber" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/editNumber"
+        app:layout_constraintTop_toBottomOf="@+id/editNumber" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".JoinActivity">
+
+    <EditText
+        android:id="@+id/editTextEmailAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textEmail"
+        app:layout_constraintStart_toEndOf="@+id/textEmail" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textPwd"
+        app:layout_constraintStart_toEndOf="@+id/textPwd" />
+
+    <TextView
+        android:id="@+id/textEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="E-mail"
+        android:textColor="#515151"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textId"
+        app:layout_constraintTop_toBottomOf="@+id/textId" />
+
+    <TextView
+        android:id="@+id/textPwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Password"
+        android:textColor="#515151"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textEmail"
+        app:layout_constraintTop_toBottomOf="@+id/textEmail" />
+
+    <TextView
+        android:id="@+id/textArea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="지역"
+        android:textColor="#515151"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textPwd"
+        app:layout_constraintTop_toBottomOf="@+id/textPwd" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="관심사를 골라주세요"
+        android:textColor="#515151"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textArea"
+        app:layout_constraintTop_toBottomOf="@+id/textArea" />
+
+    <Button
+        android:id="@+id/joinButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:backgroundTint="#CFDCFF"
+        android:text="가입하기"
+        android:textColor="#515151"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.widget.Button
+        android:id="@+id/button2"
+        android:layout_width="95dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="안드로이드"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <android.widget.Button
+        android:id="@+id/button3"
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="ios"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+        app:layout_constraintStart_toEndOf="@+id/button2" />
+
+    <android.widget.Button
+        android:id="@+id/button4"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="알고리즘"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button3"
+        app:layout_constraintStart_toEndOf="@+id/button3" />
+
+    <android.widget.Button
+        android:id="@+id/button5"
+        android:layout_width="110dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="데이터베이스"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintStart_toStartOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+    <android.widget.Button
+        android:id="@+id/button6"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="운영체제"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button5"
+        app:layout_constraintStart_toEndOf="@+id/button5" />
+
+    <android.widget.Button
+        android:id="@+id/button7"
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="서버"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button6"
+        app:layout_constraintStart_toEndOf="@+id/button6" />
+
+    <android.widget.Button
+        android:id="@+id/button8"
+        android:layout_width="45dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="웹"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintStart_toStartOf="@+id/button5"
+        app:layout_constraintTop_toBottomOf="@+id/button5" />
+
+    <android.widget.Button
+        android:id="@+id/button9"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="머신러닝"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button8"
+        app:layout_constraintStart_toEndOf="@+id/button8" />
+
+    <android.widget.Button
+        android:id="@+id/button10"
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="기타"
+        android:textAlignment="center"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button9"
+        app:layout_constraintStart_toEndOf="@+id/button9" />
+
+    <EditText
+        android:id="@+id/editAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textArea"
+        app:layout_constraintStart_toEndOf="@+id/textArea" />
+
+    <TextView
+        android:id="@+id/textId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:text="ID"
+        android:textColor="#515151"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textId"
+        app:layout_constraintStart_toEndOf="@+id/textId" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

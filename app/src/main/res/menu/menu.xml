@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/studyFragment"
+        android:icon="@drawable/ic_baseline_book_24"
+        android:title="Study" />
+    <item
+        android:id="@+id/qnAFragment"
+        android:icon="@drawable/ic_baseline_question_answer_24"
+        android:title="QnA" />
+    <item
+        android:id="@+id/chatFragment"
+        android:icon="@drawable/ic_baseline_chat_24"
+        android:title="Chat" />
+    <item
+        android:id="@+id/mypageFragment"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="Mypage" />
+</menu>
