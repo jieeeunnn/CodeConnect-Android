@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                         val code = response.code()
                         Log.e("login", "is : ${response.body()}")
                         Log.e("response code", "is : $code")
-                        if (loginResponse?.result == true ) { //&& loginResponse.Member != null
+                        if (loginResponse?.result == true && loginResponse.data != null) {
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java)
                             startActivity(nextIntent)
                         }

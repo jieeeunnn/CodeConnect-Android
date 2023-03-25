@@ -37,6 +37,16 @@ class ErrorDialogFragment : DialogFragment() {
     }
 }
 
+class JoinDialogFragment : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext()).apply {
+            setTitle("회원가입 실패")
+            setMessage("모든 값을 입력했는지 확인하세요")
+            setPositiveButton("확인") {dialog, id -> println("JoinDialogFragment 확인")}
+        }.create()
+    }
+}
+
 
 class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판 fragment
 
