@@ -1,8 +1,6 @@
 package com.example.coding_study
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
@@ -12,10 +10,10 @@ class StudyAdapter(private val viewModel: MyViewModel) : RecyclerView.Adapter<St
                                                                                                                     // 대신 ViewHolder 내에서 StudyAdapter의 속성들(viewModel)에 접근할 수 있음
         fun setContents(pos: Int) { // 실제로 데이터를 집어넣는 부분
             with(viewModel.items[pos]) { // viewModel에서 위치(pos)에 해당하는 데이터를 가져옴
-                binding.idTextView.text = id
+                binding.idTextView.text = nickname
                 binding.titleTextView.text = title
                 binding.contentTextView.text = content
-                binding.filterTextView.text = filter
+                binding.fieldTextView.text = field
                 binding.numberTextView.text = num
             }
             binding.root.setOnClickListener{ // itemClickEvent는 MultableLiveData

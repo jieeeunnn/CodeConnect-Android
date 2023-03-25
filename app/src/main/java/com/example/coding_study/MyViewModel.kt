@@ -3,7 +3,7 @@ package com.example.coding_study
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-data class Item(val id: String, val title: String, val content: String, val filter: String, val num: String)
+data class Item(val nickname: String, val title: String, val content: String, val field: String, val num: String)
 
 class MyViewModel : ViewModel() {
     val items = ArrayList<Item>()

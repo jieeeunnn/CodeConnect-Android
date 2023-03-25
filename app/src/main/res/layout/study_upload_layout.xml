@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterTextView"
+        app:layout_constraintTop_toBottomOf="@+id/fieldTextView"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -59,11 +59,11 @@
         app:layout_constraintTop_toBottomOf="@+id/idTextView" />
 
     <TextView
-        android:id="@+id/filterTextView"
+        android:id="@+id/fieldTextView"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
         android:layout_marginTop="24dp"
-        android:text="filter"
+        android:text="field"
         android:textColor="#515151"
         app:layout_constraintStart_toStartOf="@+id/contentTextView"
         app:layout_constraintTop_toBottomOf="@+id/contentTextView" />

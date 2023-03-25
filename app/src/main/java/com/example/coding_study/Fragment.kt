@@ -1,51 +1,14 @@
 package com.example.coding_study
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.view.View
 import com.example.coding_study.databinding.*
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.activity.viewModels
 import androidx.fragment.app.*
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlin.math.log
-
-class LoginDialogFragment : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext()).apply {
-            setTitle("로그인 실패")
-            setMessage("아이디, 비밀번호를 확인하세요")
-            setPositiveButton("확인") {dialog, id -> println("LoginDialogFragment 확인")}
-        }.create()
-    }
-}
-
-class ErrorDialogFragment : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext()).apply {
-            setTitle("서버 연결 실패")
-            setMessage("서버 연결을 확인하세요")
-            setPositiveButton("확인") {dialog, id -> println("ErrorDialogFragment 확인")}
-        }.create()
-    }
-}
-
-class JoinDialogFragment : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext()).apply {
-            setTitle("회원가입 실패")
-            setMessage("모든 값을 입력했는지 확인하세요")
-            setPositiveButton("확인") {dialog, id -> println("JoinDialogFragment 확인")}
-        }.create()
-    }
-}
 
 
 class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판 fragment
@@ -118,7 +81,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
         binding.spinner.adapter = adapter // spinner와 adapter를 연결하여 spinner는 ArrayAdapter 안에 있는 filters 중에서 선택 가능
 
         if (clickedItemPos >= 0) { // 생성자 인자로 받은 clickedItemPos가 0보다 크면 해당 데이터를 찾아서 위젯 내용 초기화
-            val f = viewModel.items[clickedItemPos].filter
+            val f = viewModel.items[clickedItemPos].field
             val s = filters.indexOf(f)
             binding.spinner.setSelection(s) // 스피너 선택 값 초기화
 
@@ -133,10 +96,10 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
         binding.spinner.setSelection(0)
 
         binding.buttonUpload.setOnClickListener{
-            val filter = binding.spinner.selectedItem as String // 스피너 선택 값 가져오기
-            val id = "hansung"
-            val item = Item(id, binding.editTitle.text.toString(),
-                binding.editContent.text.toString(), filter, binding.editNumber.text.toString())
+            val field = binding.spinner.selectedItem as String // 스피너 선택 값 가져오기
+            val nickname = "hansung"
+            val item = Item(nickname, binding.editTitle.text.toString(),
+                binding.editContent.text.toString(), field, binding.editNumber.text.toString())
 
             if (clickedItemPos < 0) {
                 viewModel.addItem(item)
@@ -144,7 +107,6 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
                 }
             else
                 viewModel.updateItem(item, clickedItemPos)
-
         }
 
     }
