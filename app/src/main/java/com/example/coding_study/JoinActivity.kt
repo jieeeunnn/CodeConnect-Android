@@ -26,10 +26,9 @@ class JoinActivity : AppCompatActivity() {
 
         val joinService = retrofit.create(JoinService::class.java)
 
-        binding.editAddress1.setOnClickListener{
-            val fragment = JoinAddressFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
-
+        binding.textAddress.setOnClickListener{
+            val nextIntent = Intent(this@JoinActivity, JoinAddressActivity::class.java)
+            startActivity(nextIntent) // SecondActivity (스터디 게시글 화면) 창으로 이동
         }
 
         binding.buttonAndroid.setOnClickListener{

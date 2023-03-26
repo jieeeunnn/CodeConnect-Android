@@ -36,15 +36,17 @@ class MainActivity : AppCompatActivity() {
 
             val loginRequest = LoginRequest(email, password)
 
-            Log.e("Login", "email: $email, password: $password")
+            Log.e("Login", "email: $email, password: $password") // 내가 보낸 data Log 출력
 
             loginService.requestLogin(loginRequest).enqueue(object: Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) { // 통신에 성공했을 때
                     if (response.isSuccessful) {
+
                         val loginResponse = response.body() // 서버에서 받아온 응답 데이터
-                        val code = response.code()
-                        Log.e("login", "is : ${response.body()}")
-                        Log.e("response code", "is : $code")
+                        val code = response.code() // 서버 응답 코드
+                        Log.e("login", "is : ${response.body()}") // 서버에서 받아온 응답 데이터 log 출력
+                        Log.e("response code", "is : $code") // 서버 응답 코드 log 출력
+
                         if (loginResponse?.result == true && loginResponse.data != null) {
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java)
                             startActivity(nextIntent)

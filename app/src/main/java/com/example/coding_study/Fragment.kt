@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.*
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 
 
@@ -35,7 +36,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
 class QnAFragment : Fragment(R.layout.qna_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //val binding = QnaFragmentBinding.bind(view)
-
     }
 }
 

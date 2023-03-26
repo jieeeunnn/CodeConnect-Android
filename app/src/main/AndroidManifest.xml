@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Coding_Study"
         android:usesCleartextTraffic="true">
-        <activity android:name=".JoinActivity"></activity>
+        <activity android:name=".JoinAddressActivity"></activity>
+        <activity android:name=".JoinActivity" />
         <activity android:name=".SecondActivity" />
         <activity
             android:name=".MainActivity"
