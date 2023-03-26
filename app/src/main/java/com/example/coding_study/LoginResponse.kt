@@ -25,7 +25,6 @@ data class member (
     var createMemberTime : String = "",
     var city: String = "",
     var state: String= "",
-    var street: String = "",
     var field: String = ""
 )
 

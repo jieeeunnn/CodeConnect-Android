@@ -38,6 +38,8 @@ android {
 }
 
 dependencies {
+    kapt "com.android.databinding:compiler:3.1.4"
+
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0' // 로그를 남기기 위한 라이브러리
 
     //retrofit 통신을 위한 라이브러리
@@ -46,6 +48,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-moshi:2.1.0'
     implementation 'com.android.volley:volley:1.1.0' //volley 라이브러리 추가
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+
+    implementation 'androidx.cardview:cardview:1.0.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'

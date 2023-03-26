@@ -10,8 +10,20 @@ data class JoinResponse (
     //변수명이 JSON에 있는 키값과 같아야함
     var result: Boolean,
     var message: String,
-    var data: member? // 로그인 정보가 틀렸거나 회원 정보가 없는 경우 member 객체는 null이 됨
+    var data: savedMember? // 로그인 정보가 틀렸거나 회원 정보가 없는 경우 member 객체는 null이 됨
 )
+
+data class savedMember (
+    var email: String = "",
+    var password: String = "",
+    var passwordCheck: String = "",
+    var nickname: String = "",
+    var createMemberTime : String = "",
+    var city: String = "",
+    var state: String= "",
+    var field: String = ""
+)
+
 
 //input
 interface JoinService {

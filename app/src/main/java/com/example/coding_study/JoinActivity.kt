@@ -26,6 +26,12 @@ class JoinActivity : AppCompatActivity() {
 
         val joinService = retrofit.create(JoinService::class.java)
 
+        binding.editAddress1.setOnClickListener{
+            val fragment = JoinAddressFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+
+        }
+
         binding.buttonAndroid.setOnClickListener{
             field = "ANDROID"
         }
@@ -54,7 +60,6 @@ class JoinActivity : AppCompatActivity() {
             field = "ETC"
         }
 
-
         // 가입하기 버튼을 누를 때
         binding.joinButton2.setOnClickListener{
             val nickname = binding.editNickname.text.toString()
@@ -67,14 +72,18 @@ class JoinActivity : AppCompatActivity() {
             val joinRequest = JoinRequest(email, password, passwordCheck, nickname, state, city, field.toString())
 
             Log.e("Login", "email: $email, password: $password, passwordCheck: $passwordCheck, " +
-                    "nickname: $nickname, address1: $state, address2: $city, field: $field")
+                    "nickname: $nickname, state: $state, city: $city, field: $field")
 
 
             joinService.requestJoin(joinRequest).enqueue(object: Callback<JoinResponse> {
                 override fun onResponse(call: Call<JoinResponse>, response: Response<JoinResponse>) { // 통신에 성공했을 때
+
+                    val code = response.code() // 서버 응답 코드
+                    Log.e("Join", "no response")
+                    Log.e("response code", "is : $code")
+
                     if (response.isSuccessful) {
                         val joinResponse = response.body() // 서버에서 받아온 응답 데이터
-                        val code = response.code() // 서버 응답 코드
 
                         Log.e("Join", "is : ${response.body()}")
                         Log.e("response code", "is : $code")
