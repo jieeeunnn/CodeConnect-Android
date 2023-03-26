@@ -23,9 +23,10 @@ interface JoinService {
 data class JoinRequest(
     val email: String,
     val password: String,
+    val passwordCheck: String,
     val nickname: String,
-    val address1: String,
-    val address2: String,
+    val state: String,
+    val city: String,
     val field: String
 )
 

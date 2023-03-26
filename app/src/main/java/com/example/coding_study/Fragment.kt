@@ -29,7 +29,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
         viewModel.itemsLiveData.observe(this) {
             adapter.notifyDataSetChanged() // 데이터 전체가 바뀌었음을 알려줌
         }
-
     }
 }
 

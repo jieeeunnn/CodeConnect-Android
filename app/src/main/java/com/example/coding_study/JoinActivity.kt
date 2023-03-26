@@ -60,21 +60,25 @@ class JoinActivity : AppCompatActivity() {
             val nickname = binding.editNickname.text.toString()
             val email = binding.editEmailAddress.text.toString()
             val password = binding.editTextPassword.text.toString()
-            val address1 = binding.editAddress1.text.toString()
-            val address2 = binding.editAddress2.text.toString()
+            val passwordCheck = binding.editPwdCheck.text.toString()
+            val state = binding.editAddress1.text.toString()
+            val city = binding.editAddress2.text.toString()
 
-            val joinRequest = JoinRequest(email, password, nickname, address1, address2, field.toString())
+            val joinRequest = JoinRequest(email, password, passwordCheck, nickname, state, city, field.toString())
 
-            Log.e("Login", "email: $email, password: $password, nickname: $nickname, address1: $address1, address2: $address2, field: $field")
+            Log.e("Login", "email: $email, password: $password, passwordCheck: $passwordCheck, " +
+                    "nickname: $nickname, address1: $state, address2: $city, field: $field")
 
 
             joinService.requestJoin(joinRequest).enqueue(object: Callback<JoinResponse> {
                 override fun onResponse(call: Call<JoinResponse>, response: Response<JoinResponse>) { // 통신에 성공했을 때
                     if (response.isSuccessful) {
                         val joinResponse = response.body() // 서버에서 받아온 응답 데이터
-                        val code = response.code()
+                        val code = response.code() // 서버 응답 코드
+
                         Log.e("Join", "is : ${response.body()}")
                         Log.e("response code", "is : $code")
+
                         if (joinResponse?.result == true && joinResponse.data != null) {
                             val nextIntent = Intent(this@JoinActivity, SecondActivity::class.java)
                             startActivity(nextIntent) // SecondActivity (스터디 게시글 화면) 창으로 이동
