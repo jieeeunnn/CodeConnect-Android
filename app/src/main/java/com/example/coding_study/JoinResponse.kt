@@ -16,7 +16,6 @@ data class JoinResponse (
 data class savedMember (
     var email: String = "",
     var password: String = "",
-    var passwordCheck: String = "",
     var nickname: String = "",
     var createMemberTime : String = "",
     var city: String = "",

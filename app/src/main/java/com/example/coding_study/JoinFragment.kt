@@ -1,23 +1,30 @@
 package com.example.coding_study
-/*
+
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.coding_study.databinding.ActivityJoinBinding
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.coding_study.databinding.JoinFragmentBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class JoinActivity : AppCompatActivity() {
+class JoinFragment : Fragment(R.layout.join_fragment) {
+    private lateinit var binding: JoinFragmentBinding
     private var field: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityJoinBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = JoinFragmentBinding.inflate(inflater, container, false)
+
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://223.194.157.117:8080/")
@@ -26,42 +33,49 @@ class JoinActivity : AppCompatActivity() {
 
         val joinService = retrofit.create(JoinService::class.java)
 /*
-        binding.textAddress.setOnClickListener{
-            val nextIntent = Intent(this@JoinActivity, JoinAddressActivity::class.java)
-            startActivity(nextIntent) // SecondActivity (스터디 게시글 화면) 창으로 이동
+        binding.textAddress.setOnClickListener {
+            val nextIntent = Intent(requireContext(), JoinAddressActivity::class.java)
+            startActivity(nextIntent)
         }
 
  */
 
-        binding.buttonAndroid.setOnClickListener{
+        binding.buttonAndroid.setOnClickListener {
             field = "ANDROID"
         }
-        binding.buttonIos.setOnClickListener{
+
+        binding.buttonIos.setOnClickListener {
             field = "IOS"
         }
-        binding.buttonAlgorithm.setOnClickListener{
+
+        binding.buttonAlgorithm.setOnClickListener {
             field = "ALGORITHM"
         }
-        binding.buttonDatabase.setOnClickListener{
+
+        binding.buttonDatabase.setOnClickListener {
             field = "DATABASE"
         }
-        binding.buttonOs.setOnClickListener{
+
+        binding.buttonOs.setOnClickListener {
             field = "OS"
         }
-        binding.buttonServer.setOnClickListener{
+
+        binding.buttonServer.setOnClickListener {
             field = "SERVER"
         }
-        binding.buttonWeb.setOnClickListener{
+
+        binding.buttonWeb.setOnClickListener {
             field = "WEB"
         }
-        binding.buttonMachine.setOnClickListener{
+
+        binding.buttonMachine.setOnClickListener {
             field = "MACHINE_LEARNING"
         }
-        binding.buttonEtc.setOnClickListener{
+
+        binding.buttonEtc.setOnClickListener {
             field = "ETC"
         }
 
-        // 가입하기 버튼을 누를 때
         binding.joinButton2.setOnClickListener{
             val nickname = binding.editNickname.text.toString()
             val email = binding.editEmailAddress.text.toString()
@@ -88,23 +102,29 @@ class JoinActivity : AppCompatActivity() {
                         Log.e("Join", "is : ${response.body()}")
 
                         if (joinResponse?.result == true && joinResponse.data != null) {
-                            val nextIntent = Intent(this@JoinActivity, SecondActivity::class.java)
-                            startActivity(nextIntent) // SecondActivity (스터디 게시글 화면) 창으로 이동
+                            val nextIntent = Intent(requireActivity(), SecondActivity::class.java)
+                            startActivity(nextIntent)
+
+                            //val nextIntent = Intent(this@JoinFragment, SecondActivity::class.java)
+                            //startActivity(nextIntent) // SecondActivity (스터디 게시글 화면) 창으로 이동
                         }
                     } else {
                         //서버로부터 응답이 실패한 경우
-                        JoinDialogFragment().show(supportFragmentManager,"JoinDialogFragment")
+                        JoinDialogFragment().show(childFragmentManager, "JoinDialogFragment")
+
+                        //JoinDialogFragment().show(supportFragmentManager,"JoinDialogFragment")
                     }
                 }
 
                 override fun onFailure(call: Call<JoinResponse>, t: Throwable) { // 통신에 실패했을 때
-                    ErrorDialogFragment().show(supportFragmentManager, "Join_ErrorDialogFragment")
+                    ErrorDialogFragment().show(childFragmentManager, "Join_ErrorDialogFragment")
+
+
+                    //ErrorDialogFragment().show(supportFragmentManager, "Join_ErrorDialogFragment")
                 }
             })
         }
+
+        return binding.root
     }
-
-
 }
-
- */

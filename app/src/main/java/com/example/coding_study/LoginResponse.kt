@@ -14,13 +14,18 @@ data class LoginResponse (
     //var password : String,
     //val Member: User? // 로그인 정보가 틀렸거나 회원 정보가 없는 경우 User 객체는 null이 됨
     var message: String,
-    var data: member?
+    var data: SignInResponseDto?
     )
 
-data class member (
+data class SignInResponseDto (
+    val token: String,
+    val exprTime: Int,
+    val member: Member
+)
+
+data class Member (
     var email: String = "",
     var password: String = "",
-    var passwordCheck: String = "",
     var nickname: String = "",
     var createMemberTime : String = "",
     var city: String = "",
