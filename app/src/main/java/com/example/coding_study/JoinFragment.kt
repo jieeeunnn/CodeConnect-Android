@@ -7,16 +7,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.coding_study.databinding.JoinFragmentBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import androidx.navigation.fragment.NavHostFragment
+
+
 
 class JoinFragment : Fragment(R.layout.join_fragment) {
     private lateinit var binding: JoinFragmentBinding
     private var field: String? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,18 +34,33 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://223.194.157.117:8080/")
+            .baseUrl("http://112.154.249.74:8081/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val joinService = retrofit.create(JoinService::class.java)
+
+
+        binding.textAddress.setOnClickListener {
+            val joinaddressFragment = AddressFragment()
+
+            childFragmentManager.beginTransaction()
+                .add(R.id.join_fragment, joinaddressFragment, "JOIN_FRAGMENT")
+                .addToBackStack("JOIN_FRAGMENT")
+                .commit()
+
+        }
+
 /*
         binding.textAddress.setOnClickListener {
-            val nextIntent = Intent(requireContext(), JoinAddressActivity::class.java)
-            startActivity(nextIntent)
+            val navController = Navigation.findNavController(view)
+            //val navController = findNavController()
+            navController.navigate(R.id.action_joinFragment_to_addressFragment)
         }
 
  */
+
+
 
         binding.buttonAndroid.setOnClickListener {
             field = "ANDROID"
@@ -124,7 +146,7 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
                 }
             })
         }
-
+        print("onCreateView")
         return binding.root
     }
 }

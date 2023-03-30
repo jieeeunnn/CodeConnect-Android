@@ -1,12 +1,12 @@
 package com.example.coding_study
-/*
+
 import com.beust.klaxon.*
 import com.squareup.moshi.Json
 
 private val klaxon = Klaxon()
 
 data class Welcome7 (
-    val response: Response
+    val response: Response<Any?>
 ) {
     public fun toJson() = klaxon.toJsonString(this)
 
@@ -15,7 +15,7 @@ data class Welcome7 (
     }
 }
 
-data class Response (
+data class Response<T>(
     val service: Service,
     val status: String,
     val record: Record,
@@ -72,4 +72,3 @@ data class Service (
 )
 
 
- */

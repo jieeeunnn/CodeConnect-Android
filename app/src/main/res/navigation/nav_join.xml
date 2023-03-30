@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_join">
+    <fragment
+        android:id="@+id/joinFragment"
+        android:name="com.example.coding_study.JoinFragment"
+        android:label="JoinFragment" >
+        <action
+            android:id="@+id/action_joinFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.coding_study.AddressFragment"
+        android:label="AddressFragment" />
+</navigation>

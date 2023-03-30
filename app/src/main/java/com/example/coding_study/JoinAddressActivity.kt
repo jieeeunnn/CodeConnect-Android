@@ -9,7 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.beust.klaxon.Klaxon
-import com.example.coding_study.databinding.ActivityJoinAddressBinding
+import com.example.coding_study.databinding.AddressFragmentBinding
 import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,7 +21,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import java.net.URLEncoder
 import kotlin.collections.forEach
-/*
+
 interface AddressService {
     @GET("search/address")
     fun searchAddress(
@@ -38,9 +38,7 @@ data class Address(
 )
 
 
- */
 
-/*
 class AddressSearchHelper {
     //private val api = "http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADEMD_INFO&key=D3D9E0D0-062C-35F0-A49D-FC9E863B3AD5&format=json&geometry=false&attrFilter=emd_kor_nm:like:{읍/면/동}"
     //private val apiKey = "YOUR_API_KEY"
@@ -83,7 +81,7 @@ class AddressSearchHelper {
     }
 }
 
- */
+
 
 
 class AddressSearchHelper {
@@ -150,11 +148,11 @@ class JoinAddressActivity : AppCompatActivity() {
 
     private val addressSearchHelper = AddressSearchHelper()
 
-    private lateinit var binding: ActivityJoinAddressBinding
+    private lateinit var binding: AddressFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityJoinAddressBinding.inflate(layoutInflater)
+        binding = AddressFragmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         searchView = findViewById(R.id.searchView)
@@ -192,7 +190,7 @@ class JoinAddressActivity : AppCompatActivity() {
     }
 
 
-        /*
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.example.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -238,9 +236,7 @@ class JoinAddressActivity : AppCompatActivity() {
                 return true
             }
         })
-
-         */
     }
-//}
 
  */
+

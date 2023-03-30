@@ -11,7 +11,6 @@ import androidx.fragment.app.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 
-
 class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판 fragment
 
     private val viewModel by viewModels<MyViewModel>()
@@ -23,13 +22,16 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
         //findNavController().navigate(R.id.action_studyFragment_to_studyUpload) // studyUpload fragment로 이동
         }
 
+        /*
         val adapter = StudyAdapter(viewModel) // StudyAdapter 객체를 만듬
         binding.recyclerView.adapter = adapter // recyclerView와 StudyAdapter 연결
         binding.recyclerView.layoutManager = LinearLayoutManager(context) // 어떤 layout을 사용할 것인지 결정
 
-        viewModel.itemsLiveData.observe(this) {
+        viewModel.itemsLiveData.observe(viewLifecycleOwner) {
             adapter.notifyDataSetChanged() // 데이터 전체가 바뀌었음을 알려줌
         }
+
+         */
     }
 }
 

@@ -3,19 +3,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/join_fragment_container"
+    android:id="@+id/join_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/white"
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
 
     <EditText
         android:id="@+id/editEmailAddress"
@@ -95,7 +89,8 @@
         android:textColor="#515151"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonAndroid"
@@ -108,7 +103,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonIos"
@@ -121,7 +117,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonAndroid"
-        app:layout_constraintStart_toEndOf="@+id/buttonAndroid" />
+        app:layout_constraintStart_toEndOf="@+id/buttonAndroid"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonAlgorithm"
@@ -134,7 +131,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonIos"
-        app:layout_constraintStart_toEndOf="@+id/buttonIos" />
+        app:layout_constraintStart_toEndOf="@+id/buttonIos"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonDatabase"
@@ -147,7 +145,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintStart_toStartOf="@+id/buttonAndroid"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAndroid" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonAndroid"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonOs"
@@ -160,7 +159,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonDatabase"
-        app:layout_constraintStart_toEndOf="@+id/buttonDatabase" />
+        app:layout_constraintStart_toEndOf="@+id/buttonDatabase"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonServer"
@@ -173,7 +173,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonOs"
-        app:layout_constraintStart_toEndOf="@+id/buttonOs" />
+        app:layout_constraintStart_toEndOf="@+id/buttonOs"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonWeb"
@@ -186,7 +187,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintStart_toStartOf="@+id/buttonDatabase"
-        app:layout_constraintTop_toBottomOf="@+id/buttonDatabase" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonDatabase"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonMachine"
@@ -199,7 +201,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonWeb"
-        app:layout_constraintStart_toEndOf="@+id/buttonWeb" />
+        app:layout_constraintStart_toEndOf="@+id/buttonWeb"
+        android:stateListAnimator="@null"/>
 
     <android.widget.Button
         android:id="@+id/buttonEtc"
@@ -212,7 +215,8 @@
         android:textAlignment="center"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonMachine"
-        app:layout_constraintStart_toEndOf="@+id/buttonMachine" />
+        app:layout_constraintStart_toEndOf="@+id/buttonMachine"
+        android:stateListAnimator="@null"/>
 
     <EditText
         android:id="@+id/editAddress1"
@@ -224,7 +228,8 @@
         android:textColor="#515151"
         android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textAddress"
-        app:layout_constraintStart_toEndOf="@+id/textAddress" />
+        app:layout_constraintStart_toEndOf="@+id/textAddress"
+        />
 
     <TextView
         android:id="@+id/textNickname"

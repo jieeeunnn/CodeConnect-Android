@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/mainLayout"
     tools:context=".MainActivity">
+
 
     <TextView
         android:id="@+id/textView"
@@ -56,7 +58,8 @@
         android:text="로그인"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/joinButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:stateListAnimator="@null"/>
 
     <Button
         android:id="@+id/joinButton"
@@ -70,6 +73,7 @@
         app:layout_constraintEnd_toStartOf="@+id/logButton"
         app:layout_constraintHorizontal_bias="0.98"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editPassword"
+        android:stateListAnimator="@null"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

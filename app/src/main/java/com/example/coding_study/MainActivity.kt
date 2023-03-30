@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://223.194.157.117:8080/")
+            .baseUrl("http://112.154.249.74:8081/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -80,10 +80,13 @@ class MainActivity : AppCompatActivity() {
 */
 
             val joinFragment = JoinFragment()
+
+            //val fragment01 = fragment_01()
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, joinFragment)
+                .replace(R.id.mainLayout, joinFragment)
                 .addToBackStack(null)
                 .commit()
+            Log.v("joinFragment", "main")
 
 
         }
