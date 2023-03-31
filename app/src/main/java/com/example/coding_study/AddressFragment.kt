@@ -24,7 +24,7 @@ import retrofit2.http.Query
 import java.net.URLEncoder
 
 interface AddressApiService {
-    @GET("http://api.vworld.kr/req/data")
+    @GET("req/data")
     fun getAddressList(
         @Query("service") service: String,
         @Query("request") request: String,
@@ -33,18 +33,18 @@ interface AddressApiService {
         @Query("format") format: String,
         @Query("geometry") geometry: String,
         @Query("attrFilter") attrFilter: String
-    ): Call<AddressList>
+    ): Call<Welcome7>
 }
 
-data class AddressItem( // 검색 결과에서 하나의 주소 정보를 저장하기 위한 클래스
-    @SerializedName("full_nm")
-    val fullNm: String
-)
-data class AddressList( // 검색 결과(JSON 응답)를 저장하기 위한 클래스 (전체 검색 결과를 저장)
-    @SerializedName("emd_kor_nm")
-    val emdKorNm: String,
-    val results: List<AddressItem>
-)
+//data class AddressItem( // 검색 결과에서 하나의 주소 정보를 저장하기 위한 클래스
+//    @SerializedName("full_nm")
+//    val fullNm: String
+//)
+//data class AddressList( // 검색 결과(JSON 응답)를 저장하기 위한 클래스 (전체 검색 결과를 저장)
+//    @SerializedName("emd_kor_nm")
+//    val emdKorNm: String,
+//    val results: List<AddressItem>
+//)
 /*
 class AddressSearchHelper {
     //private val api = "http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADEMD_INFO&key=D3D9E0D0-062C-35F0-A49D-FC9E863B3AD5&format=json&geometry=false&attrFilter=emd_kor_nm:like:{읍/면/동}"
@@ -100,23 +100,23 @@ class AddressFragment: Fragment(R.layout.address_fragment){
         // 프래그먼트에서 사용할 레이아웃 파일을 inflate 합니다.
         binding = AddressFragmentBinding.inflate(inflater, container, false)
 
-        val httpClient = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
-                else HttpLoggingInterceptor.Level.NONE
-            })
-            .build()
+//        val httpClient = OkHttpClient.Builder()
+//            .addInterceptor(HttpLoggingInterceptor().apply {
+//                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+//                else HttpLoggingInterceptor.Level.NONE
+//            })
+//            .build()
 
 
         // Retrofit 인스턴스 생성
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://api.vworld.kr/req/data/")
-            .client(httpClient)
+            .baseUrl("http://api.vworld.kr/")
+//            .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val addressService = retrofit.create(AddressApiService::class.java)
-        val addressList = listOf<AddressItem>()
+        val addressList = listOf<Feature>()
         val addressAdapter = AddressAdapter(addressList)
         binding.addressRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -138,8 +138,8 @@ class AddressFragment: Fragment(R.layout.address_fragment){
                     geometry = "false",
                     attrFilter = "emd_kor_nm:like:${newText}"
                     //attrFilter = "emd_kor_nm:like:${URLEncoder.encode(query, "UTF-8")}"
-                ).enqueue(object : Callback<AddressList> {
-                    override fun onResponse(call: Call<AddressList>, response: Response<AddressList>) {
+                ).enqueue(object : Callback<Welcome7> {
+                    override fun onResponse(call: Call<Welcome7>, response: Response<Welcome7>) {
 
                         //Log.e("Login", "address: ${URLEncoder.encode(query, "UTF-8")}") // 내가 보낸 data Log 출력
                         Log.e("Address", "address: $newText")
@@ -147,13 +147,13 @@ class AddressFragment: Fragment(R.layout.address_fragment){
                         if (response.isSuccessful) {
                             val code = response.code() // 서버 응답 코드
                             Log.e("AddressApi response code", "is : $code")
-                            Log.e("login", "is : ${response.body()}") // 서버에서 받아온 응답 데이터 log 출력
-                            var addressList = response.body()?.results ?: emptyList()
+                            Log.e("login", "is : ${response.body()?.response?.result?.featureCollection?.features}") // 서버에서 받아온 응답 데이터 log 출력
+                            var addressList = response.body()?.response?.result?.featureCollection?.features ?: emptyList()
                             addressAdapter.submitList(addressList)
                         }
                     }
 
-                    override fun onFailure(call: Call<AddressList>, t: Throwable) {
+                    override fun onFailure(call: Call<Welcome7>, t: Throwable) {
                         ErrorDialogFragment().show(childFragmentManager, "Address_ErrorDialogFragment")
                     }
 

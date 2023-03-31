@@ -51,17 +51,17 @@ data class Feature (
 )
 
 data class Properties (
-    @Json(name = "full_nm")
-    val fullNm: String,
+    //@Json(name = "full_nm")
+    val full_nm: String,
 
-    @Json(name = "emd_kor_nm")
-    val emdKorNm: String,
+    //@Json(name = "emd_kor_nm")
+    val emd_kor_nm: String,
 
-    @Json(name = "emd_eng_nm")
-    val emdEngNm: String,
+    //@Json(name = "emd_eng_nm")
+    val emd_eng_nm: String,
 
-    @Json(name = "emd_cd")
-    val emdCD: String
+    //@Json(name = "emd_cd")
+    val emd_cd: String
 )
 
 data class Service (

@@ -7,13 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
-class AddressAdapter(private var addressList: List<AddressItem>) : RecyclerView.Adapter<AddressAdapter.AddressViewHolder>() {
+class AddressAdapter(private var addressList: List<Feature>) : RecyclerView.Adapter<AddressAdapter.AddressViewHolder>() {
 
     class AddressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val addressTextView: TextView = itemView.findViewById(R.id.addressView)
 
-        fun bind(addressItem: AddressItem) {
-            addressTextView.text = addressItem.toString()
+        fun bind(addressItem: Feature) {
+            addressTextView.text = addressItem.properties.full_nm
         }
     }
 
@@ -28,8 +28,8 @@ class AddressAdapter(private var addressList: List<AddressItem>) : RecyclerView.
     }
 
     override fun getItemCount() = addressList.size
-    fun submitList(newList: List<AddressItem>?) {
-        addressList = newList ?: emptyList()
+    fun submitList(newList: List<Feature>?) {
+        addressList = (newList ?: emptyList())
         notifyDataSetChanged()
     }
 
