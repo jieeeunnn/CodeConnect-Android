@@ -28,7 +28,6 @@ class AddressAdapter(private var addressList: List<AddressItem>) : RecyclerView.
     }
 
     override fun getItemCount() = addressList.size
-
     fun submitList(newList: List<AddressItem>?) {
         addressList = newList ?: emptyList()
         notifyDataSetChanged()
