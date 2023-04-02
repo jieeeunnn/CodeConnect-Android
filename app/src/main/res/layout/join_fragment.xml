@@ -73,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="관심사를 골라주세요"
+        android:text="관심사를 2개 선택해주세요"
         android:textColor="#515151"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textAddress"
@@ -218,18 +218,17 @@
         app:layout_constraintStart_toEndOf="@+id/buttonMachine"
         android:stateListAnimator="@null"/>
 
-    <EditText
-        android:id="@+id/editAddress1"
+    <TextView
+        android:id="@+id/textViewAddress1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:ems="5"
-        android:inputType="textPersonName"
+        android:ems="13"
+        android:text="주소를 검색하세요"
         android:textColor="#515151"
         android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textAddress"
-        app:layout_constraintStart_toEndOf="@+id/textAddress"
-        />
+        app:layout_constraintStart_toEndOf="@+id/textAddress" />
 
     <TextView
         android:id="@+id/textNickname"
@@ -255,17 +254,6 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/textNickname"
         app:layout_constraintStart_toEndOf="@+id/textNickname" />
 
-    <EditText
-        android:id="@+id/editAddress2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:ems="5"
-        android:inputType="textPersonName"
-        android:textSize="16sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editAddress1"
-        app:layout_constraintStart_toEndOf="@+id/editAddress1" />
-
     <TextView
         android:id="@+id/textPwdCheck"
         android:layout_width="wrap_content"
@@ -283,7 +271,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textPwdCheck"
         app:layout_constraintStart_toEndOf="@+id/textPwdCheck" />

@@ -1,6 +1,5 @@
 package com.example.coding_study
 
-import android.provider.ContactsContract
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -18,11 +17,9 @@ data class savedMember (
     var password: String = "",
     var nickname: String = "",
     var createMemberTime : String = "",
-    var city: String = "",
-    var state: String= "",
-    var field: String = ""
+    var address : String = "",
+    var fieldList: List<String>
 )
-
 
 //input
 interface JoinService {
@@ -36,9 +33,8 @@ data class JoinRequest(
     val password: String,
     val passwordCheck: String,
     val nickname: String,
-    val state: String,
-    val city: String,
-    val field: String
+    val address:String,
+    val fieldList: List<String>
 )
 
 

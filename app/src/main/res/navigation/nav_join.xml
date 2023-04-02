@@ -13,5 +13,9 @@
     <fragment
         android:id="@+id/addressFragment"
         android:name="com.example.coding_study.AddressFragment"
-        android:label="AddressFragment" />
+        android:label="AddressFragment" >
+        <action
+            android:id="@+id/action_addressFragment_to_joinFragment"
+            app:destination="@id/joinFragment" />
+    </fragment>
 </navigation>

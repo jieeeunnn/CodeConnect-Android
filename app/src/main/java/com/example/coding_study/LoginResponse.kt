@@ -4,6 +4,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 import java.util.*
 
 //output
@@ -29,17 +30,28 @@ data class Member (
     var password: String = "",
     var nickname: String = "",
     var createMemberTime : String = "",
-    var city: String = "",
-    var state: String= "",
-    var field: String = ""
+    var address : String = "",
+    var fieldList: List<String>
 )
 
 
 //input
+
 interface LoginService {
     @POST("members/signIn")
     fun requestLogin(@Body loginrequest: LoginRequest): Call<LoginResponse>
 }
+
+/*
+interface LoginService {
+    @GET("members/signIn")
+    fun requestLogin(
+        @Query("email") email: String,
+        @Query("password") password: String
+    ): Call<LoginResponse>
+}
+ */
+
 
 // 요청 데이터
 data class LoginRequest(

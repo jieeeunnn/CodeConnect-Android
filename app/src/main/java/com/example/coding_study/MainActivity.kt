@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.navigation.fragment.NavHostFragment
 import com.example.coding_study.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             val loginRequest = LoginRequest(email, password)
 
             Log.e("Login", "email: $email, password: $password") // 내가 보낸 data Log 출력
-
+//email= email, password= password
             loginService.requestLogin(loginRequest).enqueue(object: Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) { // 통신에 성공했을 때
                     if (response.isSuccessful) {
