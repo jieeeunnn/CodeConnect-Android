@@ -1,11 +1,14 @@
 package com.example.coding_study
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
+import com.example.coding_study.databinding.WriteStudyBinding
 
-class StudyAdapter(private val viewModel: MyViewModel) : RecyclerView.Adapter<StudyAdapter.ViewHolder>() {
+/*
+class StudyAdapter(private val viewModel: StudyViewModel) : RecyclerView.Adapter<StudyAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: StudyUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) { // ViewHolder는 inner class이기 때문에 CustomAdapter 객체가 먼저 만들어져야 그 이후에 만들어 질 수 있음
                                                                                                                     // 대신 ViewHolder 내에서 StudyAdapter의 속성들(viewModel)에 접근할 수 있음
         fun setContents(pos: Int) { // 실제로 데이터를 집어넣는 부분
@@ -38,4 +41,45 @@ class StudyAdapter(private val viewModel: MyViewModel) : RecyclerView.Adapter<St
     override fun getItemCount(): Int { // 지금 현재 이 StudyAdapter가 관리하는 데이터의 갯수
         return viewModel.items.size
     }
+
+    fun onItemClick(position: Int) {
+        viewModel.itemClickEvent.value = position // 클릭한 게시글의 인덱스 정보를 LiveData에 전달
+    }
 }
+ */
+class StudyAdapter(private var posts: List<Post>) : RecyclerView.Adapter<StudyAdapter.ViewHolder>() {
+
+    //뷰 홀더 생성
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = StudyUploadLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+    }
+
+    //뷰 홀더에 데이터 바인딩
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val post = posts[position]
+        holder.bind(post)
+    }
+
+    override fun getItemCount(): Int {
+        return posts.size
+    }
+
+    //게시글 목록 갱신
+    fun updatePosts(posts: List<Post>) {
+        this.posts = posts
+        notifyDataSetChanged()
+    }
+
+    // 뷰 홀더 클래스
+    inner class ViewHolder(private val binding: StudyUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        //뷰 홀더에 데이터 바인딩
+        fun bind(post: Post) {
+            binding.idTextView.text = post.nickname.toString()
+            binding.titleTextView.text = post.title
+            binding.contentTextView.text = post.content
+        }
+    }
+}
+

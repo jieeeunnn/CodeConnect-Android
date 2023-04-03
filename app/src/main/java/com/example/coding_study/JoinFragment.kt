@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,13 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
     private lateinit var binding: JoinFragmentBinding
     private var field: String? = null
     private lateinit var viewModel: AddressViewModel
+
+    fun saveNickname(context: Context, nickname: String) {
+        val sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        editor?.putString("nickname", nickname)
+        editor?.apply()
+    }
 
 
     override fun onCreateView(
@@ -143,10 +151,7 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
 
 
                 joinService.requestJoin(joinRequest).enqueue(object : Callback<JoinResponse> {
-                    override fun onResponse(
-                        call: Call<JoinResponse>,
-                        response: Response<JoinResponse>
-                    ) { // 통신에 성공했을 때
+                    override fun onResponse(call: Call<JoinResponse>, response: Response<JoinResponse>) { // 통신에 성공했을 때
 
                         val code = response.code() // 서버 응답 코드
                         Log.e("response code", "is : $code")
@@ -157,6 +162,9 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
                             Log.e("Join", "is : ${response.body()}")
 
                             if (joinResponse?.result == true && joinResponse.data != null) {
+                                val receivedNickname = joinResponse.data!!.nickname// 토큰 저장
+                                saveNickname(context!!, receivedNickname) // receivedToken이 null이 아닌 경우 'let'블록 내부에서 savedToken 함수를 호출해 token 저장
+
                                 val nextIntent = Intent(requireActivity(), SecondActivity::class.java)
                                 startActivity(nextIntent)
 

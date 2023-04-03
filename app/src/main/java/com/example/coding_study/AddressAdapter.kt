@@ -70,10 +70,6 @@ class AddressAdapter(private var addressList: List<Feature>, private var itemCli
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         // 검색 결과를 TextView에 표시
-        /*
-        val addressItem = addressList[position]
-        (holder.itemView as TextView).text = addressItem.properties.full_nm
-         */
 
         val addressItem = addressList[position]
         val textView = holder.itemView as TextView

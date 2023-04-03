@@ -1,10 +1,10 @@
 package com.example.coding_study
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.navigation.fragment.NavHostFragment
 import com.example.coding_study.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,10 +15,23 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
     val binding by lazy {ActivityMainBinding.inflate(layoutInflater)}
 
+    fun saveToken(context: Context, token: String?) { // 토큰 저장 함수
+        if (token == null) {
+            Log.e("saveToken", "Token is null, failed to save token")
+            return
+        }
+        val sharedPreferences = context.getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("token", token)
+        if (!editor.commit()) {
+            Log.e("saveToken", "Failed to save token")
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://112.154.249.74:8081/")
@@ -26,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val loginService = retrofit.create(LoginService::class.java)
-
 
         //로그인 버튼 누를 때
         binding.logButton.setOnClickListener {
@@ -36,7 +48,8 @@ class MainActivity : AppCompatActivity() {
             val loginRequest = LoginRequest(email, password)
 
             Log.e("Login", "email: $email, password: $password") // 내가 보낸 data Log 출력
-//email= email, password= password
+
+            //@GET 사용시 loginRequest 대신 email= email, password= password
             loginService.requestLogin(loginRequest).enqueue(object: Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) { // 통신에 성공했을 때
                     if (response.isSuccessful) {
@@ -47,7 +60,10 @@ class MainActivity : AppCompatActivity() {
                         Log.e("response code", "is : $code") // 서버 응답 코드 log 출력
 
                         if (loginResponse?.result == true && loginResponse.data != null) {
-                            val nextIntent = Intent(this@MainActivity, SecondActivity::class.java)
+                            val receivedToken = loginResponse.data!!.token// 토큰 저장
+                            saveToken(applicationContext, receivedToken) // receivedToken이 null이 아닌 경우 'let'블록 내부에서 savedToken 함수를 호출해 token 저장
+
+                            val nextIntent = Intent(this@MainActivity, SecondActivity::class.java) // 스터디 게시글 화면으로 이동
                             startActivity(nextIntent)
                         }
                     } else {
@@ -62,34 +78,14 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-
         //회원가입 버튼을 누를 때
         binding.joinButton.setOnClickListener{
-            //val nextIntent = Intent(this@MainActivity, JoinActivity::class.java) // 회원가입(JoinActivity) 창으로 이동
-            //startActivity(nextIntent)
-
-/*
-            // 프래그먼트 매니저를 통해 JoinFragment 인스턴스 생성
             val joinFragment = JoinFragment()
 
-// 프래그먼트 매니저를 통해 프래그먼트 트랜잭션 시작
-            supportFragmentManager.beginTransaction()
-                // 레이아웃 파일에서 프래그먼트를 띄울 View의 ID를 전달하여 프래그먼트를 붙임
-                .add(R.id.join_fragment, joinFragment)
-                .commit()
-
-*/
-
-            val joinFragment = JoinFragment()
-
-            //val fragment01 = fragment_01()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.mainLayout, joinFragment)
                 .addToBackStack(null)
                 .commit()
-            Log.v("joinFragment", "main")
-
-
         }
     }
 }
