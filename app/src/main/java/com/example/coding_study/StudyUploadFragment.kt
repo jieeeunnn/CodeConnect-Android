@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.coding_study.databinding.WriteStudyBinding
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -24,7 +25,7 @@ import java.util.*
 
 class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study 게시판 글쓰기 fragment
     private lateinit var binding: WriteStudyBinding
-    private val viewModel by viewModels<StudyViewModel>()
+    private lateinit var viewModel: StudyViewModel
     private var role: Role? = null
 
     companion object { // 스피너 목록
@@ -37,6 +38,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
         savedInstanceState: Bundle?
     ): View? {
         binding = WriteStudyBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(StudyViewModel::class.java)
 
         //스피너 어댑터 생성
         val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, filters)
@@ -58,14 +60,14 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
 
 /*
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8081/")
+            .baseUrl("http://112.154.249.74:8080/")
             .header("Authorization", "Bearer $token")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
  */
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8081/")
+            .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

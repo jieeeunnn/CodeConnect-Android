@@ -51,7 +51,7 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8081/")
+            .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -165,7 +165,7 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
                                 val receivedNickname = joinResponse.data!!.nickname// 토큰 저장
                                 saveNickname(context!!, receivedNickname) // receivedToken이 null이 아닌 경우 'let'블록 내부에서 savedToken 함수를 호출해 token 저장
 
-                                val nextIntent = Intent(requireActivity(), SecondActivity::class.java)
+                                val nextIntent = Intent(requireActivity(), MainActivity::class.java)
                                 startActivity(nextIntent)
 
                                 //val nextIntent = Intent(this@JoinFragment, SecondActivity::class.java)
