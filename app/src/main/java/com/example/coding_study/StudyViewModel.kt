@@ -3,7 +3,6 @@ package com.example.coding_study
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-//data class Item(val nickname: String, val title: String, val content: String, val field: String, val num: String)
 // 게시글의 정보를 담는 데이터 클래스 Post
 data class Post(
     var nickname: String,
@@ -13,24 +12,38 @@ data class Post(
     var field: String,
     var currentTime: String
 )
-// 시간을 원하는 형식으로 표시하기
-//val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-//val formattedTime = dateFormat.format(currentTime)
 
 class StudyViewModel : ViewModel() {
 
     val postList = MutableLiveData<List<Post>??>() // 게시글 목록을 저장하는 MutableLiveData. 이 리스트는 null일 수 있음
+    val onPostAdded = MutableLiveData<Post>()
 
     init {
         postList.value = mutableListOf() // postList를 빈 리스트로 초기화
+        //addPost(Post("hansung", "스터디 모집", "스터디 모집합니다", 5, "안드로이드", "2023.04.06"))
     }
+
 
     //게시글을 추가하는 함수
     fun addPost(post: Post) {
-        val list = postList.value?.toMutableList()
-        list?.add(post)
-        postList.value = list
+        val list = postList.value?.toMutableList() ?: mutableListOf() // null이면 빈 리스트로 초기화
+        list.add(post)
+        postList.value = list // 데이터 목록을 업데이트
+        onPostAdded.value = post // 새로운 데이터가 추가되었음을 알리기 위한 목적
     }
+
+/*
+    val postAdded = MutableLiveData<Unit>()
+    fun onPostAdded(post: Post) {
+        val posts = postList.value?.toMutableList() ?: mutableListOf()
+        posts.add(post)
+        postList.value = posts
+        postAdded.value = Unit
+    }
+ */
+
+
+
 
     /*
     val items = ArrayList<Item>()

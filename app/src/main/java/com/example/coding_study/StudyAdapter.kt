@@ -1,11 +1,9 @@
 package com.example.coding_study
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
-import com.example.coding_study.databinding.WriteStudyBinding
 
 /*
 class StudyAdapter(private val viewModel: StudyViewModel) : RecyclerView.Adapter<StudyAdapter.ViewHolder>() {
@@ -47,16 +45,25 @@ class StudyAdapter(private val viewModel: StudyViewModel) : RecyclerView.Adapter
     }
 }
  */
-class StudyAdapter(private var posts: List<Post>) : RecyclerView.Adapter<StudyAdapter.ViewHolder>() {
+class StudyAdapter(private var viewModel: StudyViewModel) : RecyclerView.Adapter<StudyAdapter.StudyUploadViewHolder>() {
 
+    private var posts: List<Post> = emptyList()
+    init { // 생성자에서 받아온 viewModel 객체의 postList 속성을 관찰, postList 속성에 변화가 생길 때마다 posts 변수를 업데이트 하고, notifyDataSetChanged() 함수를 호출하여 UI를 업데이트
+        viewModel.postList.observeForever { newPosts ->
+            if (newPosts != null) {
+                posts = newPosts
+            }
+            notifyDataSetChanged()
+        }
+    }
     //뷰 홀더 생성
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyUploadViewHolder {
         val binding = StudyUploadLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return StudyUploadViewHolder(binding)
     }
 
     //뷰 홀더에 데이터 바인딩
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: StudyUploadViewHolder, position: Int) {
         val post = posts[position]
         holder.bind(post)
     }
@@ -70,16 +77,28 @@ class StudyAdapter(private var posts: List<Post>) : RecyclerView.Adapter<StudyAd
         this.posts = posts
         notifyDataSetChanged()
     }
+/*
+    fun addStudy(posts: MutableList<Post>, post: Post) {
+        posts.add(post)
+        notifyItemInserted(posts.size - 1)
+    }
+ */
+    fun addPost(post: Post) {
+        viewModel.addPost(post)
+        posts = viewModel.postList.value ?: emptyList()
+        notifyDataSetChanged()
+    }
 
     // 뷰 홀더 클래스
-    inner class ViewHolder(private val binding: StudyUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-
+    inner class StudyUploadViewHolder(private val binding: StudyUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         //뷰 홀더에 데이터 바인딩
         fun bind(post: Post) {
-            binding.idTextView.text = post.nickname.toString()
+            binding.idTextView.text = post.nickname
             binding.titleTextView.text = post.title
             binding.contentTextView.text = post.content
+            binding.numberTextView.text = post.num.toString()
+            binding.fieldTextView.text = post.field
+            binding.currentTextView.text = post.currentTime
         }
     }
 }
-

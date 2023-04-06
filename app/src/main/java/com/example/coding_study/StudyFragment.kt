@@ -13,13 +13,19 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = StudyFragmentBinding.bind(view)
+        val adapter = StudyAdapter(viewModel)
 
-        val adapter = StudyAdapter(viewModel.postList.value ?: emptyList()) // StudyAdapter 객체를 만듬
+        //val adapter = StudyAdapter(viewModel.postList.value ?: emptyList()) // StudyAdapter 객체를 만듬
         binding.studyRecyclerView.adapter = adapter // recyclerView와 StudyAdapter 연결
         binding.studyRecyclerView.layoutManager = LinearLayoutManager(context) // 어떤 layout을 사용할 것인지 결정
 
         binding.floatingActionButton.setOnClickListener { // +버튼 (글쓰기 버튼) 눌렀을 때
-            StudyUpload().show(childFragmentManager, "studyUpload")
+            //StudyUpload().show(childFragmentManager, "studyUpload")
+            val studyuploadFragment = StudyUpload()
+            childFragmentManager.beginTransaction()
+                .add(R.id.study_fragment_layout, studyuploadFragment, "STUDY_FRAGMENT")
+                .addToBackStack("STUDY_FRAGMENT")
+                .commit()
         }
 
         // 게시글 목록 관찰하여 어댑터 갱신
@@ -27,6 +33,17 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
             if (posts != null) {
                 adapter.updatePosts(posts)
             }
+        }
+/*
+        viewModel.postAdded.observe(viewLifecycleOwner) {
+            viewModel.postList.value?.lastOrNull()?.let { adapter.addPost(it) }
+        }
+
+ */
+        // 새로운 게시글 추가 이벤트 구독
+        viewModel.onPostAdded.observe(viewLifecycleOwner) { newPost ->
+            // 새로운 게시글이 추가되었을 때 호출될 함수
+            adapter.addPost(newPost)
         }
 /*
         viewModel.itemClickEvent.observe(viewLifecycleOwner) { position ->

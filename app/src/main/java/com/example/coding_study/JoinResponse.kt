@@ -23,7 +23,7 @@ data class savedMember (
 
 //input
 interface JoinService {
-    @POST("members/signUp")
+    @POST("members/signup")
     fun requestJoin(@Body joinrequest: JoinRequest): Call<JoinResponse>
 }
 

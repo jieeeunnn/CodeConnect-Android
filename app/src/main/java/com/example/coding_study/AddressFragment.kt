@@ -91,8 +91,6 @@ class AddressFragment: Fragment(R.layout.address_fragment){
             parentFragmentManager.popBackStack()
         }
 
-
-
         binding.addressRecyclerView.layoutManager = LinearLayoutManager(context)
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -139,10 +137,12 @@ class AddressFragment: Fragment(R.layout.address_fragment){
 
         return binding.root
     }
-
+/*
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // onViewCreated() 메서드에서 view를 사용하여 뷰에 대한 작업을 수행합니다.
 
     }
+
+ */
 }

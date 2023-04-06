@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.coding_study.databinding.WriteStudyBinding
 import okhttp3.OkHttpClient
@@ -23,10 +25,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
-class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study 게시판 글쓰기 fragment
+class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { // study 게시판 글쓰기 fragment
     private lateinit var binding: WriteStudyBinding
-    private lateinit var viewModel: StudyViewModel
     private var role: Role? = null
+    //val viewModel = ViewModelProvider(this).get(StudyViewModel::class.java)
 
     companion object { // 스피너 목록
         val filters = arrayListOf("안드로이드", "ios", "알고리즘", "데이터베이스", "운영체제", "서버", "웹", "머신러닝", "기타")
@@ -38,7 +40,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
         savedInstanceState: Bundle?
     ): View? {
         binding = WriteStudyBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(StudyViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(StudyViewModel::class.java)
 
         //스피너 어댑터 생성
         val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, filters)
@@ -56,18 +58,10 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
         }
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "")
-
-/*
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
-            .header("Authorization", "Bearer $token")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
- */
+        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://112.154.249.74:8081/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -85,7 +79,6 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
 
         val studyService = retrofit.create(StudyService::class.java)
 
-        //새로 추가한 코드
         //업로드 버튼 클릭 시
         binding.buttonUpload.setOnClickListener {
             val sharedPreferences = context?.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
@@ -95,19 +88,12 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
             val content = binding.editContent.text.toString()
             val count = binding.editNumber.text.toString().toInt()
             val field = binding.spinner.selectedItem as String // 스피너 선택 값 가져오기
-            var currentTime = Date()
             role = Role.HOST
 
-            // 시간을 원하는 형식으로 표시하기
-            val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-            val formattedTime = dateFormat.format(currentTime)
-
-            //새로운 포스트 객체 생성
-            val newPost = Post(nickname, title, content, count, field, formattedTime)
 
             val studyRequest = StudyRequest(title, content, count, role!!, field)
 
-            Log.e("studyPost", "title: $title, content: $content, count: $count, " +
+            Log.e("studyPost", "nickname: $nickname, title: $title, content: $content, count: $count, " +
                     "role: $role, field:$field")
             studyService.requestStudy(studyRequest).enqueue(object :Callback<StudyResponse> {
                 override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse> // 통신에 성공했을 때
@@ -120,7 +106,10 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
                         Log.e("StudyPost","is: ${response.body()}")
 
                         if(studyResponse?.result == true && studyResponse.data != null) {
+                            val currentDateTime = studyResponse.data!!.currentDateTime // 서버에서 받아온 현재시간
+                            val newPost = Post(nickname, title, content, count, field, currentDateTime) //새로운 포스트 객체 생성
                             viewModel.addPost(newPost)
+                            //viewModel.addPost(newPost)
                         }
                     }
                 }
@@ -131,15 +120,18 @@ class StudyUpload(val clickedItemPos: Int = -1) : DialogFragment() { // study �
 
             })
 
-            dismiss() // 다이얼로그 종료
+            //dismiss() // 다이얼로그 종료
 
             //업로드 후 리스트로 돌아감
             val parentFragmentManager = requireActivity().supportFragmentManager
             parentFragmentManager.popBackStackImmediate()
+
         }
 
         return binding.root
     }
+
+
 }
     /*
 

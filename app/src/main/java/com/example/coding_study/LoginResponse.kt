@@ -38,7 +38,7 @@ data class Member (
 //input
 
 interface LoginService {
-    @POST("members/signIn")
+    @POST("members/login")
     fun requestLogin(@Body loginrequest: LoginRequest): Call<LoginResponse>
 }
 

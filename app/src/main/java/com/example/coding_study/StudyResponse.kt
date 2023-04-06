@@ -27,7 +27,7 @@ data class RecruitmentCreateDto (
 
 //input
 interface StudyService {
-    @POST("recruitment/create")
+    @POST("recruitments/create")
     fun requestStudy(@Body studyrequest: StudyRequest): Call<StudyResponse>
 }
 
