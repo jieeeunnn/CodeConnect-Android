@@ -35,9 +35,9 @@ interface StudyService {
 data class StudyRequest(
     val title: String,
     val content: String,
-    val count: Int,
-    var role : Role,
-    var field : String
+    val count: Long,
+    var role: Role,
+    var field: String
 )
 
 enum class Role(val role: String) {

@@ -1,6 +1,7 @@
 package com.example.coding_study
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,8 +29,14 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
                 .commit()
         }
 
+        // 새로운 게시글 추가 이벤트 구독
+        viewModel.onPostAdded.observe(viewLifecycleOwner) { newPost ->
+            // 새로운 게시글이 추가되었을 때 호출될 함수
+            adapter.addPost(newPost)
+        }
         // 게시글 목록 관찰하여 어댑터 갱신
         viewModel.postList.observe(viewLifecycleOwner) { posts ->
+            Log.d("StudyFragment_postList", "New post added: $posts")
             if (posts != null) {
                 adapter.updatePosts(posts)
             }
@@ -40,11 +47,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
         }
 
  */
-        // 새로운 게시글 추가 이벤트 구독
-        viewModel.onPostAdded.observe(viewLifecycleOwner) { newPost ->
-            // 새로운 게시글이 추가되었을 때 호출될 함수
-            adapter.addPost(newPost)
-        }
+
 /*
         viewModel.itemClickEvent.observe(viewLifecycleOwner) { position ->
             StudyUpload(position).show(childFragmentManager, "studyUpload") // 클릭한 게시글의 인덱스 정보를 함께 전달하여 StudyUpload DialogFragment를 호출

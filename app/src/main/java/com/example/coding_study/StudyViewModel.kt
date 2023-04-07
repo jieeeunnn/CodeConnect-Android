@@ -1,14 +1,17 @@
 package com.example.coding_study
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.coding_study.databinding.StudyUploadLayoutBinding
+import com.example.coding_study.databinding.WriteStudyBinding
 
 // 게시글의 정보를 담는 데이터 클래스 Post
 data class Post(
     var nickname: String,
     var title: String,
     var content: String,
-    var num: Int,
+    var num: Long,
     var field: String,
     var currentTime: String
 )
@@ -30,7 +33,9 @@ class StudyViewModel : ViewModel() {
         list.add(post)
         postList.value = list // 데이터 목록을 업데이트
         onPostAdded.value = post // 새로운 데이터가 추가되었음을 알리기 위한 목적
+        Log.e("ViewModel", "onPostAdded: $post")
     }
+
 
 /*
     val postAdded = MutableLiveData<Unit>()
@@ -41,8 +46,6 @@ class StudyViewModel : ViewModel() {
         postAdded.value = Unit
     }
  */
-
-
 
 
     /*
