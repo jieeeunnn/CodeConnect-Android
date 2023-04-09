@@ -16,9 +16,15 @@ import com.example.coding_study.databinding.AddressFragmentBinding
 
 
 class AddressAdapter(private var addressList: List<Feature>, private var itemClickListener: ItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var selectedItem = -1
 
     interface ItemClickListener {
         fun onItemClick(fullNm: String)
+    }
+
+    fun setSelectedItem(position: Int) { // 선택된 주소 색상 변경을 위한 함수
+        selectedItem = position
+        notifyDataSetChanged()
     }
 
     // ItemClickListener 설정 함수
@@ -75,12 +81,18 @@ class AddressAdapter(private var addressList: List<Feature>, private var itemCli
         val textView = holder.itemView as TextView
         textView.text = addressItem.properties.full_nm // addressRecyclerView의 아이템에 full_nm 출력
 
-        textView.setTextColor(Color.parseColor("#515151")) // 아이템(주소) 글씨 색상 변경
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f) // 아이템(주소) 글씨 크기 변경
+
+        if (selectedItem == position) { // 선택된 아이템의 글씨색 변경
+            textView.setTextColor(Color.parseColor("#6185E8"))
+        } else { // 선택되지 않은 아이템의 글씨색 설정
+            textView.setTextColor(Color.parseColor("#515151"))
+        }
 
         // 클릭 이벤트 설정
         textView.setOnClickListener {
             itemClickListener?.onItemClick(addressItem.properties.full_nm)
+            setSelectedItem(position) // 선택된 주소 text 색상 변경
         }
     }
 

@@ -46,7 +46,6 @@ class AddressFragment: Fragment(R.layout.address_fragment){
     ): View? {
         // 프래그먼트에서 사용할 레이아웃 파일을 inflate 합니다.
         binding = AddressFragmentBinding.inflate(inflater, container, false)
-
         viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
 
         val recyclerView = binding.addressRecyclerView
@@ -70,9 +69,6 @@ class AddressFragment: Fragment(R.layout.address_fragment){
 
         val addressService = retrofit.create(AddressApiService::class.java)
         val addressList = listOf<Feature>()
-
-
-        //var mAddress: String? = null // 멤버 변수로 선언
 
         val addressAdapter = AddressAdapter(addressList, object : AddressAdapter.ItemClickListener {
             override fun onItemClick(fullNm: String) {
@@ -128,21 +124,11 @@ class AddressFragment: Fragment(R.layout.address_fragment){
                         ErrorDialogFragment().show(childFragmentManager, "Address_ErrorDialogFragment")
                     }
                 })
-
                 return false
             }
         })
-
         binding.addressRecyclerView.adapter = addressAdapter
 
         return binding.root
     }
-/*
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // onViewCreated() 메서드에서 view를 사용하여 뷰에 대한 작업을 수행합니다.
-
-    }
-
- */
 }

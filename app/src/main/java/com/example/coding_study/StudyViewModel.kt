@@ -16,10 +16,32 @@ data class Post(
     var currentTime: String
 )
 
+open class Event<out T>(private val content: T) {
+    var hasBeenHandled = false
+
+    /**
+     * Returns the content and prevents its use again.
+     */
+    fun getContentIfNotHandled(): T? {
+        return if (hasBeenHandled) {
+            null
+        } else {
+            hasBeenHandled = true
+            content
+        }
+    }
+
+    /**
+     * Returns the content, even if it's already been handled.
+     */
+    fun peekContent(): T = content
+}
+
+
 class StudyViewModel : ViewModel() {
 
     val postList = MutableLiveData<List<Post>??>() // 게시글 목록을 저장하는 MutableLiveData. 이 리스트는 null일 수 있음
-    val onPostAdded = MutableLiveData<Post>()
+    val onPostAdded = MutableLiveData<Event<Post>>()
 
     init {
         postList.value = mutableListOf() // postList를 빈 리스트로 초기화
@@ -32,8 +54,9 @@ class StudyViewModel : ViewModel() {
         val list = postList.value?.toMutableList() ?: mutableListOf() // null이면 빈 리스트로 초기화
         list.add(post)
         postList.value = list // 데이터 목록을 업데이트
-        onPostAdded.value = post // 새로운 데이터가 추가되었음을 알리기 위한 목적
-        Log.e("ViewModel", "onPostAdded: $post")
+        onPostAdded.value = Event(post) // 새로운 데이터가 추가되었음을 알리기 위한 목적
+        Log.e("StudyViewModel", "onPostAdded: ${onPostAdded.value}")
+        Log.e("StudyViewModel", "postList: ${postList.value}")
     }
 
 

@@ -28,12 +28,25 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
                 .addToBackStack("STUDY_FRAGMENT")
                 .commit()
         }
-
+/*
         // 새로운 게시글 추가 이벤트 구독
         viewModel.onPostAdded.observe(viewLifecycleOwner) { newPost ->
+            Log.e("StudyFragment_onPostAdded", "newPost: $newPost")
             // 새로운 게시글이 추가되었을 때 호출될 함수
-            adapter.addPost(newPost)
+            if (newPost != null) { // onPostAdded가 초기에 null인 경우 처리
+                adapter.addPost(newPost)
+            }
         }
+ */
+
+        viewModel.onPostAdded.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { newPost ->
+                Log.e("StudyFragment_onPostAdded", "newPost: $newPost")
+                // 새로운 게시글이 추가되었을 때 호출될 함수
+                adapter.addPost(newPost)
+            }
+        }
+
         // 게시글 목록 관찰하여 어댑터 갱신
         viewModel.postList.observe(viewLifecycleOwner) { posts ->
             Log.d("StudyFragment_postList", "New post added: $posts")

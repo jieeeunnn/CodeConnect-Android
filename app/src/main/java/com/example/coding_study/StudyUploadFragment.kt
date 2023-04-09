@@ -63,7 +63,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8081/")
+            .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
