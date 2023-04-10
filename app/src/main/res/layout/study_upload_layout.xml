@@ -5,7 +5,10 @@
     android:id="@+id/study_upload_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F3F8FF">
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="20dp"
+    android:background="@drawable/round_button">
 
     <TextView
         android:id="@+id/numberTextView"
@@ -30,11 +33,11 @@
         android:id="@+id/idTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="80dp"
         android:layout_marginTop="32dp"
         android:text="id"
         android:textColor="#515151"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,6 +59,8 @@
         android:layout_marginTop="24dp"
         android:text="title"
         android:textColor="#515151"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idTextView" />
 
@@ -73,7 +78,7 @@
         android:id="@+id/currentTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="30dp"
         android:text="TextView"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/idTextView"

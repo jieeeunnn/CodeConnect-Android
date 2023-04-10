@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.coding_study.databinding.WriteStudyBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -81,6 +83,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
             // 뷰모델에 액세스할 수 있는 코드
 
         binding.buttonUpload.setOnClickListener {
+
             val title = binding.editTitle.text.toString()
             val content = binding.editContent.text.toString()
             val count = binding.editNumber.text.toString().toLong()
@@ -108,12 +111,8 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
 
                         if (studyResponse?.result == true && studyResponse.data != null) {
                             var nickname = studyResponse.data!!.nickname
-                            val title = binding.editTitle.text.toString()
-                            val content = binding.editContent.text.toString()
-                            val num = binding.editNumber.text.toString().toLong()
-                            val field = binding.spinner.selectedItem as String // 스피너 선택 값 가져오기
-                            val currentTime = studyResponse.data!!.currentDateTime // 서버에서 받아온 현재시간
-                            val post = Post(nickname, title, content, num, field, currentTime)
+                            val currentTime = studyResponse.data!!.currentDateTime.substring(0, 10) // 서버에서 받아온 현재시간 (substring은 0번째부터 10번째 인덱까지의 문자열을 추출)
+                            val post = Post(nickname, title, content, count, field, currentTime)
                             viewModel.addPost(post)
                             Log.e("StudyUploadFragment_viewModel.addPost", "$post added to ViewModel")
                         }
