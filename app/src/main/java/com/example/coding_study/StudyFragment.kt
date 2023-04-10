@@ -41,9 +41,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판
 
         viewModel.onPostAdded.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { newPost ->
-                Log.e("StudyFragment_onPostAdded", "newPost: $newPost")
+                //Log.e("StudyFragment_onPostAdded", "newPost: $newPost")
                 // 새로운 게시글이 추가되었을 때 호출될 함수
                 adapter.addPost(newPost)
+                Log.e("StudyFragment_onPostAdded", "newPost: $newPost")
             }
         }
 

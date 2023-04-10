@@ -21,7 +21,6 @@ data class RecruitmentCreateDto (
     var recruitmentId : Long, // 게시글 번호
     var address: String ="",
     var count : Int,
-    var role: Role,
     var field: String
 )
 
@@ -36,11 +35,5 @@ data class StudyRequest(
     val title: String,
     val content: String,
     val count: Long,
-    var role: Role,
     var field: String
 )
-
-enum class Role(val role: String) {
-    HOST("HOST"),
-    GUEST("GUEST")
-}

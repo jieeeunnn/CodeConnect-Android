@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("saveToken", "Failed to save token")
         }
     }
+    // 토큰 만료시간 exp가 되면 서버에게 새 토큰 요청
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

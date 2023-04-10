@@ -48,13 +48,18 @@ class StudyAdapter(private val viewModel: StudyViewModel) : RecyclerView.Adapter
 class StudyAdapter(private var viewModel: StudyViewModel) : RecyclerView.Adapter<StudyAdapter.StudyUploadViewHolder>() {
 
     private var posts: List<Post> = emptyList()
+
     init { // 생성자에서 받아온 viewModel 객체의 postList 속성을 관찰, postList 속성에 변화가 생길 때마다 posts 변수를 업데이트 하고, notifyDataSetChanged() 함수를 호출하여 UI를 업데이트
+
+        /*
         viewModel.postList.observeForever { newPosts ->
             if (newPosts != null) {
                 posts = newPosts
             }
             notifyDataSetChanged()
         }
+
+         */
     }
     //뷰 홀더 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyUploadViewHolder {
@@ -84,7 +89,7 @@ class StudyAdapter(private var viewModel: StudyViewModel) : RecyclerView.Adapter
     }
  */
     fun addPost(post: Post) {
-        viewModel.addPost(post)
+        //viewModel.addPost(post)
         posts = viewModel.postList.value ?: emptyList()
         notifyDataSetChanged()
     }

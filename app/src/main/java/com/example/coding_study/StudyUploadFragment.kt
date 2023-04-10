@@ -23,7 +23,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { // study 게시판 글쓰기 fragment
     private lateinit var binding: WriteStudyBinding
-    private var role: Role? = null
 
     companion object { // 스피너 목록
         val filters = arrayListOf("안드로이드", "ios", "알고리즘", "데이터베이스", "운영체제", "서버", "웹", "머신러닝", "기타")
@@ -42,8 +41,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         //스피너 어댑터 생성
         val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, filters)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // 클릭했을 때 아래로 펼쳐지는 레이아웃
-        binding.spinner.adapter =
-            adapter // spinner와 adapter를 연결하여 spinner는 ArrayAdapter 안에 있는 filters 중에서 선택 가능
+        binding.spinner.adapter = adapter // spinner와 adapter를 연결하여 spinner는 ArrayAdapter 안에 있는 filters 중에서 선택 가능
 
         if (clickedItemPos >= 0) { // 생성자 인자로 받은 clickedItemPos가 0보다 크면 해당 데이터를 찾아서 위젯 내용 초기화
             //스피너 초기값 설정
@@ -58,8 +56,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
             binding.spinner.setSelection(0)
         }
 
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofit = Retrofit.Builder()
@@ -87,24 +84,20 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
             // 뷰모델에 액세스할 수 있는 코드
 
         binding.buttonUpload.setOnClickListener {
-            val sharedPreferences =
-                context?.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
-            val nickname = sharedPreferences?.getString("nickname", "") ?: "not found"
-
             val title = binding.editTitle.text.toString()
             val content = binding.editContent.text.toString()
             val count = binding.editNumber.text.toString().toLong()
             val field = binding.spinner.selectedItem as String // 스피너 선택 값 가져오기
-            role = Role.HOST
 
-
-            val studyRequest = StudyRequest(title, content, count, role!!, field)
-
+            val studyRequest = StudyRequest(title, content, count, field)
+/*
             Log.e(
                 "studyPost",
                 "nickname: $nickname, title: $title, content: $content, count: $count, " +
                         "role: $role, field:$field"
             )
+
+ */
             studyService.requestStudy(studyRequest).enqueue(object : Callback<StudyResponse> {
                 override fun onResponse(
                     call: Call<StudyResponse>, response: Response<StudyResponse> // 통신에 성공했을 때
@@ -117,10 +110,8 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                         Log.e("StudyPost", "is: ${response.body()}")
 
                         if (studyResponse?.result == true && studyResponse.data != null) {
-                            //val currentDateTime = studyResponse.data!!.currentDateTime // 서버에서 받아온 현재시간
                             fun savePost() {
-                                var nickname =
-                                    sharedPreferences?.getString("nickname", "") ?: "not found"
+                                var nickname = studyResponse.data!!.nickname
                                 val title = binding.editTitle.text.toString()
                                 val content = binding.editContent.text.toString()
                                 val num = binding.editNumber.text.toString().toLong()
@@ -158,8 +149,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
 
 }
     /*
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, filters)

@@ -1,10 +1,12 @@
 package com.example.coding_study
 
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
 import com.example.coding_study.databinding.WriteStudyBinding
+import kotlinx.coroutines.NonDisposableHandle.parent
 
 // 게시글의 정보를 담는 데이터 클래스 Post
 data class Post(
@@ -37,17 +39,31 @@ open class Event<out T>(private val content: T) {
     fun peekContent(): T = content
 }
 
-
 class StudyViewModel : ViewModel() {
+    private lateinit var binding: StudyUploadLayoutBinding
 
     val postList = MutableLiveData<List<Post>??>() // 게시글 목록을 저장하는 MutableLiveData. 이 리스트는 null일 수 있음
     val onPostAdded = MutableLiveData<Event<Post>>()
 
     init {
-        postList.value = mutableListOf() // postList를 빈 리스트로 초기화
-        //addPost(Post("hansung", "스터디 모집", "스터디 모집합니다", 5, "안드로이드", "2023.04.06"))
-    }
+        //postList.value = mutableListOf() // postList를 빈 리스트로 초기화
+        addPost(Post("hansung", "스터디 모집", "스터디 모집합니다", 5, "안드로이드", "2023.04.06"))
+        /*
+        onPostAdded.observeForever{ Post ->
+            addPost()
+        }
+         */
 
+        //binding.idTextView.text = postList.value.toString()
+        /*
+        binding.titleTextView.text = post.title
+        binding.contentTextView.text = post.content
+        binding.numberTextView.text = post.num.toString()
+        binding.fieldTextView.text = post.field
+        binding.currentTextView.text = post.currentTime
+
+         */
+    }
 
     //게시글을 추가하는 함수
     fun addPost(post: Post) {
@@ -55,8 +71,8 @@ class StudyViewModel : ViewModel() {
         list.add(post)
         postList.value = list // 데이터 목록을 업데이트
         onPostAdded.value = Event(post) // 새로운 데이터가 추가되었음을 알리기 위한 목적
-        Log.e("StudyViewModel", "onPostAdded: ${onPostAdded.value}")
-        Log.e("StudyViewModel", "postList: ${postList.value}")
+        Log.e("StudyViewModel_1", "onPostAdded: ${onPostAdded.value}")
+        Log.e("StudyViewModel_2", "postList: ${postList.value}")
     }
 
 
