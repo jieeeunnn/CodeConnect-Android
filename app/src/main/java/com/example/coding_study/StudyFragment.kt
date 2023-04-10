@@ -1,79 +1,48 @@
 package com.example.coding_study
 
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.StudyFragmentBinding
 
-class StudyFragment : Fragment(R.layout.study_fragment) {  //스터디 게시판 fragment
+class StudyFragment : Fragment(R.layout.study_fragment) {
+    private lateinit var viewModel: StudyViewModel
+    private lateinit var studyAdapter: StudyAdapter
 
-    private val viewModel by viewModels<StudyViewModel>()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // 뷰모델 인스턴스 가져오기
+        viewModel = ViewModelProvider(requireActivity()).get(StudyViewModel::class.java)
+        // 게시글 목록 뷰 생성
+        val view = inflater.inflate(R.layout.study_fragment, container, false)
         val binding = StudyFragmentBinding.bind(view)
-        val adapter = StudyAdapter(viewModel)
+        val postRecyclerView = binding.studyRecyclerView
 
-        //val adapter = StudyAdapter(viewModel.postList.value ?: emptyList()) // StudyAdapter 객체를 만듬
-        binding.studyRecyclerView.adapter = adapter // recyclerView와 StudyAdapter 연결
+        // 어댑터 설정
+        studyAdapter = StudyAdapter(listOf())
+        postRecyclerView.adapter = studyAdapter
         binding.studyRecyclerView.layoutManager = LinearLayoutManager(context) // 어떤 layout을 사용할 것인지 결정
 
         binding.floatingActionButton.setOnClickListener { // +버튼 (글쓰기 버튼) 눌렀을 때
-            //StudyUpload().show(childFragmentManager, "studyUpload")
-            val studyuploadFragment = StudyUpload()
+            val studyuploadFragment = StudyUpload() // StudyUploadFragment로 변경
             childFragmentManager.beginTransaction()
                 .add(R.id.study_fragment_layout, studyuploadFragment, "STUDY_FRAGMENT")
                 .addToBackStack("STUDY_FRAGMENT")
                 .commit()
         }
-/*
-        // 새로운 게시글 추가 이벤트 구독
-        viewModel.onPostAdded.observe(viewLifecycleOwner) { newPost ->
-            Log.e("StudyFragment_onPostAdded", "newPost: $newPost")
-            // 새로운 게시글이 추가되었을 때 호출될 함수
-            if (newPost != null) { // onPostAdded가 초기에 null인 경우 처리
-                adapter.addPost(newPost)
-            }
-        }
- */
 
-        viewModel.onPostAdded.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { newPost ->
-                //Log.e("StudyFragment_onPostAdded", "newPost: $newPost")
-                // 새로운 게시글이 추가되었을 때 호출될 함수
-                adapter.addPost(newPost)
-                Log.e("StudyFragment_onPostAdded", "newPost: $newPost")
-            }
+        // 뷰모델에서 게시글 데이터를 가져와서 어댑터에 설정
+        viewModel.postList.observe(viewLifecycleOwner) { postList -> // postList 변수가 업데이트 될 때마다
+            studyAdapter.postList = postList // 어댑터의 postList 변수 업데이트
+            studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
         }
-
-        // 게시글 목록 관찰하여 어댑터 갱신
-        viewModel.postList.observe(viewLifecycleOwner) { posts ->
-            Log.d("StudyFragment_postList", "New post added: $posts")
-            if (posts != null) {
-                adapter.updatePosts(posts)
-            }
-        }
-/*
-        viewModel.postAdded.observe(viewLifecycleOwner) {
-            viewModel.postList.value?.lastOrNull()?.let { adapter.addPost(it) }
-        }
-
- */
-
-/*
-        viewModel.itemClickEvent.observe(viewLifecycleOwner) { position ->
-            StudyUpload(position).show(childFragmentManager, "studyUpload") // 클릭한 게시글의 인덱스 정보를 함께 전달하여 StudyUpload DialogFragment를 호출
-        }
-
-        val adapter = StudyAdapter(viewModel) // StudyAdapter 객체를 만듬
-        binding.studyRecyclerView.adapter = adapter // recyclerView와 StudyAdapter 연결
-        binding.studyRecyclerView.layoutManager = LinearLayoutManager(context) // 어떤 layout을 사용할 것인지 결정
-
-        viewModel.itemsLiveData.observe(viewLifecycleOwner) {
-            adapter.notifyDataSetChanged() // 데이터 전체가 바뀌었음을 알려줌
-        }
- */
+        return view
     }
 }
