@@ -11,6 +11,7 @@ import com.example.coding_study.databinding.StudyUploadLayoutBinding
 import com.example.coding_study.databinding.WriteStudyBinding
 import kotlinx.coroutines.NonDisposableHandle.parent
 
+
 // 게시글의 정보를 담는 데이터 클래스 Post
 data class Post(
     var nickname: String,

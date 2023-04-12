@@ -9,13 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.coding_study.databinding.WriteStudyBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -58,7 +55,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
-        val retrofit = Retrofit.Builder()
+        val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
@@ -75,7 +72,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
             )
             .build()
 
-        val studyService = retrofit.create(StudyService::class.java)
+        val studyService = retrofitBearer.create(StudyService::class.java)
 
         //업로드 버튼 클릭 시
         activity?.let { activity ->
@@ -89,15 +86,8 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
             val count = binding.editNumber.text.toString().toLong()
             val field = binding.spinner.selectedItem as String // 스피너 선택 값 가져오기
 
-            val studyRequest = StudyRequest(title, content, count, field)
-/*
-            Log.e(
-                "studyPost",
-                "nickname: $nickname, title: $title, content: $content, count: $count, " +
-                        "role: $role, field:$field"
-            )
+            val studyRequest = StudyRequest(title, content, count, field) // 서버에 보낼 요청값
 
- */
             studyService.requestStudy(studyRequest).enqueue(object : Callback<StudyResponse> {
                 override fun onResponse(
                     call: Call<StudyResponse>, response: Response<StudyResponse> // 통신에 성공했을 때
@@ -110,11 +100,11 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                         Log.e("StudyPost", "is: ${response.body()}")
 
                         if (studyResponse?.result == true && studyResponse.data != null) {
-                            var nickname = studyResponse.data!!.nickname
-                            val currentTime = studyResponse.data!!.currentDateTime.substring(0, 10) // 서버에서 받아온 현재시간 (substring은 0번째부터 10번째 인덱까지의 문자열을 추출)
-                            val post = Post(nickname, title, content, count, field, currentTime)
-                            viewModel.addPost(post)
-                            Log.e("StudyUploadFragment_viewModel.addPost", "$post added to ViewModel")
+                            //var nickname = studyResponse.data!!.nickname
+                            //val currentTime = studyResponse.data!!.currentDateTime.substring(0, 10) // 서버에서 받아온 현재시간 (substring은 0번째부터 10번째 인덱까지의 문자열을 추출)
+                            //val post = Post(nickname, title, content, count, field, currentTime)
+                            //viewModel.addPost(post)
+                            //Log.e("StudyUploadFragment_viewModel.addPost", "$post added to ViewModel")
                         }
                     }
                 }

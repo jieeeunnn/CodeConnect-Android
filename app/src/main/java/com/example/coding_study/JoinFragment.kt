@@ -138,7 +138,7 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
 
                 val joinRequest = JoinRequest(email, password, passwordCheck, nickname, address, fieldList)
 
-                Log.e("Login", "email: $email, password: $password, passwordCheck: $passwordCheck, " +
+                Log.e("JoinFragment_joinRequest", "email: $email, password: $password, passwordCheck: $passwordCheck, " +
                             "nickname: $nickname, address:$address, fieldList: $fieldList")
 
 

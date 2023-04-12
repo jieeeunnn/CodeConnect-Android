@@ -7,8 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
 
-class StudyAdapter(var postList: List<Post>) :
-    RecyclerView.Adapter<StudyAdapter.StudyUploadViewHolder>() {
+class StudyAdapter(var postList: List<Post>) : RecyclerView.Adapter<StudyAdapter.StudyUploadViewHolder>() {
 
     inner class StudyUploadViewHolder(private val binding: StudyUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) { // 각 게시글 뷰의 textView를 참조
         fun bind(post: Post) { // bind 메서드를 통해 해당 뷰의 텍스트를 게시글 데이터로 설정

@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) { // 통신에 실패했을 때
-                    ErrorDialogFragment().show(supportFragmentManager,"") // 로그인 실패 다이얼로그 띄우기
+                    ErrorDialogFragment().show(supportFragmentManager,"")
                 }
             })
         }

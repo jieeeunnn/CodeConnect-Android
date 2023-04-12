@@ -9,10 +9,10 @@ data class StudyResponse (
     //변수명이 JSON에 있는 키값과 같아야함
     var result: Boolean,
     var message: String,
-    var data: RecruitmentCreateDto?
+    var data: RecruitmentDto?
     )
 
-data class RecruitmentCreateDto (
+data class RecruitmentDto (
     var title: String = "",
     var content: String = "",
     var nickname: String = "",
@@ -20,7 +20,7 @@ data class RecruitmentCreateDto (
     var modifiedDataTime : String = "",
     var recruitmentId : Long, // 게시글 번호
     var address: String ="",
-    var count : Int,
+    var count : Long,
     var field: String
 )
 
