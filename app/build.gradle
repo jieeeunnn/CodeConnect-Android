@@ -41,6 +41,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     kapt "com.android.databinding:compiler:3.1.4"
 
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0' // pull to refesh를 위한 swiperefreshlayout 라이브러리
+
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0' // 로그를 남기기 위한 라이브러리
 
     //retrofit 통신을 위한 라이브러리

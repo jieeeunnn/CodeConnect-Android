@@ -1,6 +1,7 @@
 package com.example.coding_study
 
 import android.R
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -105,6 +106,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                             //val post = Post(nickname, title, content, count, field, currentTime)
                             //viewModel.addPost(post)
                             //Log.e("StudyUploadFragment_viewModel.addPost", "$post added to ViewModel")
+
                         }
                     }
                 }
