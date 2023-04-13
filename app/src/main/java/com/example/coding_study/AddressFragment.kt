@@ -52,18 +52,9 @@ class AddressFragment: Fragment(R.layout.address_fragment){
         val itemDecoration = AddressAdapter.MyItemDecoration(30,30) // 아이템 간 간격 설정
         recyclerView.addItemDecoration(itemDecoration)
 
-//        val httpClient = OkHttpClient.Builder()
-//            .addInterceptor(HttpLoggingInterceptor().apply {
-//                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
-//                else HttpLoggingInterceptor.Level.NONE
-//            })
-//            .build()
-
-
         // Retrofit 인스턴스 생성
         val retrofit = Retrofit.Builder()
             .baseUrl("http://api.vworld.kr/")
-//            .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
