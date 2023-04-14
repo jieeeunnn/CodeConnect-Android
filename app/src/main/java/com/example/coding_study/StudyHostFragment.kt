@@ -20,6 +20,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         binding = StudyHostBinding.inflate(inflater, container, false)
 
 
+
         return binding.root
     }
 
@@ -37,7 +38,16 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         binding.hostContentText.text = recruitment.content
         binding.hostFieldText.text = recruitment.field
         binding.hostCountText.text = recruitment.count.toString()
-        binding.hostCurrentText.text = recruitment.currentDateTime
+        binding.hostCurrentText.text = recruitment.currentDateTime.substring(0, 10)
+
+
+        binding.hostEditButton.setOnClickListener { // 수정 버튼을 눌렀을 때
+
+        }
+
+        binding.hostDeleteButton.setOnClickListener { // 삭제 버튼을 눌렀을 때
+
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.coding_study
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,12 +28,14 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val json = arguments?.getString("recruitmentJson")
         val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
 
+        Log.e("StudyGuestFragment","$recruitment")
+
         // recruitment 변수에서 게시글 정보를 가져와서 레이아웃에 표시
         binding.guestNicknameText.text = recruitment.nickname
         binding.guestTitleText.text = recruitment.title
         binding.guestContentText.text = recruitment.content
         binding.guestFieldText.text = recruitment.field
         binding.guestCountText.text = recruitment.count.toString()
-        binding.guestCurrentText.text = recruitment.currentDateTime
+        binding.guestCurrentText.text = recruitment.currentDateTime.substring(0, 10)
     }
 }

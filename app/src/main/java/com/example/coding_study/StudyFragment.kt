@@ -19,6 +19,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface StudyGetService { // 게시글 조회 인터페이스
@@ -36,16 +37,16 @@ data class StudyListResponse ( // 게시글 응답값
 )
 
 interface StudyOnlyService { // 게시글 하나만 조회
-    @GET("req/data")
+    @GET("recruitments/{id}")
     fun getOnlyPost(
-        @Query("recruitmentId") recruitmentId: Long
+        @Path("id") postId: Long
     ): Call<StudyOnlyResponse>
 }
 
 data class StudyOnlyResponse( // 게시글 하나만 조회할 때 응답값 (Map으로 Role 정보 받음)
     var result: Boolean,
     var message: String,
-    var data: Map<Role, RecruitmentDto>
+    var data: Map<Role, RecruitmentDto> // 서버에서 Role-게시물 정보를 Map으로 전달해줌
 )
 
 enum class Role{
@@ -59,20 +60,17 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     private lateinit var studyAdapter: StudyAdapter
     private lateinit var onItemClickListener: StudyAdapter.OnItemClickListener
 
-
+    // savePostIds 함수
     fun savePostIds(context: Context, postIds: List<Long>) {
         val sharedPreferencesPostId = context.getSharedPreferences("MyPostIds", Context.MODE_PRIVATE)
         val editor = sharedPreferencesPostId.edit()
-        val idSet = postIds.toSet()
-        idSet.forEachIndexed { index, id ->
+        postIds.forEachIndexed { index, id ->
             editor.putLong("post_$index", id)
         }
         if (!editor.commit()) {
             Log.e("savePostIds", "Failed to save post IDs")
         }
     }
-
-
 
 
     override fun onCreateView(
@@ -91,19 +89,25 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             loadStudyList()
         }
 
-        // 어댑터 설정
+        // 게시글을 클릭할 때 서버에 토큰, 게시글 id를 주고 Role과 게시글 정보를 받아옴. 이후 Role에 따라 다른 레이아웃 띄우기
         var onItemClickListener: StudyAdapter.OnItemClickListener = object : StudyAdapter.OnItemClickListener {
-            //onItemClickListener = object : StudyAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) { // 게시글 클릭 시
                 Log.e("StudyFragment", "onItemClick!!!")
 
-                val sharedPreferencesPostId = requireActivity().getSharedPreferences("MyPostIds", Context.MODE_PRIVATE)
-                val postIds = sharedPreferencesPostId.getStringSet("postIds", emptySet())
-                // 클릭한 게시물의 아이디를 selectedPostId 변수에 저장
+
+                // 저장된 게시글 id 가져오기
+                val sharedPreferencesPostId = requireActivity().getSharedPreferences("MyPostIds", Context.MODE_PRIVATE) // "MyPostIds" 라는 이름으로 SharedPreferences 객체를 생성
+                val size = sharedPreferencesPostId.all.size // SharedPreferences 객체에 저장된 모든 키-값 쌍의 개수를 구함
+                val postIds = (0 until size).mapNotNull { // 0부터 size-1까지의 정수를 순회하면서, 해당하는 키("post_0", "post_1", ...)에 대한 값을 리스트에 추가, 함수를 적용한 결과 중 null이 아닌 값들로만 리스트를 만듬
+                    val postId = sharedPreferencesPostId.getLong("post_$it", -1) // "post_$it"라는 이름으로 저장된 Long 타입의 값 가져오기, 해당 키가 존재하지 않으면 -1 반환
+                    if (postId != -1L) postId else null// postId가 -1L 이 아닐 경우 해당 값을 유지하고, -1L일 경우 null 반환
+                }
                 Log.e("StudyFragment","postIds: $postIds")
-                val selectedPostId = postIds?.toList()?.get(position)?.toLong()
 
+                val selectedPostId = postIds.getOrNull(position)// postIds 리스트에서 position에 해당하는 인덱스의 값을 가져옴
+                Log.e("StudyFragment","selectedPostId: $selectedPostId")
 
+                //저장된 토큰값 가져오기
                 val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
                 val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
@@ -127,23 +131,17 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                 val studyOnlyService = retrofitBearer.create(StudyOnlyService::class.java)
 
                 if (selectedPostId != null) {
-                    studyOnlyService.getOnlyPost(recruitmentId= selectedPostId).enqueue(object : Callback<StudyOnlyResponse>{
+                    studyOnlyService.getOnlyPost(selectedPostId).enqueue(object : Callback<StudyOnlyResponse>{
                         override fun onResponse(call: Call<StudyOnlyResponse>, response: Response<StudyOnlyResponse>) {
+
                             if (response.isSuccessful){
                                 val studyOnlyResponse = response.body() // 서버에서 받아온 응답 데이터
                                 val code = response.code() // 서버 응답 코드
                                 Log.e("StudyOnlyResponse_response.body", "is : ${response.body()}") // 서버에서 받아온 응답 데이터 log 출력
-                                Log.e("StudyOnlyResponse_response code", "is : $code") // 서버 응답 코드 log 출력
+                                Log.e("StudyOnlyResponse_response.code", "is : $code") // 서버 응답 코드 log 출력
 
-                                if (studyOnlyResponse?.result == true && studyOnlyResponse.data.containsKey(Role.HOST)){
-                                    //호스트 게시글 프래그먼트로 이동 (수정 삭제 버튼이 있는 레이아웃)
-                                    /*
-                                    val recruitment = studyOnlyResponse.data[Role.HOST] as RecruitmentDto
-                                    val bundle = bundleOf("role" to Role.HOST, "recruitment" to recruitment)
-                                    val hostFragment = StudyHostFragment()
-                                    hostFragment.arguments = bundle
-
-                                     */
+                                if (studyOnlyResponse?.result == true && studyOnlyResponse.data.containsKey(Role.HOST)){ // Role이 호스트인 경우
+                                    // StudyHostFragment로 게시글 정보를 넘겨주기 위해 받은 데이터 저장
                                     val recruitment = studyOnlyResponse.data[Role.HOST] as RecruitmentDto
                                     val gson = Gson()
                                     val json = gson.toJson(recruitment)
@@ -151,42 +149,45 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                                     bundle.putString("recruitmentJson", json)
                                     val hostFragment = StudyHostFragment()
                                     hostFragment.arguments = bundle
+
                                     childFragmentManager.beginTransaction()
                                         .replace(R.id.study_fragment_layout, hostFragment)
                                         .addToBackStack(null)
                                         .commit()
 
-                                } else if (studyOnlyResponse?.result == true && studyOnlyResponse.data.containsKey(Role.GUEST)){
-                                    //게스트 게시글 프래그먼트로 이동 (참여하기 버튼이 있는 레이아웃)
+                                } else if (studyOnlyResponse?.result == true && studyOnlyResponse.data.containsKey(Role.GUEST)){ // Role이 게스트인 경우
+                                    // StudyGuestFragment로 게시글 정보를 넘겨주기 위해 받은 데이터 저장
                                     val recruitment = studyOnlyResponse.data[Role.GUEST] as RecruitmentDto
                                     val gson = Gson()
                                     val json = gson.toJson(recruitment)
                                     val bundle = Bundle()
                                     bundle.putString("recruitmentJson", json)
                                     val guestFragment = StudyGuestFragment()
+                                    guestFragment.arguments = bundle
+
                                     childFragmentManager.beginTransaction()
                                         .replace(R.id.study_fragment_layout, guestFragment)
                                         .addToBackStack(null)
                                         .commit()
                                 }
                             }
+                            else{
+                                Log.e("studyOnlyResponse onResponse","But not success")
+                            }
                         }
 
                         override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
                             Log.e("StudyFragment_StudyOnlyResponse", "Failed to get study list", t)
-                            ErrorDialogFragment().show(childFragmentManager, "StudyFragment_Error")                        }
+                            ErrorDialogFragment().show(childFragmentManager, "StudyFragment_Error")
+                        }
                     })
                 }
             }
         }
 
-
-
-        //studyAdapter = StudyAdapter(listOf())
-        studyAdapter = StudyAdapter(listOf(), onItemClickListener)
+        studyAdapter = StudyAdapter(listOf(), onItemClickListener) // 어댑터 초기화 설정
         postRecyclerView.adapter = studyAdapter
         binding.studyRecyclerView.layoutManager = LinearLayoutManager(context) // 어떤 layout을 사용할 것인지 결정
-
 
         binding.floatingActionButton.setOnClickListener { // +버튼 (글쓰기 버튼) 눌렀을 때
             val studyuploadFragment = StudyUpload() // StudyUploadFragment로 변경
@@ -205,7 +206,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         super.onResume()
         loadStudyList()
     }
-
 
     private fun loadStudyList() { // 서버에서 게시글 전체를 가져와서 로드하는 함수
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
@@ -245,25 +245,18 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                     val studyList = studyListResponse?.data
                     val postListResponse = studyList?.map {
-                        Post(
-                            it.nickname,
-                            it.title,
-                            it.content,
-                            it.count,
-                            it.field,
-                            it.currentDateTime.substring(0, 10)
-                        )
+                        Post( it.nickname, it.title, it.content, it.count, it.field, it.currentDateTime.substring(0, 10))
                     } ?: emptyList()
                     //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
 
                     if (studyListResponse?.result == true) {
-                        val recruitmentIds =
-                            studyListResponse.data?.map { it.recruitmentId } // 게시물 아이디 리스트 추출
+                        val recruitmentIds = studyListResponse.data?.map { it.recruitmentId } // 게시물 아이디 리스트 추출
+
                         if (recruitmentIds != null) {
-                            context?.let { savePostIds(it, recruitmentIds) }
-                        } // 게시물 아이디 리스트 저장
-                        //studyAdapter = StudyAdapter(listOf(), onItemClickListener)
-                        studyAdapter.postList = postListResponse.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
+                            context?.let { savePostIds(it, recruitmentIds) } // 게시물 아이디 리스트 저장
+                        }
+
+                        studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
                         studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
 
                         if (binding != null) {
@@ -279,35 +272,4 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             }
         })
     }
-
-    /*
-    companion object {
-        fun onClick(post: Post) {
-            // 게시글 상세화면으로 이동하는 코드 작성
-            val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-            val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
-
-            val retrofitBearer = Retrofit.Builder()
-                .baseUrl("http://112.154.249.74:8080/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(
-                    OkHttpClient.Builder()
-                        .addInterceptor { chain ->
-                            val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token.orEmpty())
-                                //.addHeader("Authorization", "Bearer $token")
-                                .build()
-                            Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
-                            chain.proceed(request)
-                        }
-                        .build()
-                )
-                .build()
-
-            val studyService = retrofitBearer.create(StudyGetService::class.java)
-        }
-    }
-
-     */
-
 }

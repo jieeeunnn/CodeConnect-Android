@@ -1,87 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent" >
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-        <TextView
-            android:id="@+id/guestNicknameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="130dp"
-            android:layout_marginTop="170dp"
-            android:text="nickname"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/guestNicknameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="150dp"
+        android:text="nickname"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/guestTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="32dp"
-            android:text="title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guestNicknameText" />
+    <TextView
+        android:id="@+id/guestTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="32dp"
+        android:text="title"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guestNicknameText" />
 
-        <TextView
-            android:id="@+id/guestContentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="content"
-            app:layout_constraintStart_toStartOf="@+id/guestTitleText"
-            app:layout_constraintTop_toBottomOf="@+id/guestTitleText" />
+    <TextView
+        android:id="@+id/guestContentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="content"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/guestTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/guestTitleText" />
 
-        <TextView
-            android:id="@+id/guestFieldText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="field"
-            app:layout_constraintStart_toStartOf="@+id/guestContentText"
-            app:layout_constraintTop_toBottomOf="@+id/guestContentText" />
+    <TextView
+        android:id="@+id/guestFieldText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="field"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/guestContentText"
+        app:layout_constraintTop_toBottomOf="@+id/guestContentText" />
 
-        <TextView
-            android:id="@+id/guestPersonText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="참여인원"
-            app:layout_constraintStart_toStartOf="@+id/guestFieldText"
-            app:layout_constraintTop_toBottomOf="@+id/guestFieldText" />
+    <TextView
+        android:id="@+id/guestPersonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="참여인원"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/guestFieldText"
+        app:layout_constraintTop_toBottomOf="@+id/guestFieldText" />
 
-        <TextView
-            android:id="@+id/guestCountText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:text="TextView"
-            app:layout_constraintBaseline_toBaselineOf="@+id/guestPersonText"
-            app:layout_constraintStart_toEndOf="@+id/guestPersonText" />
+    <TextView
+        android:id="@+id/guestCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/guestPersonText"
+        app:layout_constraintStart_toEndOf="@+id/guestPersonText" />
 
-        <Button
-            android:id="@+id/guestButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:text="참여하기"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guestCountText" />
+    <Button
+        android:id="@+id/guestButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="참여하기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guestCountText" />
 
-        <TextView
-            android:id="@+id/guestCurrentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="70dp"
-            android:text="currentTime"
-            app:layout_constraintBaseline_toBaselineOf="@+id/guestNicknameText"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <TextView
+        android:id="@+id/guestCurrentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="70dp"
+        android:text="currentTime"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/guestNicknameText"
+        app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
