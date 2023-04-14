@@ -24,7 +24,7 @@ import retrofit2.http.Query
 
 interface StudyGetService { // 게시글 조회 인터페이스
     @GET("recruitments/list") // 전체 게시글
-    //@GET("main") // 주소, 필드가 같은 게시글
+    //@GET("recruitments/main") // 주소, 필드가 같은 게시글
     fun studygetList(
     ): Call<StudyListResponse>
 }
@@ -93,7 +93,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         var onItemClickListener: StudyAdapter.OnItemClickListener = object : StudyAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) { // 게시글 클릭 시
                 Log.e("StudyFragment", "onItemClick!!!")
-
 
                 // 저장된 게시글 id 가져오기
                 val sharedPreferencesPostId = requireActivity().getSharedPreferences("MyPostIds", Context.MODE_PRIVATE) // "MyPostIds" 라는 이름으로 SharedPreferences 객체를 생성
@@ -255,6 +254,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                         if (recruitmentIds != null) {
                             context?.let { savePostIds(it, recruitmentIds) } // 게시물 아이디 리스트 저장
                         }
+                        Log.e("StudyFragment", "recruitmentIds: $recruitmentIds")
 
                         studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
                         studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영

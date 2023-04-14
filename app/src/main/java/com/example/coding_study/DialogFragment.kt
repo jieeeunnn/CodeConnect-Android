@@ -34,3 +34,4 @@ class JoinDialogFragment : DialogFragment() {
         }.create()
     }
 }
+

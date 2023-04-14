@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/guestContentText"
-        android:layout_width="wrap_content"
+        android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="content"
@@ -74,7 +74,7 @@
         android:id="@+id/guestButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="70dp"
         android:text="참여하기"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
