@@ -60,7 +60,6 @@ class StudyEditFragment : Fragment(R.layout.write_study) {
         binding.spinner.setSelection(filterIndex)
 
 
-
         //저장된 토큰값 가져오기
         val sharedPreferences =
             requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
@@ -106,10 +105,8 @@ class StudyEditFragment : Fragment(R.layout.write_study) {
                         val studHostFragment = StudyHostFragment()
                         studHostFragment.arguments = bundle
 
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.write_study_layout, studHostFragment)
-                            .addToBackStack(null)
-                            .commit()
+                        val parentFragmentManager = requireActivity().supportFragmentManager
+                        parentFragmentManager.popBackStackImmediate()
 
                     }else{
                         Log.e("StudyEditFragment_onResponse", "But not success")

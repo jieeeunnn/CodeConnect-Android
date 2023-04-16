@@ -60,7 +60,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         binding.hostContentText.text = recruitment.content
         binding.hostFieldText.text = recruitment.field
         binding.hostCountText.text = recruitment.count.toString()
-        binding.hostCurrentText.text = recruitment.modifiedDataTime.substring(0, 10) ?: recruitment.currentDateTime?.substring(0, 10) ?: ""
+        binding.hostCurrentText.text = recruitment.modifiedDataTime ?: recruitment.currentDateTime?.substring(0, 10) ?: ""
 
 
         //저장된 토큰값 가져오기
