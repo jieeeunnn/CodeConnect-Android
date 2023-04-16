@@ -43,12 +43,6 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
     ): View? {
         binding = StudyHostBinding.inflate(inflater, container, false)
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         // 가져온 recruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
         val gson = Gson()
         val json = arguments?.getString("recruitmentJson")
@@ -62,6 +56,51 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         binding.hostCountText.text = recruitment.count.toString()
         binding.hostCurrentText.text = recruitment.modifiedDataTime ?: recruitment.currentDateTime?.substring(0, 10) ?: ""
 
+        return binding.root
+    }
+    /*
+    override fun onResume() {
+        super.onResume()
+
+        Log.e("StudyHostFragment", "onResume!!!!!!!!!!!!!!!")
+        // Fragment가 화면에 다시 보일 때 수정된 데이터를 가져와서 화면에 표시
+        val gson = Gson()
+
+        val recruitmentJson = arguments?.getString("recruitmentJson")
+        val recruitment = gson.fromJson(recruitmentJson, RecruitmentDto::class.java)
+        binding.hostNicknameText.text = recruitment.nickname
+        binding.hostTitleText.text = recruitment.title
+        binding.hostContentText.text = recruitment.content
+        binding.hostFieldText.text = recruitment.field
+        binding.hostCountText.text = recruitment.count.toString()
+        binding.hostCurrentText.text = recruitment.modifiedDataTime?.substring(0,10) ?: recruitment.currentDateTime.substring(0, 10)
+    }
+
+     */
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        /*
+        // 가져온 recruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
+        val gson = Gson()
+        val json = arguments?.getString("recruitmentJson")
+        val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
+
+        // recruitment 변수에서 게시글 정보를 가져와서 레이아웃에 표시
+        binding.hostNicknameText.text = recruitment.nickname
+        binding.hostTitleText.text = recruitment.title
+        binding.hostContentText.text = recruitment.content
+        binding.hostFieldText.text = recruitment.field
+        binding.hostCountText.text = recruitment.count.toString()
+        binding.hostCurrentText.text = recruitment.modifiedDataTime ?: recruitment.currentDateTime?.substring(0, 10) ?: ""
+
+         */
+        val gson = Gson()
+        val json = arguments?.getString("recruitmentJson")
+        val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
 
         //저장된 토큰값 가져오기
         val sharedPreferences =

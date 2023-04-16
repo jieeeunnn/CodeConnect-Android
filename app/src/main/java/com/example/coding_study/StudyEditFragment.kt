@@ -97,7 +97,8 @@ class StudyEditFragment : Fragment(R.layout.write_study) {
                 override fun onResponse(call: Call<StudyResponse>, response: Response<StudyResponse>) {
                     if (response.isSuccessful){
                         Log.e("response code", "is : ${response.code()}")
-                        Log.e("StudyList_response.body", "is : ${response.body()}") // 서버에서 받아온 응답 데이터 log 출력
+                        Log.e("StudyEditFragment_response.body", "is : ${response.body()}") // 서버에서 받아온 응답 데이터 log 출력
+
 
                         // 수정된 글을 서버에서 받아와서 StudyHostFragment로 다시 전달
                         val bundle = Bundle()
@@ -106,7 +107,9 @@ class StudyEditFragment : Fragment(R.layout.write_study) {
                         studHostFragment.arguments = bundle
 
                         val parentFragmentManager = requireActivity().supportFragmentManager
-                        parentFragmentManager.popBackStackImmediate()
+                        parentFragmentManager.popBackStack()
+                        parentFragmentManager.popBackStack() // popBackStack()을 두번 호출해서 StudyFragment로 이동
+
 
                     }else{
                         Log.e("StudyEditFragment_onResponse", "But not success")

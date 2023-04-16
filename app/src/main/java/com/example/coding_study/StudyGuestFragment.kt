@@ -1,13 +1,26 @@
 package com.example.coding_study
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.StudyGuestBinding
 import com.google.gson.Gson
+
+class GuestJoinFragment : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext()).apply {
+            setTitle("스터디 참여 신청")
+            setMessage("스터디 참여 신청이 완료되었습니다")
+            setPositiveButton("확인") {dialog, id -> println("스터디 참여 신청 확인")}
+        }.create()
+    }
+}
 
 class StudyGuestFragment : Fragment(R.layout.study_guest) {
     private lateinit var binding: StudyGuestBinding
@@ -40,6 +53,8 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
 
         binding.guestButton.setOnClickListener { // 참여하기 버튼을 누를 시
+            GuestJoinFragment().show(childFragmentManager, "GuestJoin Dialog")
+            // 이미 신청한 스터디를 또 신청하기 버튼을 누르면 어떻게 처리할 것인가?
 
         }
     }
