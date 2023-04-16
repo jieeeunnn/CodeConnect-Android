@@ -3,6 +3,7 @@ package com.example.coding_study
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -59,7 +60,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         binding.hostContentText.text = recruitment.content
         binding.hostFieldText.text = recruitment.field
         binding.hostCountText.text = recruitment.count.toString()
-        binding.hostCurrentText.text = recruitment.currentDateTime.substring(0, 10)
+        binding.hostCurrentText.text = recruitment.modifiedDataTime.substring(0, 10) ?: recruitment.currentDateTime?.substring(0, 10) ?: ""
 
 
         //저장된 토큰값 가져오기
@@ -87,7 +88,8 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         val postId = recruitment.recruitmentId
         val studyDeleteService = retrofitBearer.create(StudyDeleteService::class.java)
 
-/*
+
+        /*
         class StudyDeleteFragment : DialogFragment() {
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
                 return AlertDialog.Builder(requireContext()).apply {
@@ -104,15 +106,15 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
                                     Toast.makeText(context, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
 
                                     //글 삭제 후 스터디 게시판으로 돌아감
-                                    //val parentFragmentManager = requireActivity().supportFragmentManager
-                                    //parentFragmentManager.popBackStackImmediate()
-                                    //parentFragment?.childFragmentManager?.popBackStackImmediate()
-                                    parentFragmentManager.popBackStack(parentFragmentManager.getBackStackEntryAt(parentFragmentManager.backStackEntryCount - 2).id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                                    requireActivity().supportFragmentManager.popBackStack()
 
+                                    /*
+                                    val parentFragment = parentFragment
+                                    if (parentFragment is StudyHostFragment) {
+                                        requireActivity().supportFragmentManager.popBackStack()
+                                    }
+                                     */
                                     dismiss()
-                                    //parentFragment?.childFragmentManager?.popBackStack()
-
-
                                 }
                             }
                             override fun onFailure(call: Call<Void>, t: Throwable) {
@@ -129,9 +131,19 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
             }
         }
 
- */
+         */
+
+
 
         binding.hostEditButton.setOnClickListener { // 수정 버튼을 눌렀을 때
+            val editFragment = StudyEditFragment()
+            val bundle = Bundle()
+            bundle.putString("recruitmentJson", gson.toJson(recruitment))
+            editFragment.arguments = bundle
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.study_host_fragment, editFragment)
+                .addToBackStack(null)
+                .commit()
 
         }
 
@@ -139,13 +151,11 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
             //val dialogFragment = StudyDeleteFragment()
             //dialogFragment.show(childFragmentManager, "deleteDialog")
 
+
             studyDeleteService.deletePost(postId).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
                     if (response.isSuccessful) {
-                        Log.e(
-                            "StudyList_response.body",
-                            "is : ${response.body()}"
-                        ) // 서버에서 받아온 응답 데이터 log 출력
+                        Log.e("StudyList_response.body", "is : ${response.body()}") // 서버에서 받아온 응답 데이터 log 출력
                         Log.e("response code", "is : ${response.code()}") // 서버 응답 코드 log 출력
 
                         Toast.makeText(context, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
@@ -162,7 +172,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
                 }
             })
 
-
         }
     }
+
 }

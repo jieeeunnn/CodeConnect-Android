@@ -76,9 +76,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         val studyService = retrofitBearer.create(StudyService::class.java)
 
         //업로드 버튼 클릭 시
-        activity?.let { activity ->
-            val viewModel = ViewModelProvider(activity).get(StudyViewModel::class.java)
-            // 뷰모델에 액세스할 수 있는 코드
+        activity?.let {
 
         binding.buttonUpload.setOnClickListener {
 
@@ -93,8 +91,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                 override fun onResponse(
                     call: Call<StudyResponse>, response: Response<StudyResponse> // 통신에 성공했을 때
                 ) {
-                    val code = response.code() // 서버 응답 코드
-                    Log.e("response code", "is : $code")
+                    Log.e("response code", "is : ${response.code()}")
 
                     if (response.isSuccessful) {
                         val studyResponse = response.body() // 서버에서 받아온 응답 데이터
@@ -115,8 +112,6 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                     Toast.makeText(context, "통신에 실패했습니다", Toast.LENGTH_LONG).show()
                 }
             })
-            //dismiss() // 다이얼로그 종료
-
             //업로드 후 리스트로 돌아감
             val parentFragmentManager = requireActivity().supportFragmentManager
             parentFragmentManager.popBackStackImmediate()
