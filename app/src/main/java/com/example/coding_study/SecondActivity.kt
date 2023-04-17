@@ -36,6 +36,9 @@ class SecondActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        //val toolbar = binding.toolBar // 툴바 선언
+        //setSupportActionBar(toolbar)
+
         val nhf = supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
 
         //val appbarc = AppBarConfiguration(nhf.navController.graph)

@@ -3,14 +3,15 @@ package com.example.coding_study
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.StudyFragmentBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -55,10 +56,12 @@ enum class Role{
 }
 
 
+@Suppress("DEPRECATION")
 class StudyFragment : Fragment(R.layout.study_fragment) {
     //private lateinit var viewModel: StudyViewModel
     private lateinit var studyAdapter: StudyAdapter
     private lateinit var onItemClickListener: StudyAdapter.OnItemClickListener
+    private lateinit var binding:StudyFragmentBinding
 
     // savePostIds 함수
     fun savePostIds(context: Context, postIds: List<Long>) {
@@ -87,6 +90,8 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         // SwipeRefreshLayout 초기화
         binding.swipeRefreshLayout.setOnRefreshListener { // 게시판을 swipe해서 새로고침하면 새로 추가된 게시글 업로드
             loadStudyList()
+            //binding.floatingActionButton.visibility = View.VISIBLE
+
         }
 
         // 게시글을 클릭할 때 서버에 토큰, 게시글 id를 주고 Role과 게시글 정보를 받아옴. 이후 Role에 따라 다른 레이아웃 띄우기
@@ -111,7 +116,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                 val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
                 val retrofitBearer = Retrofit.Builder()
-                    .baseUrl("http://223.194.135.136:8081/")
+                    .baseUrl("http://112.154.249.74:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(
                         OkHttpClient.Builder()
@@ -191,19 +196,26 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         binding.floatingActionButton.setOnClickListener { // +버튼 (글쓰기 버튼) 눌렀을 때
             val studyuploadFragment = StudyUpload() // StudyUploadFragment로 변경
             childFragmentManager.beginTransaction()
-                .add(R.id.study_fragment_layout, studyuploadFragment, "STUDY_FRAGMENT")
                 .addToBackStack("STUDY_FRAGMENT")
+                .replace(R.id.study_fragment_layout, studyuploadFragment, "STUDY_FRAGMENT")
                 .commit()
-        }
+            //binding.floatingActionButton.visibility = View.GONE
 
+        }
         return view
     }
 
+    override fun onPause() {
+        super.onPause()
+        // onPause() 함수가 수행될 때 실행될 코드 작성
+        Log.e("onPause", "***********")
+    }
 
     // onResume에서 loadStudyList() 함수 호출
     override fun onResume() {
         super.onResume()
         loadStudyList()
+        //binding.floatingActionButton.visibility = View.VISIBLE
     }
 
     private fun loadStudyList() { // 서버에서 게시글 전체를 가져와서 로드하는 함수
@@ -211,7 +223,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://223.194.135.136:8081/")
+            .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -272,4 +284,35 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             }
         })
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_menu_study, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.toolbar_study_search -> {
+                val searchView = item.actionView as SearchView
+
+                // 검색 기능 구현
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        // 검색 버튼을 눌렀을 때 처리할 내용
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        // 검색어가 변경될 때마다 처리할 내용
+                        return false
+                    }
+                })
+
+                return true
+            }
+            // 다른 메뉴 항목 처리
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
 }
