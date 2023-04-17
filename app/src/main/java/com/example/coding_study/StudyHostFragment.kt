@@ -13,8 +13,6 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.example.coding_study.databinding.StudyHostBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -25,7 +23,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Path
-import kotlin.properties.Delegates
 
 interface StudyDeleteService {
     @DELETE("recruitments/delete/{id}")
@@ -42,19 +39,6 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         savedInstanceState: Bundle?
     ): View? {
         binding = StudyHostBinding.inflate(inflater, container, false)
-
-        // 가져온 recruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
-        val gson = Gson()
-        val json = arguments?.getString("recruitmentJson")
-        val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
-
-        // recruitment 변수에서 게시글 정보를 가져와서 레이아웃에 표시
-        binding.hostNicknameText.text = recruitment.nickname
-        binding.hostTitleText.text = recruitment.title
-        binding.hostContentText.text = recruitment.content
-        binding.hostFieldText.text = recruitment.field
-        binding.hostCountText.text = recruitment.count.toString()
-        binding.hostCurrentText.text = recruitment.modifiedDataTime ?: recruitment.currentDateTime?.substring(0, 10) ?: ""
 
         return binding.root
     }
@@ -75,15 +59,11 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         binding.hostCountText.text = recruitment.count.toString()
         binding.hostCurrentText.text = recruitment.modifiedDataTime?.substring(0,10) ?: recruitment.currentDateTime.substring(0, 10)
     }
-
      */
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        /*
         // 가져온 recruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
         val gson = Gson()
         val json = arguments?.getString("recruitmentJson")
@@ -95,12 +75,8 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         binding.hostContentText.text = recruitment.content
         binding.hostFieldText.text = recruitment.field
         binding.hostCountText.text = recruitment.count.toString()
-        binding.hostCurrentText.text = recruitment.modifiedDataTime ?: recruitment.currentDateTime?.substring(0, 10) ?: ""
+        binding.hostCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
 
-         */
-        val gson = Gson()
-        val json = arguments?.getString("recruitmentJson")
-        val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
 
         //저장된 토큰값 가져오기
         val sharedPreferences =
@@ -108,7 +84,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://223.194.135.136:8081/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -128,9 +104,10 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         val studyDeleteService = retrofitBearer.create(StudyDeleteService::class.java)
 
 
-        /*
-        class StudyDeleteFragment : DialogFragment() {
+
+        class StudyDeleteFragment : DialogFragment() { // 게시글 삭제 여부 다이얼로그
             override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
                 return AlertDialog.Builder(requireContext()).apply {
                     setTitle("게시글 삭제")
                     setMessage("게시글을 삭제 하시겠습니까?")
@@ -145,7 +122,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
                                     Toast.makeText(context, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
 
                                     //글 삭제 후 스터디 게시판으로 돌아감
-                                    requireActivity().supportFragmentManager.popBackStack()
+                                    //requireActivity().supportFragmentManager.popBackStack()
 
                                     /*
                                     val parentFragment = parentFragment
@@ -154,6 +131,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
                                     }
                                      */
                                     dismiss()
+
                                 }
                             }
                             override fun onFailure(call: Call<Void>, t: Throwable) {
@@ -170,9 +148,6 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
             }
         }
 
-         */
-
-
 
         binding.hostEditButton.setOnClickListener { // 수정 버튼을 눌렀을 때
             val editFragment = StudyEditFragment()
@@ -183,14 +158,13 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
                 .replace(R.id.study_host_fragment, editFragment)
                 .addToBackStack(null)
                 .commit()
-
         }
 
         binding.hostDeleteButton.setOnClickListener { // 삭제 버튼을 눌렀을 때
-            //val dialogFragment = StudyDeleteFragment()
-            //dialogFragment.show(childFragmentManager, "deleteDialog")
+            val dialogFragment = StudyDeleteFragment()
+            dialogFragment.show(childFragmentManager, "deleteDialog")
 
-
+/*
             studyDeleteService.deletePost(postId).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
                     if (response.isSuccessful) {
@@ -210,6 +184,8 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
                     Toast.makeText(context, "게시글 삭제 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                 }
             })
+
+ */
 
         }
     }

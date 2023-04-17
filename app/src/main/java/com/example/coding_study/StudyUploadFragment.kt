@@ -57,7 +57,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://223.194.135.136:8081/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -103,7 +103,6 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                             //val post = Post(nickname, title, content, count, field, currentTime)
                             //viewModel.addPost(post)
                             //Log.e("StudyUploadFragment_viewModel.addPost", "$post added to ViewModel")
-
                         }
                     }
                 }

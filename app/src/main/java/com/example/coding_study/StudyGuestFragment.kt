@@ -49,7 +49,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         binding.guestContentText.text = recruitment.content
         binding.guestFieldText.text = recruitment.field
         binding.guestCountText.text = recruitment.count.toString()
-        binding.guestCurrentText.text = recruitment.currentDateTime.substring(0, 10)
+        binding.guestCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
 
 
         binding.guestButton.setOnClickListener { // 참여하기 버튼을 누를 시

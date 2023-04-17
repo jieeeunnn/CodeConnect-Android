@@ -17,7 +17,7 @@ data class RecruitmentDto (
     var content: String = "",
     var nickname: String = "",
     var currentDateTime : String = "",
-    var modifiedDataTime : String = "",
+    var modifiedDateTime : String = "",
     var recruitmentId : Long, // 게시글 번호
     var address: String ="",
     var count : Long,
