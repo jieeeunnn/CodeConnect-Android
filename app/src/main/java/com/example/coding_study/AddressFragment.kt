@@ -70,11 +70,12 @@ class AddressFragment: Fragment(R.layout.address_fragment){
         binding.OkButton.setOnClickListener {
             // ViewModel에 데이터 저장
             viewModel.selectAddress(mAddress)
-
+            /*
             childFragmentManager.beginTransaction()
                 .add(R.id.addressFragment, JoinFragment())
                 .commit()
 
+             */
             parentFragmentManager.popBackStack()
         }
 

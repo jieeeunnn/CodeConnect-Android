@@ -8,7 +8,7 @@
     tools:context=".SecondActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBar"
+        android:id="@+id/studyToolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintStart_toStartOf="parent"

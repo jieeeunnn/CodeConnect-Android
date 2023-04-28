@@ -13,12 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Coding_Study"
         android:usesCleartextTraffic="true">
-        <activity android:name=".JoinAddressActivity"></activity>
-        <activity android:name=".JoinActivity" />
-        <activity android:name=".SecondActivity" />
+        <activity android:name=".SecondActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

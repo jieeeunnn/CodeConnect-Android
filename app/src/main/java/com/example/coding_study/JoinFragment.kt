@@ -49,7 +49,7 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
 
         val joinService = retrofit.create(JoinService::class.java)
 
-        binding.textViewAddress1.setOnClickListener { // testViewAddress1을 클릭하면 주소 검색 창으로 이동
+        binding.textViewAddress1.setOnClickListener { // textViewAddress1을 클릭하면 주소 검색 창으로 이동
             val addressFragment = AddressFragment()
 
             childFragmentManager.beginTransaction()
@@ -57,7 +57,6 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
                 .addToBackStack("JOIN_FRAGMENT")
                 .commit()
         }
-
 
         val selectedFields = mutableListOf<String>() // selectedFields 리스트 정의
 

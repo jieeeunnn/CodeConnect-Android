@@ -6,9 +6,8 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.os.bundleOf
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.StudyFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -19,41 +18,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-
-interface StudyGetService { // 게시글 조회 인터페이스
-    @GET("recruitments/list") // 전체 게시글
-    //@GET("recruitments/main") // 주소, 필드가 같은 게시글
-    fun studygetList(
-    ): Call<StudyListResponse>
-}
-
-data class StudyListResponse ( // 게시글 응답값
-    //변수명이 JSON에 있는 키값과 같아야함
-    var result: Boolean,
-    var message: String,
-    var data: List<RecruitmentDto>? // 게시글 데이터를 리스트로 받음
-)
-
-interface StudyOnlyService { // 게시글 하나만 조회
-    @GET("recruitments/{id}")
-    fun getOnlyPost(
-        @Path("id") postId: Long
-    ): Call<StudyOnlyResponse>
-}
-
-data class StudyOnlyResponse( // 게시글 하나만 조회할 때 응답값 (Map으로 Role 정보 받음)
-    var result: Boolean,
-    var message: String,
-    var data: Map<Role, RecruitmentDto> // 서버에서 Role-게시물 정보를 Map으로 전달해줌
-)
-
-enum class Role{
-    GUEST,
-    HOST
-}
 
 
 @Suppress("DEPRECATION")
@@ -62,8 +26,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     private lateinit var studyAdapter: StudyAdapter
     private lateinit var onItemClickListener: StudyAdapter.OnItemClickListener
     private lateinit var binding:StudyFragmentBinding
+    private lateinit var viewModel: AddressViewModel
 
-    // savePostIds 함수
+
+    // savePostIds 함수 (로컬 저장소에 게시글 번호 저장하는 함수)
     fun savePostIds(context: Context, postIds: List<Long>) {
         val sharedPreferencesPostId = context.getSharedPreferences("MyPostIds", Context.MODE_PRIVATE)
         val editor = sharedPreferencesPostId.edit()
@@ -92,6 +58,30 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             loadStudyList()
             //binding.floatingActionButton.visibility = View.VISIBLE
 
+        }
+
+        val sharedPreferences = requireActivity().getSharedPreferences("MyAddress", Context.MODE_PRIVATE)
+        val address = sharedPreferences?.getString("address", "") // 저장해둔 회원의 주소 가져오기
+
+        var studyAddressTextView = binding.toolbarAddressTextView
+        studyAddressTextView.text = address
+
+        binding.toolbarAddressTextView.setOnClickListener { // testViewAddress1을 클릭하면 주소 검색 창으로 이동
+            val addressFragment = AddressFragment()
+            childFragmentManager.beginTransaction()
+                .add(R.id.study_fragment_layout, addressFragment, "STUDY_FRAGMENT")
+                .addToBackStack("STUDY_FRAGMENT")
+                .commit()
+        }
+
+        // ViewModel 초기화
+        viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
+
+        // 가져온 데이터를(AddressFragment에서 선택한 주소) 사용해서 textViewAddress1 업데이트
+        viewModel.getSelectedAddress().observe(viewLifecycleOwner) { address ->
+            binding.toolbarAddressTextView.text = address
+
+            Log.e("JoinFragment", "Selected address: $address") // 선택된 address 변수 값 로그 출력
         }
 
         // 게시글을 클릭할 때 서버에 토큰, 게시글 id를 주고 Role과 게시글 정보를 받아옴. 이후 Role에 따라 다른 레이아웃 띄우기

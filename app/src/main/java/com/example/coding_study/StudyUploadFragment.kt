@@ -53,6 +53,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
             binding.spinner.setSelection(0)
         }
 
+
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 

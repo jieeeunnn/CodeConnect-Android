@@ -29,6 +29,15 @@ class MainActivity : AppCompatActivity() {
     }
     // 토큰 만료시간 exp가 되면 서버에게 새 토큰 요청
 
+    fun saveAddress(context: Context, address: String?) {
+        val sharedPreferences = context.getSharedPreferences("MyAddress", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("address", address)
+        if (!editor.commit()) {
+            Log.e("saveAddress", "Failed to save address")
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +72,9 @@ class MainActivity : AppCompatActivity() {
                         if (loginResponse?.result == true && loginResponse.data != null) {
                             val receivedToken = loginResponse.data!!.token// 토큰 저장
                             saveToken(applicationContext, receivedToken) // receivedToken이 null이 아닌 경우 'let'블록 내부에서 savedToken 함수를 호출해 token 저장
+
+                            val receivedAddress = loginResponse.data!!.member.address
+                            saveAddress(applicationContext, receivedAddress)
 
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java) // 스터디 게시글 화면으로 이동
                             startActivity(nextIntent)

@@ -10,11 +10,6 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.LinearLayoutManager
 
-class QnAFragment : Fragment(R.layout.qna_fragment) {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //val binding = QnaFragmentBinding.bind(view)
-    }
-}
 
 class ChatFragment : Fragment(R.layout.chat_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
