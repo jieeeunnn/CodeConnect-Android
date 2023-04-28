@@ -13,7 +13,7 @@ data class QnaPost (
     var title: String,
     var content: String,
     var currentTime: String
-        )
+    )
 
 
 class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener: OnQnaClickListener) : RecyclerView.Adapter<QnaAdapter.QnaUploadViewHolder>() {
