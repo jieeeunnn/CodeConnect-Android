@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/qnaHostNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="80dp"
+        android:text="nickname"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/qnaHostTItle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="title"
+        app:layout_constraintStart_toStartOf="@+id/qnaHostNickname"
+        app:layout_constraintTop_toBottomOf="@+id/qnaHostNickname" />
+
+    <TextView
+        android:id="@+id/qnaHostContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="content"
+        app:layout_constraintStart_toStartOf="@+id/qnaHostTItle"
+        app:layout_constraintTop_toBottomOf="@+id/qnaHostTItle" />
+
+    <TextView
+        android:id="@+id/qnaHostCurrentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="70dp"
+        android:text="currentTime"
+        app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostNickname"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/qnaHostEditButton"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#CFDCFF"
+        android:textColor="#515151"
+        android:text="수정"
+        app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostDeleteButton"
+        app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton" />
+
+    <Button
+        android:id="@+id/qnaHostDeleteButton"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="70dp"
+        android:backgroundTint="#CFDCFF"
+        android:textColor="#E45050"
+        android:text="삭제"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
