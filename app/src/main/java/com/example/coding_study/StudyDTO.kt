@@ -1,10 +1,12 @@
 package com.example.coding_study
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
+
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+annotation class SEARCH(val value: String = "") // SEARCH 어노테이션 정의
+
 
 //게시글 작성 시 응답 값
 data class StudyResponse (
@@ -78,4 +80,10 @@ data class StudyOnlyResponse( // 게시글 하나만 조회할 때 응답값 (Ma
 enum class Role{
     GUEST,
     HOST
+}
+
+
+interface StudySearchService {
+    @SEARCH("recruitments/search/{text}")
+    fun studySearch(@Query("text") studySearchText: String): Call<StudyListResponse>
 }

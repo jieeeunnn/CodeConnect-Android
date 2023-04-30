@@ -9,14 +9,23 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.WriteQnaBinding
+import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
-class QnaUpload : Fragment() {
+interface QnaEditService {
+    @PUT("qna/update{qnaId}")
+    fun qnaEditPost(@Path("qnaId") id:Long, @Body qnaEdit: QnaRequest): Call<QnaResponse>
+}
+
+class QnaEditFragment : Fragment(R.layout.write_qna) {
     private lateinit var binding: WriteQnaBinding
 
     override fun onCreateView(
@@ -26,7 +35,16 @@ class QnaUpload : Fragment() {
     ): View? {
         binding = WriteQnaBinding.inflate(inflater, container, false)
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val qnaGson = Gson()
+        val qnaJson = arguments?.getString("qnaRecruitmentJson")
+        val qnaRecruitment = qnaGson.fromJson(qnaJson, QnaUploadDto::class.java)
+
+        binding.qnaEditTitle.setText(qnaRecruitment.title)
+        binding.qnaEditContent.setText(qnaRecruitment.content)
+
+        //저장된 토큰값 가져오기
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
@@ -39,28 +57,40 @@ class QnaUpload : Fragment() {
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
                             //.addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
                         chain.proceed(request)
                     }
                     .build()
             )
             .build()
 
-        val qnaService = retrofitBearer.create(QnaService::class.java)
+        val qnaPostId = qnaRecruitment.qnaId
+        val qnaEditService = retrofitBearer.create(QnaEditService::class.java)
 
         binding.qnaButtonUpload.setOnClickListener {
             val title = binding.qnaEditTitle.text.toString()
             val content = binding.qnaEditContent.text.toString()
 
-            val qnaRequest = QnaRequest(title, content)
+            val qnaEdit = QnaRequest(title, content) // 서버에 보낼 요청값
 
-            qnaService.requestQna(qnaRequest).enqueue(object : Callback<QnaResponse> {
+            qnaEditService.qnaEditPost(qnaPostId, qnaEdit).enqueue(object : Callback<QnaResponse>{
                 override fun onResponse(call: Call<QnaResponse>, response: Response<QnaResponse>) {
-                    Log.e("Qna Upload response code", "is : ${response.code()}")
-
                     if (response.isSuccessful) {
-                        val qnaResponse = response.body() // 서버에서 받아온 응답 데이터
-                        Log.e("QnaPost" , "is : $qnaResponse")
+                        Log.e("qnaEditPost response code is", "${response.code()}")
+                        Log.e("qnaEditPost response body is", "${response.body()}")
+
+                        // 수정된 글을 서버에서 받아와서 QnaHostFragment로 다시 전달
+                        val qnaBundle = Bundle()
+                        qnaBundle.putString("qnaRecruitmentJson", qnaGson.toJson(response.body()))
+                        val qnaHostFragment = QnaHostFragment()
+                        qnaHostFragment.arguments = qnaBundle
+
+                        val parentFragmentManager = requireActivity().supportFragmentManager
+                        parentFragmentManager.popBackStack()
+                        parentFragmentManager.popBackStack() // popBackStack()을 두번 호출해서 StudyFragment로 이동
+
+                    }else {
+                        Log.e("QnaEditFragment_onResponse","But not success")
                     }
                 }
 
@@ -68,9 +98,6 @@ class QnaUpload : Fragment() {
                     Toast.makeText(context, "통신에 실패했습니다", Toast.LENGTH_LONG).show()
                 }
             })
-            //업로드 후 qna 게시판으로 돌아감
-            val parentFragmentManager = requireActivity().supportFragmentManager
-            parentFragmentManager.popBackStackImmediate()
         }
 
         return binding.root

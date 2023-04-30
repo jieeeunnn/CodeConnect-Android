@@ -44,9 +44,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val retrofit = Retrofit.Builder()
-            //.baseUrl("http://112.154.249.74:8080/")   준현오빠 서버
-            .baseUrl("http://172.30.1.45:8080/")
-
+            .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

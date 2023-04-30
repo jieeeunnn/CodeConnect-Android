@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/qna_host_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true">
 
     <TextView
         android:id="@+id/qnaHostNickname"
@@ -50,8 +51,8 @@
         android:layout_height="45dp"
         android:layout_marginEnd="8dp"
         android:backgroundTint="#CFDCFF"
-        android:textColor="#515151"
         android:text="수정"
+        android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostDeleteButton"
         app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton" />
 
@@ -62,8 +63,8 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="70dp"
         android:backgroundTint="#CFDCFF"
-        android:textColor="#E45050"
         android:text="삭제"
+        android:textColor="#E45050"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

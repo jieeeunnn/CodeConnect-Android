@@ -11,6 +11,7 @@
     android:layout_marginEnd="15dp"
     android:layout_marginBottom="15dp"
     android:background="@drawable/round_3"
+    android:clickable="true"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

@@ -61,7 +61,7 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://172.30.1.45:8080/")
+            .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -123,9 +123,23 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
             }
         }
 
+        //qna 삭제 버튼
         binding.qnaHostDeleteButton.setOnClickListener {
             val qnaDeleteDialog= QnaDeleteFragment()
             qnaDeleteDialog.show(childFragmentManager, "QnaDeleteDialog")
+        }
+
+        //qna 수정 버튼
+        binding.qnaHostEditButton.setOnClickListener {
+            val qnaEditFragment = QnaEditFragment()
+            val qnaBundle = Bundle()
+            qnaBundle.putString("qnaRecruitmentJson", qnaGson.toJson(qnaRecruitment))
+            qnaEditFragment.arguments = qnaBundle
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.qna_host_fragment, qnaEditFragment)
+                .addToBackStack(null)
+                .commit()
+
         }
 
 

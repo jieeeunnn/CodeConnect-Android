@@ -106,7 +106,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                 val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
                 val retrofitBearer = Retrofit.Builder()
-                    .baseUrl("http://172.30.1.45:8080/")
+                    .baseUrl("http://112.154.249.74:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(
                         OkHttpClient.Builder()
@@ -192,6 +192,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             //binding.floatingActionButton.visibility = View.GONE
 
         }
+
         return view
     }
 
@@ -213,7 +214,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://172.30.1.45:8080/")
+            .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -285,10 +286,69 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             R.id.toolbar_study_search -> {
                 val searchView = item.actionView as SearchView
 
+                //저장된 토큰값 가져오기
+                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+                val retrofitBearer = Retrofit.Builder()
+                    .baseUrl("http://112.154.249.74:8080/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(
+                        OkHttpClient.Builder()
+                            .addInterceptor { chain ->
+                                val request = chain.request().newBuilder()
+                                    .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                    //.addHeader("Authorization", "Bearer $token")
+                                    .build()
+                                Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                                chain.proceed(request)
+                            }
+                            .build()
+                    )
+                    .build()
+
+                val studySearchService = retrofitBearer.create(StudySearchService::class.java)
+
+
                 // 검색 기능 구현
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
+                    override fun onQueryTextSubmit(studySearchText: String?): Boolean {
                         // 검색 버튼을 눌렀을 때 처리할 내용
+                        if (studySearchText != null) {
+                            studySearchService.studySearch(studySearchText).enqueue(object : Callback<StudyListResponse>{
+                                override fun onResponse(call: Call<StudyListResponse>, response: Response<StudyListResponse>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        val studyListResponse = response.body() // 서버에서 받아온 응답 데이터
+                                        Log.e("StudySearchService response code is","${response.code()}")
+                                        Log.e("StudySearchService response body is", "$studyListResponse")
+
+                                        val studyList = studyListResponse?.data
+                                        val postListResponse = studyList?.map {
+                                            Post( it.nickname, it.title, it.content, it.count, it.field, it.currentDateTime)
+                                        } ?: emptyList()
+                                        //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
+
+                                        if (studyListResponse?.result == true) {
+                                            studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
+                                            studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
+
+                                            if (binding != null) {
+                                                binding.swipeRefreshLayout.isRefreshing = false // 새로고침 상태를 false로 변경해서 새로고침 완료
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        Log.e("StudySearchService onResponse", "But not success")
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<StudyListResponse>, t: Throwable
+                                ) {
+                                    ErrorDialogFragment().show(childFragmentManager, "StudySearchService_ErrorDialogFragment")
+                                }
+                            })
+                        }
                         return false
                     }
 

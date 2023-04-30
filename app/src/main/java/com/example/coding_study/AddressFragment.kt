@@ -106,7 +106,7 @@ class AddressFragment: Fragment(R.layout.address_fragment){
                         if (response.isSuccessful) {
                             val code = response.code() // 서버 응답 코드
                             Log.e("AddressApi response code", "is : $code")
-                            Log.e("login", "is : ${response.body()?.response?.result?.featureCollection?.features}") // 서버에서 받아온 응답 데이터 log 출력
+                            Log.e("AddressApi response body", "is : ${response.body()?.response?.result?.featureCollection?.features}") // 서버에서 받아온 응답 데이터 log 출력
                             var addressList = response.body()?.response?.result?.featureCollection?.features ?: emptyList()
                             addressAdapter.submitList(addressList)
                         }
