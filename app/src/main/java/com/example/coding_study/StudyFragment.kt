@@ -309,12 +309,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.e("StudySearch", "keyword: $newText")
-
                 studySearchService.studySearch(keyword = "$newText").enqueue(object :Callback<StudyListResponse>{
                     override fun onResponse( call: Call<StudyListResponse>, response: Response<StudyListResponse>
                     ) {
-                        //Log.e("StudySearch", "keyword: $newText")
+                        Log.e("StudySearch", "keyword: $newText")
                         Log.e("studySearchService", "onResponse")
                         if (response.isSuccessful) {
                             val studyListResponse = response.body() // 서버에서 받아온 응답 데이터

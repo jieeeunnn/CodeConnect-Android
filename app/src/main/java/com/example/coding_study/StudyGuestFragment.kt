@@ -8,19 +8,30 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.StudyGuestBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
+interface StudyParticipateService {
+    @PUT("recruitments/{id}")
+    fun participateStudy(
+        @Path("id") id:Long,
+        @Query("isParticipating") isParticipating: Boolean
+    ): Call<StudyOnlyResponse>
+}
 
-class GuestJoinFragment : DialogFragment() {
+class GuestParticipateDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext()).apply {
             setTitle("스터디 참여 신청")
@@ -82,14 +93,47 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
             .build()
 
         val postId = recruitment.recruitmentId
+        val studyParticipateService = retrofitBearer.create(StudyParticipateService::class.java)
 
 
         binding.guestButton.setOnClickListener { // 참여하기 버튼을 누를 시
+            studyParticipateService.participateStudy(postId, isParticipating = true).enqueue(object : Callback<StudyOnlyResponse>{
+                override fun onResponse( call: Call<StudyOnlyResponse>, response: Response<StudyOnlyResponse>
+                ) {
+                    Log.e("guestButton response code", "${response.code()}")
+                    Log.e("guestButton response body", "${response.body()}")
 
+                    binding.guestButton.visibility = View.GONE
+                    binding.guestCancelButton.visibility = View.VISIBLE
 
-            GuestJoinFragment().show(childFragmentManager, "GuestJoin Dialog")
-            // 이미 신청한 스터디를 또 신청하기 버튼을 누르면 어떻게 처리할 것인가?
+                    GuestParticipateDialog().show(childFragmentManager, "GuestJoin Dialog")
 
+                }
+
+                override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
+                    Toast.makeText(context, "참여하기 버튼_서버 연결 실패", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
+
+        binding.guestCancelButton.setOnClickListener { // 취소하기 버튼 누를 시
+            studyParticipateService.participateStudy(postId, isParticipating = false).enqueue(object : Callback<StudyOnlyResponse>{
+                override fun onResponse( call: Call<StudyOnlyResponse>, response: Response<StudyOnlyResponse>
+                ) {
+                    Log.e("guestButton response code", "${response.code()}")
+                    Log.e("guestButton response body", "${response.body()}")
+
+                    binding.guestButton.visibility = View.VISIBLE
+                    binding.guestCancelButton.visibility = View.GONE
+                }
+
+                override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
+                    Toast.makeText(context, "참여 취소하기 버튼_서버 연결 실패", Toast.LENGTH_SHORT).show()
+                }
+
+            })
+        }
+
+
     }
 }

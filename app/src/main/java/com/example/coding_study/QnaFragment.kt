@@ -3,9 +3,10 @@ package com.example.coding_study
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaFragmentBinding
@@ -17,6 +18,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@Suppress("DEPRECATION")
 class QnAFragment : Fragment(R.layout.qna_fragment) {
     private lateinit var binding:QnaFragmentBinding
     private lateinit var qnaAdapter: QnaAdapter
@@ -32,6 +34,14 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         if (!editor.commit()) {
             Log.e("saveQnaPostIds", "Failed to save QnaPost IDs")
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.qnaToolBar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        setHasOptionsMenu(true) // 옵션 메뉴 사용을 알림
     }
 
     override fun onCreateView(
@@ -231,6 +241,59 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                 Log.e("QnaFragment", "Failed to get qna list")
             }
 
+        })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.toolbar_menu_qna, menu)
+
+        val searchItem = menu.findItem(R.id.toolbar_qna_search)
+        searchItem.isVisible = true // 검색 아이템을 보이도록 설정
+        val searchView = searchItem.actionView as SearchView
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val qnaSearchService = retrofit.create(QnaSearchService::class.java)
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                qnaSearchService.qnaSearch("$newText").enqueue(object : Callback<QnaListResponse> {
+                    override fun onResponse(
+                        call: Call<QnaListResponse>, response: Response<QnaListResponse>
+                    ) {
+                        Log.e("QnaSearch", "keyword: $newText")
+                        Log.e("QnaSearchService", "response code : ${response.code()}")
+
+                        if (response.isSuccessful) {
+                            val qnaListResponse = response.body()
+                            Log.e("QnaSearchService response code is", "${response.code()}")
+
+                            val qnaList = qnaListResponse?.data
+                            val qnapostListResponse = qnaList?.map {
+                                QnaPost(it.nickname, it.title, it.content, it.currentDateTime)
+                            }
+
+                            if (qnapostListResponse != null) {
+                                qnaAdapter.qnaPostList = qnapostListResponse
+                                qnaAdapter.notifyDataSetChanged()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<QnaListResponse>, t: Throwable) {
+                        TODO("Not yet implemented")
+                    }
+                })
+                return false
+            }
         })
     }
 }

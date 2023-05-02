@@ -18,8 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/toolbar_menu_study">
 
-
-
         <TextView
             android:id="@+id/toolbarAddressTextView"
             android:layout_width="wrap_content"

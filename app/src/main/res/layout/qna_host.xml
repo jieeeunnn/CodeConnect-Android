@@ -51,8 +51,8 @@
         android:layout_height="45dp"
         android:layout_marginEnd="8dp"
         android:backgroundTint="#CFDCFF"
-        android:text="수정"
         android:textColor="#515151"
+        android:text="수정"
         app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostDeleteButton"
         app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton" />
 
@@ -67,4 +67,28 @@
         android:textColor="#E45050"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/hostComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="32dp"
+        android:ems="14"
+        android:hint="댓글을 입력하세요"
+        android:inputType="textPersonName"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/hostCommentButton"
+        android:layout_width="65dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#CFDCFF"
+        android:textColor="#515151"
+        android:text="댓글"
+        app:layout_constraintBaseline_toBaselineOf="@+id/hostComment"
+        app:layout_constraintEnd_toEndOf="parent"  />
 </androidx.constraintlayout.widget.ConstraintLayout>

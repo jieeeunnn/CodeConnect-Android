@@ -71,18 +71,6 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/guestPersonText"
         app:layout_constraintStart_toEndOf="@+id/guestPersonText" />
 
-    <Button
-        android:id="@+id/guestButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:backgroundTint="#CFDCFF"
-        android:textColor="#515151"
-        android:text="참여하기"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guestCountText" />
-
     <TextView
         android:id="@+id/guestCurrentText"
         android:layout_width="wrap_content"
@@ -92,5 +80,29 @@
         android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/guestNicknameText"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/guestCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:backgroundTint="#CFDCFF"
+        android:textColor="#515151"
+        android:text="취소하기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guestCountText" />
+
+    <Button
+        android:id="@+id/guestButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:backgroundTint="#CFDCFF"
+        android:text="참여하기"
+        android:textColor="#515151"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guestCountText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

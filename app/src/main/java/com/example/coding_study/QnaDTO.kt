@@ -2,10 +2,7 @@ package com.example.coding_study
 
 import android.icu.text.CaseMap.Title
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 // 게시글 작성 시 응답값
 data class QnaResponse ( // qnaUpload에서 사용
@@ -65,4 +62,13 @@ data class QnaOnlyResponse( // 게시글 하나만 조회할 때 응답값 (Map�
 enum class QnaRole{
     GUEST,
     HOST
+}
+
+
+
+interface QnaSearchService { // qna 게시판 검색 api
+    @GET("qna/search/{text}")
+    fun qnaSearch(
+        @Path("text") text: String
+    ): Call<QnaListResponse>
 }
