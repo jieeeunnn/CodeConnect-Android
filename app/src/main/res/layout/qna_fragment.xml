@@ -16,7 +16,15 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/toolbar_menu_study" />
+        app:menu="@menu/toolbar_menu_study" >
+
+        <TextView
+            android:id="@+id/toolbarQnaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QnA" />
+
+    </androidx.appcompat.widget.Toolbar>
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

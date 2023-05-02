@@ -202,6 +202,8 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                     val qnaList = qnaListResponse?.data
                     val qnapostListResponse = qnaList?.map {
                         QnaPost(it.nickname, it.title, it.content, it.currentDateTime)
+                        //QnaPost("nickname", it.title, it.content, "2023")
+
                     }
                     //qnaList의 형식은 List<QnaUploadDto>이므로 서버에서 받은 게시글을 qnaPostList에 넣어주기 위해 List<qnaPost>로 변환
 

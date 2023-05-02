@@ -6,11 +6,11 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.StudyFragmentBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -18,6 +18,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import androidx.fragment.app.FragmentActivity
 
 
 @Suppress("DEPRECATION")
@@ -41,6 +42,14 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.studyToolBar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        setHasOptionsMenu(true) // 옵션 메뉴 사용을 알림
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -52,6 +61,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         val view = inflater.inflate(R.layout.study_fragment, container, false)
         val binding = StudyFragmentBinding.bind(view)
         val postRecyclerView = binding.studyRecyclerView
+
 
         // SwipeRefreshLayout 초기화
         binding.swipeRefreshLayout.setOnRefreshListener { // 게시판을 swipe해서 새로고침하면 새로 추가된 게시글 업로드
@@ -136,7 +146,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                                 if (studyOnlyResponse?.result == true && studyOnlyResponse.data.containsKey(Role.HOST)){ // Role이 호스트인 경우
                                     // StudyHostFragment로 게시글 정보를 넘겨주기 위해 받은 데이터 저장
-                                    val recruitment = studyOnlyResponse.data[Role.HOST] as RecruitmentDto
+                                    val recruitment = studyOnlyResponse.data[Role.HOST] as Any
                                     val gson = Gson()
                                     val json = gson.toJson(recruitment)
                                     val bundle = Bundle()
@@ -151,7 +161,8 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                                 } else if (studyOnlyResponse?.result == true && studyOnlyResponse.data.containsKey(Role.GUEST)){ // Role이 게스트인 경우
                                     // StudyGuestFragment로 게시글 정보를 넘겨주기 위해 받은 데이터 저장
-                                    val recruitment = studyOnlyResponse.data[Role.GUEST] as RecruitmentDto
+                                    val recruitment = studyOnlyResponse.data[Role.GUEST] as Any
+                                    val participantExist = studyOnlyResponse.data[Role.PARTICIPATION] as Boolean // participantExist이 true면 취소하기 버튼, false면 참여하기 버튼
                                     val gson = Gson()
                                     val json = gson.toJson(recruitment)
                                     val bundle = Bundle()
@@ -277,92 +288,62 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_menu_study, menu)
         super.onCreateOptionsMenu(menu, inflater)
-    }
+        inflater.inflate(R.menu.toolbar_menu_study, menu)
+        Log.e("studySearchView", "onCreateOptionsMenu")
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.toolbar_study_search -> {
-                val searchView = item.actionView as SearchView
+        val searchItem = menu.findItem(R.id.toolbar_study_search)
+        searchItem.isVisible = true // 검색 아이템을 보이도록 설정
+        val searchView = searchItem.actionView as SearchView
 
-                //저장된 토큰값 가져오기
-                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-                val retrofitBearer = Retrofit.Builder()
-                    .baseUrl("http://112.154.249.74:8080/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(
-                        OkHttpClient.Builder()
-                            .addInterceptor { chain ->
-                                val request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "Bearer " + token.orEmpty())
-                                    //.addHeader("Authorization", "Bearer $token")
-                                    .build()
-                                Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
-                                chain.proceed(request)
+        val studySearchService = retrofit.create(StudySearchService::class.java)
+
+        searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.e("StudySearch", "keyword: $newText")
+
+                studySearchService.studySearch(keyword = "$newText").enqueue(object :Callback<StudyListResponse>{
+                    override fun onResponse( call: Call<StudyListResponse>, response: Response<StudyListResponse>
+                    ) {
+                        //Log.e("StudySearch", "keyword: $newText")
+                        Log.e("studySearchService", "onResponse")
+                        if (response.isSuccessful) {
+                            val studyListResponse = response.body() // 서버에서 받아온 응답 데이터
+                            Log.e("StudySearchService response code is","${response.code()}")
+                            Log.e("StudySearchService response body is", "$studyListResponse")
+
+                            val studyList = studyListResponse?.data
+                            val postListResponse = studyList?.map {
+                                Post( it.nickname, it.title, it.content, it.count, it.field, it.currentDateTime)
+                            } ?: emptyList()
+                            //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
+
+                            if (studyListResponse?.result == true) {
+                                studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
+                                studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
+
                             }
-                            .build()
-                    )
-                    .build()
-
-                val studySearchService = retrofitBearer.create(StudySearchService::class.java)
-
-
-                // 검색 기능 구현
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(studySearchText: String?): Boolean {
-                        // 검색 버튼을 눌렀을 때 처리할 내용
-                        if (studySearchText != null) {
-                            studySearchService.studySearch(studySearchText).enqueue(object : Callback<StudyListResponse>{
-                                override fun onResponse(call: Call<StudyListResponse>, response: Response<StudyListResponse>
-                                ) {
-                                    if (response.isSuccessful) {
-                                        val studyListResponse = response.body() // 서버에서 받아온 응답 데이터
-                                        Log.e("StudySearchService response code is","${response.code()}")
-                                        Log.e("StudySearchService response body is", "$studyListResponse")
-
-                                        val studyList = studyListResponse?.data
-                                        val postListResponse = studyList?.map {
-                                            Post( it.nickname, it.title, it.content, it.count, it.field, it.currentDateTime)
-                                        } ?: emptyList()
-                                        //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
-
-                                        if (studyListResponse?.result == true) {
-                                            studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
-                                            studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
-
-                                            if (binding != null) {
-                                                binding.swipeRefreshLayout.isRefreshing = false // 새로고침 상태를 false로 변경해서 새로고침 완료
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        Log.e("StudySearchService onResponse", "But not success")
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<StudyListResponse>, t: Throwable
-                                ) {
-                                    ErrorDialogFragment().show(childFragmentManager, "StudySearchService_ErrorDialogFragment")
-                                }
-                            })
                         }
-                        return false
+                        else {
+                            Log.e("StudySearchService onResponse", "But not success")
+                        }
                     }
 
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        // 검색어가 변경될 때마다 처리할 내용
-                        return false
+                    override fun onFailure(call: Call<StudyListResponse>, t: Throwable) {
+                        ErrorDialogFragment().show(childFragmentManager, "StudySearchService_ErrorDialogFragment")
                     }
                 })
-
-                return true
+                return false
             }
-            // 다른 메뉴 항목 처리
-            else -> return super.onOptionsItemSelected(item)
-        }
+        })
     }
-
 }
