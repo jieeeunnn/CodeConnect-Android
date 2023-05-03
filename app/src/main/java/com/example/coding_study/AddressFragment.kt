@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.AddressFragmentBinding
 import retrofit2.Call
@@ -74,7 +73,6 @@ class AddressFragment: Fragment(R.layout.address_fragment){
             childFragmentManager.beginTransaction()
                 .add(R.id.addressFragment, JoinFragment())
                 .commit()
-
              */
             parentFragmentManager.popBackStack()
         }

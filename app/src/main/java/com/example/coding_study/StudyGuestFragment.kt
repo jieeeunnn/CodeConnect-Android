@@ -24,7 +24,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface StudyParticipateService {
-    @PUT("recruitments/{id}")
+    @PUT("recruitments/participate/{id}")
     fun participateStudy(
         @Path("id") id:Long,
         @Query("isParticipating") isParticipating: Boolean
@@ -59,6 +59,18 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val gson = Gson()
         val json = arguments?.getString("recruitmentJson")
         val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
+        val bundle = arguments
+        val participantExist = bundle?.getBoolean("participateJson")
+
+        Log.e("StudyGuest participantExist", "$participantExist")
+
+        if (participantExist == true) {
+            binding.guestButton.visibility = View.GONE
+            binding.guestCancelButton.visibility = View.VISIBLE
+        } else {
+            binding.guestButton.visibility = View.VISIBLE
+            binding.guestCancelButton.visibility = View.GONE
+        }
 
         Log.e("StudyGuestFragment","$recruitment")
 
@@ -71,8 +83,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         binding.guestCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
 
         //저장된 토큰값 가져오기
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
@@ -85,7 +96,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
                             //.addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyGuestFragment", "Token: " + token.orEmpty())
                         chain.proceed(request)
                     }
                     .build()
@@ -100,18 +111,22 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
             studyParticipateService.participateStudy(postId, isParticipating = true).enqueue(object : Callback<StudyOnlyResponse>{
                 override fun onResponse( call: Call<StudyOnlyResponse>, response: Response<StudyOnlyResponse>
                 ) {
-                    Log.e("guestButton response code", "${response.code()}")
-                    Log.e("guestButton response body", "${response.body()}")
+                    if (response.isSuccessful) {
+                        Log.e("guestButton response code", "${response.code()}")
+                        Log.e("guestButton response body", "${response.body()}")
 
-                    binding.guestButton.visibility = View.GONE
-                    binding.guestCancelButton.visibility = View.VISIBLE
+                        binding.guestButton.visibility = View.GONE
+                        binding.guestCancelButton.visibility = View.VISIBLE
 
-                    GuestParticipateDialog().show(childFragmentManager, "GuestJoin Dialog")
-
+                        GuestParticipateDialog().show(childFragmentManager, "GuestJoin Dialog")
+                    }else{
+                        Log.e("StudyGuestFragment guestButton onResponse", "But not success")
+                    }
                 }
 
                 override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
                     Toast.makeText(context, "참여하기 버튼_서버 연결 실패", Toast.LENGTH_SHORT).show()
+                    Log.e("studyHostFragment_", "$t")
                 }
             })
         }
@@ -120,20 +135,24 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
             studyParticipateService.participateStudy(postId, isParticipating = false).enqueue(object : Callback<StudyOnlyResponse>{
                 override fun onResponse( call: Call<StudyOnlyResponse>, response: Response<StudyOnlyResponse>
                 ) {
-                    Log.e("guestButton response code", "${response.code()}")
-                    Log.e("guestButton response body", "${response.body()}")
+                    if (response.isSuccessful) {
+                        Log.e("guestButton response code", "${response.code()}")
+                        Log.e("guestButton response body", "${response.body()}")
 
-                    binding.guestButton.visibility = View.VISIBLE
-                    binding.guestCancelButton.visibility = View.GONE
+                        binding.guestButton.visibility = View.VISIBLE
+                        binding.guestCancelButton.visibility = View.GONE
+                    } else {
+                        Log.e("StudyGuestFragment guestCancelButton onResponse", "But not success")
+
+                    }
                 }
 
                 override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
                     Toast.makeText(context, "참여 취소하기 버튼_서버 연결 실패", Toast.LENGTH_SHORT).show()
-                }
+                    Log.e("studyHostFragment_", "$t")
 
+                }
             })
         }
-
-
     }
 }

@@ -18,7 +18,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import androidx.fragment.app.FragmentActivity
 
 
 @Suppress("DEPRECATION")
@@ -166,7 +165,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                                     val gson = Gson()
                                     val json = gson.toJson(recruitment)
                                     val bundle = Bundle()
+
                                     bundle.putString("recruitmentJson", json)
+                                    bundle.putBoolean("participateJson", participantExist)
+
                                     val guestFragment = StudyGuestFragment()
                                     guestFragment.arguments = bundle
 

@@ -18,8 +18,17 @@ data class QnaUploadDto(
     var currentDateTime: String,
     var modifiedDateTime: String,
     var qnaId: Long,
-    var commentCount: Int
+    var commentCount: Int,
+    var comments: List<Comment>
 )
+
+data class Comment (
+    var commentId: Long,
+    var comment: String,
+    var nickname: String,
+    var currentDateTime: String
+    )
+
 
 
 interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사용
@@ -33,6 +42,8 @@ data class QnaRequest( // 게시글 작성 시 전송값, qnaUpload에서 사용
 )
 
 
+
+
 interface QnaGetService { // qna 게시글 조회 인터페이스
     @GET("qna/list") // 전체 게시글
     fun qnaGetList(
@@ -44,6 +55,9 @@ data class QnaListResponse ( // 게시글 응답값 (qna 게시판에서 게시�
     var message: String,
     var data: List<QnaUploadDto>? // 게시글 데이터를 리스트로 받음
 )
+
+
+
 
 
 interface QnaOnlyService { // 게시글 하나만 조회 인터페이스
@@ -63,6 +77,8 @@ enum class QnaRole{
     GUEST,
     HOST
 }
+
+
 
 
 
