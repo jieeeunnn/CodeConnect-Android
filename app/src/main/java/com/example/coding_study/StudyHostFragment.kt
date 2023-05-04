@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -61,6 +62,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
     }
      */
 
+    @SuppressLint("SetTextI18n") // 다국어 지원 기능
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -74,7 +76,7 @@ class StudyHostFragment : Fragment(R.layout.study_host) {
         binding.hostTitleText.text = recruitment.title
         binding.hostContentText.text = recruitment.content
         binding.hostFieldText.text = recruitment.field
-        binding.hostCountText.text = recruitment.count.toString()
+        binding.hostCountText.text = "${recruitment.currentCount} / ${recruitment.count}"
         binding.hostCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
 
 

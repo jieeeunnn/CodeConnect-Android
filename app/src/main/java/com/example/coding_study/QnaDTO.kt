@@ -1,6 +1,5 @@
 package com.example.coding_study
 
-import android.icu.text.CaseMap.Title
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -33,7 +32,7 @@ data class Comment (
 
 interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사용
     @POST("qna/create")
-    fun requestQna(@Body qnarequest: QnaRequest): Call<QnaResponse>
+    fun requestQna(@Body qnaRequest: QnaRequest): Call<QnaResponse>
 }
 
 data class QnaRequest( // 게시글 작성 시 전송값, qnaUpload에서 사용
@@ -81,10 +80,21 @@ enum class QnaRole{
 
 
 
-
 interface QnaSearchService { // qna 게시판 검색 api
     @GET("qna/search/{text}")
     fun qnaSearch(
         @Path("text") text: String
     ): Call<QnaListResponse>
 }
+
+
+
+
+interface QnaCommentCreateService {
+    @POST("comment/create/{qnaId}")
+    fun qnaCommentCreate(@Path("qnaId") qnaPostId: Long ,@Body qnaCommentRequest : QnaCommentRequest) : Call<Comment>
+}
+
+data class QnaCommentRequest(
+    var comment: String
+)

@@ -43,9 +43,9 @@ data class StudyRequest(
 
 
 interface StudyGetService { // 게시글 조회 인터페이스
-    @GET("recruitments/list") // 전체 게시글
-    //@GET("recruitments/main") // 주소, 필드가 같은 게시글
-    fun studygetList(
+    //@GET("recruitments/list") // 전체 게시글
+    @GET("recruitments/main") // 주소, 필드가 같은 게시글
+    fun studyGetList(
     ): Call<StudyListResponse>
 }
 

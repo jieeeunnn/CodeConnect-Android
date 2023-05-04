@@ -79,48 +79,48 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
         }
 
         binding.buttonAndroid.setOnClickListener {
-            updateSelectedFields("ANDROID")
-            updateButtonAppearance(binding.buttonAndroid, selectedFields.contains("ANDROID"))
+            updateSelectedFields("안드로이드")
+            updateButtonAppearance(binding.buttonAndroid, selectedFields.contains("안드로이드"))
         }
 
         binding.buttonIos.setOnClickListener {
-            updateSelectedFields("IOS")
-            updateButtonAppearance(binding.buttonIos, selectedFields.contains("IOS"))
+            updateSelectedFields("ios")
+            updateButtonAppearance(binding.buttonIos, selectedFields.contains("ios"))
         }
 
         binding.buttonAlgorithm.setOnClickListener {
-            updateSelectedFields("ALGORITHM")
-            updateButtonAppearance(binding.buttonAlgorithm, selectedFields.contains("ALGORITHM"))
+            updateSelectedFields("알고리즘")
+            updateButtonAppearance(binding.buttonAlgorithm, selectedFields.contains("알고리즘"))
         }
 
         binding.buttonDatabase.setOnClickListener {
-            updateSelectedFields("DATABASE")
-            updateButtonAppearance(binding.buttonDatabase, selectedFields.contains("DATABASE"))
+            updateSelectedFields("데이터베이스")
+            updateButtonAppearance(binding.buttonDatabase, selectedFields.contains("데이터베이스"))
         }
 
         binding.buttonOs.setOnClickListener {
-            updateSelectedFields("OS")
-            updateButtonAppearance(binding.buttonOs, selectedFields.contains("OS"))
+            updateSelectedFields("운영체제")
+            updateButtonAppearance(binding.buttonOs, selectedFields.contains("운영체제"))
         }
 
         binding.buttonServer.setOnClickListener {
-            updateSelectedFields("SERVER")
-            updateButtonAppearance(binding.buttonServer, selectedFields.contains("SERVER"))
+            updateSelectedFields("서버")
+            updateButtonAppearance(binding.buttonServer, selectedFields.contains("서버"))
         }
 
         binding.buttonWeb.setOnClickListener {
-            updateSelectedFields("WEB")
-            updateButtonAppearance(binding.buttonWeb, selectedFields.contains("WEB"))
+            updateSelectedFields("웹")
+            updateButtonAppearance(binding.buttonWeb, selectedFields.contains("웹"))
         }
 
         binding.buttonMachine.setOnClickListener {
-            updateSelectedFields("MACHINE_LEARNING")
-            updateButtonAppearance(binding.buttonMachine, selectedFields.contains("MACHINE_LEARNING"))
+            updateSelectedFields("머신러닝")
+            updateButtonAppearance(binding.buttonMachine, selectedFields.contains("머신러닝"))
         }
 
         binding.buttonEtc.setOnClickListener {
-            updateSelectedFields("ETC")
-            updateButtonAppearance(binding.buttonEtc, selectedFields.contains("ETC"))
+            updateSelectedFields("기타")
+            updateButtonAppearance(binding.buttonEtc, selectedFields.contains("기타"))
         }
 
 

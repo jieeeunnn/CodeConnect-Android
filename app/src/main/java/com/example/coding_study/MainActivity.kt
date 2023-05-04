@@ -11,6 +11,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Field
 
 class MainActivity : AppCompatActivity() {
     val binding by lazy {ActivityMainBinding.inflate(layoutInflater)}
@@ -37,6 +38,19 @@ class MainActivity : AppCompatActivity() {
             Log.e("saveAddress", "Failed to save address")
         }
     }
+
+    // saveFields 함수 (로컬 저장소에 필드값 저장하는 함수)
+    fun saveFields(context: Context, postFields: List<String>) {
+        val sharedPreferencesFields = context.getSharedPreferences("MyFields", Context.MODE_PRIVATE)
+        val editor = sharedPreferencesFields.edit()
+        val postFieldsString = postFields.joinToString(",")
+        editor.putString("fields", postFieldsString)
+        if (!editor.commit()) {
+            Log.e("saveFields", "Failed to save Fields")
+        }
+    }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +89,9 @@ class MainActivity : AppCompatActivity() {
 
                             val receivedAddress = loginResponse.data!!.member.address
                             saveAddress(applicationContext, receivedAddress)
+
+                            val receivedFields = loginResponse.data!!.member.fieldList
+                            saveFields(applicationContext, receivedFields)
 
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java) // 스터디 게시글 화면으로 이동
                             startActivity(nextIntent)

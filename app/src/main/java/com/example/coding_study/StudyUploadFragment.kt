@@ -1,7 +1,6 @@
 package com.example.coding_study
 
 import android.R
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -24,9 +23,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { // study 게시판 글쓰기 fragment
     private lateinit var binding: WriteStudyBinding
 
+    /*
     companion object { // 스피너 목록
         val filters = arrayListOf("안드로이드", "ios", "알고리즘", "데이터베이스", "운영체제", "서버", "웹", "머신러닝", "기타")
     }
+     */
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,8 +37,13 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
     ): View? {
         binding = WriteStudyBinding.inflate(inflater, container, false)
 
+        val sharedPreferencesFields = requireActivity().getSharedPreferences("MyFields", Context.MODE_PRIVATE)
+        val fieldsString = sharedPreferencesFields?.getString("fields", "")
+        val fields = fieldsString?.split(",") ?: emptyList()
+
+
         //스피너 어댑터 생성
-        val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, filters)
+        val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, fields)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // 클릭했을 때 아래로 펼쳐지는 레이아웃
         binding.spinner.adapter = adapter // spinner와 adapter를 연결하여 spinner는 ArrayAdapter 안에 있는 filters 중에서 선택 가능
 
@@ -46,7 +53,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                 val viewModel = ViewModelProvider(activity).get(StudyViewModel::class.java)
                 // 뷰모델에 액세스할 수 있는 코드
                 val f = viewModel.postList.value?.get(clickedItemPos)?.field // 클릭한 아이템의 field값을 가져옴
-                val s = filters.indexOf(f) // field 값을 이용하여 filters에서 해당 값의 index를 찾음
+                val s = fields.indexOf(f) // field 값을 이용하여 filters에서 해당 값의 index를 찾음
                 binding.spinner.setSelection(s) // 스피너 선택 값 초기화
             }
         } else {

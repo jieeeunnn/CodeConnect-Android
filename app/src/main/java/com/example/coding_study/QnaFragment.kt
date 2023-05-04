@@ -59,7 +59,6 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         }
 
 
-
         var onQnaClickListener: QnaAdapter.OnQnaClickListener = object : QnaAdapter.OnQnaClickListener {
             override fun onQnaClick(position: Int) {
                 Log.e("QnaFragment", "onQnaClick!!!")

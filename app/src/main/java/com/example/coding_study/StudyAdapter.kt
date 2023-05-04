@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +20,12 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
     }
 
     inner class StudyUploadViewHolder(private val binding: StudyUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) { // 각 게시글 뷰의 textView를 참조
+        @SuppressLint("SetTextI18n") // 다국어 지원 기능 (currentCount와 num을 함께 문자열에 담기 위해 사용)
         fun bind(post: Post) { // bind 메서드를 통해 해당 뷰의 텍스트를 게시글 데이터로 설정
             binding.idTextView.text = post.nickname
             binding.titleTextView.text = post.title
             binding.contentTextView.text = post.content
-            binding.numberTextView.text = post.num.toString()
+            binding.numberTextView.text = "${post.currentCount} / ${post.num}"
             binding.fieldTextView.text = post.field
             binding.currentTextView.text = post.currentTime
         }

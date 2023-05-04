@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.coding_study.StudyUpload.Companion.filters
 import com.example.coding_study.databinding.WriteStudyBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -24,7 +23,7 @@ import retrofit2.http.Path
 
 
 interface StudyEditService{
-    @PUT("recruitments/edit/{id}")
+    @PUT("recruitments/update/{id}")
     fun editPost(@Path("id") id: Long, @Body studyEdit: StudyRequest): Call<StudyResponse>
 }
 
@@ -48,15 +47,18 @@ class StudyEditFragment : Fragment(R.layout.write_study) {
         binding.editContent.setText(recruitment.content)
         binding.editNumber.setText(recruitment.count.toString())
 
+        val sharedPreferencesFields = requireActivity().getSharedPreferences("MyFields", Context.MODE_PRIVATE)
+        val fieldsString = sharedPreferencesFields?.getString("fields", "")
+        val fields = fieldsString?.split(",") ?: emptyList()
 
         //스피너 어댑터 생성
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, filters)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, fields)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) // 클릭했을 때 아래로 펼쳐지는 레이아웃
-        binding.spinner.adapter = adapter // spinner와 adapter를 연결하여 spinner는 ArrayAdapter 안에 있는 filters 중에서 선택 가능
+        binding.spinner.adapter = adapter // spinner와 adapter를 연결하여 spinner는 ArrayAdapter 안에 있는 fields 중에서 선택 가능
 
         // recruitment 객체에서 필드 값 가져와서 스피너 초기값 설정
         val field = recruitment.field
-        val filterIndex = filters.indexOf(field)
+        val filterIndex = fields.indexOf(field)
         binding.spinner.setSelection(filterIndex)
 
 

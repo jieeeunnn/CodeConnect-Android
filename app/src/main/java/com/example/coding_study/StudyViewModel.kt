@@ -1,22 +1,15 @@
 package com.example.coding_study
 
-import android.app.Application
-import android.util.Log
-import android.view.LayoutInflater
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.coding_study.databinding.StudyUploadLayoutBinding
-import com.example.coding_study.databinding.WriteStudyBinding
-import kotlinx.coroutines.NonDisposableHandle.parent
-
 
 // 게시글의 정보를 담는 데이터 클래스 Post
 data class Post(
     var nickname: String,
     var title: String,
     var content: String,
+    var currentCount: Int,
     var num: Long,
     var field: String,
     var currentTime: String

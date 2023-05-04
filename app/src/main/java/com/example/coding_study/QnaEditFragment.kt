@@ -21,7 +21,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface QnaEditService {
-    @PUT("qna/update{qnaId}")
+    @PUT("qna/update/{qnaId}")
     fun qnaEditPost(@Path("qnaId") id:Long, @Body qnaEdit: QnaRequest): Call<QnaResponse>
 }
 

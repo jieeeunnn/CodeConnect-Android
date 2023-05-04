@@ -22,12 +22,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Suppress("DEPRECATION")
 class StudyFragment : Fragment(R.layout.study_fragment) {
-    //private lateinit var viewModel: StudyViewModel
     private lateinit var studyAdapter: StudyAdapter
     private lateinit var onItemClickListener: StudyAdapter.OnItemClickListener
     private lateinit var binding:StudyFragmentBinding
     private lateinit var viewModel: AddressViewModel
-
 
     // savePostIds 함수 (로컬 저장소에 게시글 번호 저장하는 함수)
     fun savePostIds(context: Context, postIds: List<Long>) {
@@ -53,14 +51,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // 뷰모델 인스턴스 가져오기
-        //viewModel = ViewModelProvider(requireActivity()).get(StudyViewModel::class.java)
-
         // 게시글 목록 뷰 생성
         val view = inflater.inflate(R.layout.study_fragment, container, false)
         val binding = StudyFragmentBinding.bind(view)
         val postRecyclerView = binding.studyRecyclerView
-
 
         // SwipeRefreshLayout 초기화
         binding.swipeRefreshLayout.setOnRefreshListener { // 게시판을 swipe해서 새로고침하면 새로 추가된 게시글 업로드
@@ -76,9 +70,9 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         studyAddressTextView.text = address
 
         binding.toolbarAddressTextView.setOnClickListener { // testViewAddress1을 클릭하면 주소 검색 창으로 이동
-            val addressFragment = AddressFragment()
+            val studyAddressFragment = StudyAddressFragment()
             childFragmentManager.beginTransaction()
-                .add(R.id.study_fragment_layout, addressFragment, "STUDY_FRAGMENT")
+                .add(R.id.study_fragment_layout, studyAddressFragment, "STUDY_FRAGMENT")
                 .addToBackStack("STUDY_FRAGMENT")
                 .commit()
         }
@@ -90,7 +84,9 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         viewModel.getSelectedAddress().observe(viewLifecycleOwner) { address ->
             binding.toolbarAddressTextView.text = address
 
-            Log.e("JoinFragment", "Selected address: $address") // 선택된 address 변수 값 로그 출력
+            loadStudyList()
+
+            Log.e("StudyFragment", "Change address: $address") // 선택된 address 변수 값 로그 출력
         }
 
         // 게시글을 클릭할 때 서버에 토큰, 게시글 id를 주고 Role과 게시글 정보를 받아옴. 이후 Role에 따라 다른 레이아웃 띄우기
@@ -247,7 +243,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         val binding = view?.let { StudyFragmentBinding.bind(it) }
 
         //스터디 게시글 가져오기
-        studyService.studygetList().enqueue(object : Callback<StudyListResponse> {
+        studyService.studyGetList().enqueue(object : Callback<StudyListResponse> {
             override fun onResponse(
                 call: Call<StudyListResponse>,
                 response: Response<StudyListResponse>
@@ -260,7 +256,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                     val studyList = studyListResponse?.data
                     val postListResponse = studyList?.map {
-                        Post( it.nickname, it.title, it.content, it.count, it.field, it.currentDateTime)
+                        Post( it.nickname, it.title, it.content, it.currentCount, it.count, it.field, it.currentDateTime)
                     } ?: emptyList()
                     //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
 
@@ -323,7 +319,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                             val studyList = studyListResponse?.data
                             val postListResponse = studyList?.map {
-                                Post( it.nickname, it.title, it.content, it.count, it.field, it.currentDateTime)
+                                Post( it.nickname, it.title, it.content, it.currentCount, it.count, it.field, it.currentDateTime)
                             } ?: emptyList()
                             //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
 

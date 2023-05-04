@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -54,6 +55,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // 가져온 recruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
         val gson = Gson()
@@ -79,7 +81,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         binding.guestTitleText.text = recruitment.title
         binding.guestContentText.text = recruitment.content
         binding.guestFieldText.text = recruitment.field
-        binding.guestCountText.text = recruitment.count.toString()
+        binding.guestCountText.text = "${recruitment.currentCount} / ${recruitment.count}"
         binding.guestCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
 
         //저장된 토큰값 가져오기
