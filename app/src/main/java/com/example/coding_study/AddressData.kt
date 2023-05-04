@@ -1,7 +1,6 @@
 package com.example.coding_study
 
 import com.beust.klaxon.*
-import com.squareup.moshi.Json
 
 private val klaxon = Klaxon()
 

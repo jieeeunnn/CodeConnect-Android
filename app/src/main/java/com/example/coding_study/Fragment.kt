@@ -3,12 +3,7 @@ package com.example.coding_study
 import android.os.Bundle
 import android.view.View
 import com.example.coding_study.databinding.*
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.*
-import androidx.recyclerview.widget.LinearLayoutManager
 
 
 class ChatFragment : Fragment(R.layout.chat_fragment) {
