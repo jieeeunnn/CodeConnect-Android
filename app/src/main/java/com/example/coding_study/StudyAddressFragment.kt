@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,19 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.AddressFragmentBinding
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
-
-interface StudyAddressService{
-    @GET("recruitments/searchAddress")
-    fun getStudyAddress(@Query("address") address: String) : Call<StudyListResponse>
-}
-
 
 class StudyAddressFragment : Fragment(R.layout.address_fragment) {
     private lateinit var binding: AddressFragmentBinding
@@ -59,20 +53,32 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
             }
         })
 
-        val retrofitStudy = Retrofit.Builder()
+        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+        val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
             .build()
 
-        val studyAddressService = retrofitStudy.create(StudyAddressService::class.java)
+        val studyAddressService = retrofitBearer.create(StudyGetService::class.java)
 
         binding.OkButton.setOnClickListener {
             // ViewModel에 데이터 저장
-            if (mAddress != null) {
-
             viewModel.selectAddress(mAddress)
 
-            studyAddressService.getStudyAddress(address = mAddress).enqueue(object : Callback<StudyListResponse>{
+            studyAddressService.studyGetList(address = mAddress).enqueue(object : Callback<StudyListResponse>{
                 override fun onResponse(call: Call<StudyListResponse>, response: Response<StudyListResponse>
                 ) {
                     if (response.isSuccessful) {
@@ -89,10 +95,6 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
                     Toast.makeText(context, "StudyAddressService_서버 연결 실패", Toast.LENGTH_SHORT).show()
                 }
             })
-            }
-            else {
-                Toast.makeText(context, "주소를 선택해주세요", Toast.LENGTH_SHORT).show()
-            }
         }
 
         binding.addressRecyclerView.layoutManager = LinearLayoutManager(context)

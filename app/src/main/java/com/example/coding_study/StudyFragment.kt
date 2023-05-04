@@ -64,10 +64,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         }
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyAddress", Context.MODE_PRIVATE)
-        val address = sharedPreferences?.getString("address", "") // 저장해둔 회원의 주소 가져오기
+        val myAddress = sharedPreferences?.getString("address", "") // 저장해둔 회원의 주소 가져오기
 
         var studyAddressTextView = binding.toolbarAddressTextView
-        studyAddressTextView.text = address
+        studyAddressTextView.text = myAddress
 
         binding.toolbarAddressTextView.setOnClickListener { // testViewAddress1을 클릭하면 주소 검색 창으로 이동
             val studyAddressFragment = StudyAddressFragment()
@@ -82,7 +82,11 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
         // 가져온 데이터를(AddressFragment에서 선택한 주소) 사용해서 textViewAddress1 업데이트
         viewModel.getSelectedAddress().observe(viewLifecycleOwner) { address ->
-            binding.toolbarAddressTextView.text = address
+            if (address == "") { // 주소 검색란에 검색어가 없을 경우
+                binding.toolbarAddressTextView.text = myAddress // 원래 저장된 주소 띄우기
+            } else {
+                binding.toolbarAddressTextView.text = address
+            }
 
             loadStudyList()
 
@@ -241,13 +245,15 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
         val studyService = retrofitBearer.create(StudyGetService::class.java)
         val binding = view?.let { StudyFragmentBinding.bind(it) }
+        val changeAddress = viewModel.getSelectedAddress().value
 
         //스터디 게시글 가져오기
-        studyService.studyGetList().enqueue(object : Callback<StudyListResponse> {
-            override fun onResponse(
-                call: Call<StudyListResponse>,
-                response: Response<StudyListResponse>
+        studyService.studyGetList(address = changeAddress).enqueue(object : Callback<StudyListResponse> {
+            override fun onResponse(call: Call<StudyListResponse>, response: Response<StudyListResponse>
             ) {
+                if (changeAddress != null) {
+                    Log.e("changeAddress", changeAddress)
+                }
                 if (response.isSuccessful) {
                     val studyListResponse = response.body() // 서버에서 받아온 응답 데이터
                     val code = response.code() // 서버 응답 코드

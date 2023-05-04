@@ -46,6 +46,7 @@ interface StudyGetService { // 게시글 조회 인터페이스
     //@GET("recruitments/list") // 전체 게시글
     @GET("recruitments/main") // 주소, 필드가 같은 게시글
     fun studyGetList(
+        @Query("address") address: String? // 처음 로그인 시 null 전달을 위해 address에 null 허용
     ): Call<StudyListResponse>
 }
 
@@ -78,7 +79,6 @@ enum class Role{ //
     HOST,
     PARTICIPATION
 }
-
 
 
 
