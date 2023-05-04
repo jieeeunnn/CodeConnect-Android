@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaFragmentBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -23,6 +24,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
     private lateinit var binding:QnaFragmentBinding
     private lateinit var qnaAdapter: QnaAdapter
     private lateinit var onQnaClickListener: QnaAdapter.OnQnaClickListener
+    private lateinit var qnaFab: FloatingActionButton
 
     // saveQnaPostIds 함수 (로컬 저장소에 Qna 게시글Id 저장하는 함수)
     fun saveQnaPostIds(context: Context, qnaPostIds: List<Long>) {
@@ -50,8 +52,9 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.qna_fragment, container, false)
-        val binding = QnaFragmentBinding.bind(view)
+        binding = QnaFragmentBinding.bind(view)
         val qnaPostRecyclerView = binding.qnaRecyclerView
+        qnaFab = binding.qnaFloatingActionButton
 
         // SwipeRefreshLayout 초기화
         binding.qnaSwifeRefreshLayout.setOnRefreshListener {
@@ -172,8 +175,15 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
     override fun onResume() {
         super.onResume()
+        Log.e("QnaFragment", "onResume-----------------------")
         loadQnaList()
+        qnaFab.show()
     }
+
+    fun hideFloatingButton() {
+        qnaFab.hide()
+    }
+
     private fun loadQnaList() {
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
@@ -246,6 +256,8 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu_qna, menu)
+        Log.e("qnaSearchView", "onCreateOptionsMenu")
+        onResume()
 
         val searchItem = menu.findItem(R.id.toolbar_qna_search)
         searchItem.isVisible = true // 검색 아이템을 보이도록 설정

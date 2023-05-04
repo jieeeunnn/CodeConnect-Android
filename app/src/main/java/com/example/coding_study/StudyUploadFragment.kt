@@ -20,6 +20,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { // study 게시판 글쓰기 fragment
     private lateinit var binding: WriteStudyBinding
 
@@ -37,10 +38,10 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
     ): View? {
         binding = WriteStudyBinding.inflate(inflater, container, false)
 
+        //스피너 fields에 회원 정보에서 저장해 둔 fields 값 넣기
         val sharedPreferencesFields = requireActivity().getSharedPreferences("MyFields", Context.MODE_PRIVATE)
         val fieldsString = sharedPreferencesFields?.getString("fields", "")
         val fields = fieldsString?.split(",") ?: emptyList()
-
 
         //스피너 어댑터 생성
         val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, fields)
@@ -72,7 +73,6 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            //.addHeader("Authorization", "Bearer $token")
                             .build()
                         Log.d("TokenInterceptor", "Token: " + token.orEmpty())
                         chain.proceed(request)
@@ -99,19 +99,10 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                 override fun onResponse(
                     call: Call<StudyResponse>, response: Response<StudyResponse> // 통신에 성공했을 때
                 ) {
-                    Log.e("response code", "is : ${response.code()}")
 
                     if (response.isSuccessful) {
-                        val studyResponse = response.body() // 서버에서 받아온 응답 데이터
-                        Log.e("StudyPost", "is: ${response.body()}")
-
-                        if (studyResponse?.result == true && studyResponse.data != null) {
-                            //var nickname = studyResponse.data!!.nickname
-                            //val currentTime = studyResponse.data!!.currentDateTime.substring(0, 10) // 서버에서 받아온 현재시간 (substring은 0번째부터 10번째 인덱까지의 문자열을 추출)
-                            //val post = Post(nickname, title, content, count, field, currentTime)
-                            //viewModel.addPost(post)
-                            //Log.e("StudyUploadFragment_viewModel.addPost", "$post added to ViewModel")
-                        }
+                        Log.e("StudyUploadFragment", "is: ${response.body()}")
+                        Log.e("StudyUploadFragment", "is : ${response.code()}")
                     }
                 }
 
@@ -125,5 +116,16 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         }
     }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val parentFragment = parentFragment
+        if (parentFragment is StudyFragment) {
+            parentFragment.hideFloatingButton()
+        }
+
+
     }
 }

@@ -75,4 +75,13 @@ class QnaUpload : Fragment() {
 
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val parentFragment = parentFragment
+        if (parentFragment is QnAFragment) {
+            parentFragment.hideFloatingButton()
+        }
+    }
 }

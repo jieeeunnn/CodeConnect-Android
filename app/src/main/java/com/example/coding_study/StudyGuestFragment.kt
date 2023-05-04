@@ -64,6 +64,11 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val bundle = arguments
         val participantExist = bundle?.getBoolean("participateJson")
 
+        val parentFragment = parentFragment
+        if (parentFragment is StudyFragment) {
+            parentFragment.hideFloatingButton()
+        }
+
         Log.e("StudyGuest participantExist", "$participantExist")
 
         if (participantExist == true) {

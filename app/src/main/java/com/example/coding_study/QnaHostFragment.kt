@@ -44,6 +44,11 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val parentFragment = parentFragment
+        if (parentFragment is QnAFragment) {
+            parentFragment.hideFloatingButton()
+        }
+
         // 가져온 qnaRecruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
         val qnaGson = Gson()
         val qnaJson = arguments?.getString("qnaRecruitmentJson")

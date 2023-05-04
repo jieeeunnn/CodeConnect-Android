@@ -141,4 +141,13 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
 
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val parentFragment = parentFragment
+        if (parentFragment is StudyFragment) {
+            parentFragment.hideFloatingButton()
+        }
+    }
 }

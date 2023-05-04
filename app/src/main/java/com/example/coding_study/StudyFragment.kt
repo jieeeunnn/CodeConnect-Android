@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.StudyFragmentBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -26,6 +27,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     private lateinit var onItemClickListener: StudyAdapter.OnItemClickListener
     private lateinit var binding:StudyFragmentBinding
     private lateinit var viewModel: AddressViewModel
+    private lateinit var fab: FloatingActionButton
 
     // savePostIds 함수 (로컬 저장소에 게시글 번호 저장하는 함수)
     fun savePostIds(context: Context, postIds: List<Long>) {
@@ -53,8 +55,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     ): View? {
         // 게시글 목록 뷰 생성
         val view = inflater.inflate(R.layout.study_fragment, container, false)
-        val binding = StudyFragmentBinding.bind(view)
+        binding = StudyFragmentBinding.bind(view)
         val postRecyclerView = binding.studyRecyclerView
+
+        fab = binding.floatingActionButton
 
         // SwipeRefreshLayout 초기화
         binding.swipeRefreshLayout.setOnRefreshListener { // 게시판을 swipe해서 새로고침하면 새로 추가된 게시글 업로드
@@ -218,8 +222,14 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     // onResume에서 loadStudyList() 함수 호출
     override fun onResume() {
         super.onResume()
+        Log.e("StudyFragment", "onResume---------------------------")
         loadStudyList()
+        fab.show()
         //binding.floatingActionButton.visibility = View.VISIBLE
+    }
+
+    fun hideFloatingButton() {
+        fab.hide()
     }
 
     private fun loadStudyList() { // 서버에서 게시글 전체를 가져와서 로드하는 함수
@@ -295,6 +305,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu_study, menu)
         Log.e("studySearchView", "onCreateOptionsMenu")
+        onResume()
 
         val searchItem = menu.findItem(R.id.toolbar_study_search)
         searchItem.isVisible = true // 검색 아이템을 보이도록 설정
