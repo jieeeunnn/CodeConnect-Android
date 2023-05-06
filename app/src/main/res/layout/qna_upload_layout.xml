@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="32dp"
-        android:text="Id"
+        android:text="nickname"
         android:textColor="#515151"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

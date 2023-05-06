@@ -8,10 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaHostBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -23,15 +25,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.DELETE
 import retrofit2.http.Path
 
-
-interface QnaDeleteService {
-    @DELETE("qna/delete/{qnaId}")
-    fun qnaDeletePost(@Path("qnaId") id: Long): Call<Void>
-}
-
-
 class QnaHostFragment : Fragment(R.layout.qna_host){
     private lateinit var binding: QnaHostBinding
+    private lateinit var qnaCommentAdapter: QnaCommentAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +35,11 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
         savedInstanceState: Bundle?
     ): View? {
         binding = QnaHostBinding.inflate(inflater, container, false)
+
+        qnaCommentAdapter = QnaCommentAdapter(listOf())
+        val qnaHostRecyclerView = binding.qnaHostRecyclerView
+        qnaHostRecyclerView.adapter = qnaCommentAdapter
+        binding.qnaHostRecyclerView.layoutManager = LinearLayoutManager(context)
 
         return binding.root
     }
@@ -70,7 +71,6 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
         binding.qnaHostTItle.text = qnaRecruitment.title
         binding.qnaHostContent.text = qnaRecruitment.content
         binding.qnaHostCurrentTime.text = qnaRecruitment.currentDateTime
-
 
         //저장된 토큰값 가져오기
         val sharedPreferences =
@@ -160,6 +160,7 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
 
         val qnaCommentCreateService = retrofitBearer.create(QnaCommentCreateService::class.java)
 
+        // 댓글 버튼
         binding.hostCommentButton.setOnClickListener {
             val comment = binding.hostComment.text.toString()
             val qnaId = qnaRecruitment.qnaId

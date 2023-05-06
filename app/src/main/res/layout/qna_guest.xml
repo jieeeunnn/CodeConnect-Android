@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/guestComment"
+        android:id="@+id/guestCommentEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -65,8 +65,18 @@
         android:backgroundTint="#CFDCFF"
         android:textColor="#515151"
         android:text="댓글"
-        app:layout_constraintBaseline_toBaselineOf="@+id/guestComment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/guestCommentEdit"
         app:layout_constraintEnd_toEndOf="parent"
         android:stateListAnimator="@null" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/qnaGuestRecyclerView"
+        android:layout_width="418dp"
+        android:layout_height="373dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qnaGuestContent"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

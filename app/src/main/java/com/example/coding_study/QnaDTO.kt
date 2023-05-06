@@ -81,7 +81,10 @@ interface QnaSearchService { // qna 게시판 검색 api
     ): Call<QnaListResponse>
 }
 
-
+interface QnaDeleteService { // qna 게시글 삭제
+    @DELETE("qna/delete/{qnaId}")
+    fun qnaDeletePost(@Path("qnaId") id: Long): Call<Void>
+}
 
 
 interface QnaCommentCreateService {

@@ -41,7 +41,6 @@ class StudyDeleteFragment : DialogFragment() { // 게시글 삭제 여부 다이
 
         val sharedPreferencesHostId = requireActivity().getSharedPreferences("MyHostIds", Context.MODE_PRIVATE)
         val hostIds = sharedPreferencesHostId?.getLong("MyHostIds",0)
-        Log.e("StudyDeleteFragment hostIds", "$hostIds")
 
         val studyDeleteService = retrofitBearer.create(StudyDeleteService::class.java)
 

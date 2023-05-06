@@ -80,7 +80,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         val qnaCommentCreateService = retrofitBearer.create(QnaCommentCreateService::class.java)
 
         binding.guestCommentButton.setOnClickListener {
-            val comment = binding.guestComment.text.toString()
+            val comment = binding.guestCommentEdit.text.toString()
             val qnaId = qnaRecruitment.qnaId
             val qnaCommentRequest = QnaCommentRequest(comment)
 
