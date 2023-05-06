@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -60,6 +61,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         setHasOptionsMenu(true) // 옵션 메뉴 사용을 알림
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -79,7 +81,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         val myAddress = sharedPreferences?.getString("address", "") // 저장해둔 회원의 주소 가져오기
 
         var studyAddressTextView = binding.toolbarAddressTextView
-        studyAddressTextView.text = myAddress
+        studyAddressTextView.text = "▼$myAddress"
 
         binding.toolbarAddressTextView.setOnClickListener { // testViewAddress1을 클릭하면 주소 검색 창으로 이동
             val studyAddressFragment = StudyAddressFragment()
@@ -95,9 +97,9 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         // 가져온 데이터를(AddressFragment에서 선택한 주소) 사용해서 textViewAddress1 업데이트
         viewModel.getSelectedAddress().observe(viewLifecycleOwner) { address ->
             if (address == "") { // 주소 검색란에 검색어가 없을 경우
-                binding.toolbarAddressTextView.text = myAddress // 원래 저장된 주소 띄우기
+                binding.toolbarAddressTextView.text = "▼$myAddress" // 원래 저장된 주소 띄우기
             } else {
-                binding.toolbarAddressTextView.text = address
+                binding.toolbarAddressTextView.text = "▼$address"
             }
 
             loadStudyList()

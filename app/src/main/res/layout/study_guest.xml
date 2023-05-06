@@ -94,22 +94,12 @@
                 android:textSize="16sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/guestNicknameText"
                 app:layout_constraintEnd_toEndOf="parent" />
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <Button
-        android:id="@+id/guestCancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="150dp"
-        android:backgroundTint="#CFDCFF"
-        android:text="취소하기"
-        android:textColor="#515151"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="NotSibling" />
 
     <Button
         android:id="@+id/guestButton"
@@ -124,4 +114,16 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="NotSibling" />
 
+    <Button
+        android:id="@+id/guestCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="150dp"
+        android:backgroundTint="#CFDCFF"
+        android:text="취소하기"
+        android:textColor="#515151"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="NotSibling" />
 </androidx.constraintlayout.widget.ConstraintLayout>

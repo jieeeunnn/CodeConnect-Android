@@ -166,7 +166,10 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
                                 val studyCurrentCount = studyGuestCurrentCount.data
                                 loadStudyGuest(studyCurrentCount)
-                                GuestParticipateDialog().show(childFragmentManager, "GuestJoin Dialog")
+
+                                val cofirmDialog = ConfirmDialog("스터디 참여 신청이 완료되었습니다")
+                                cofirmDialog.isCancelable = false
+                                cofirmDialog.show(childFragmentManager, "deleteDialog")
                             }
                         }
 
@@ -198,7 +201,9 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                             loadStudyGuest(studyCurrentCount)
                         }
 
-                        GuestCancelDialog().show(childFragmentManager, "Guest Cancel")
+                        val cofirmDialog = ConfirmDialog("스터디 신청이 취소되었습니다")
+                        cofirmDialog.isCancelable = false
+                        cofirmDialog.show(childFragmentManager, "deleteDialog")
 
                     } else {
                         Log.e("StudyGuestFragment guestCancelButton onResponse", "But not success")

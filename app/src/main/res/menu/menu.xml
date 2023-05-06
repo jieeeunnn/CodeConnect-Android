@@ -5,7 +5,8 @@
     <item
         android:id="@+id/studyFragment"
         android:icon="@drawable/ic_baseline_book_24"
-        android:title="Study" />
+        android:title="Study"
+        />
     <item
         android:id="@+id/qnAFragment"
         android:icon="@drawable/ic_baseline_question_answer_24"

@@ -30,7 +30,7 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
             } else {
                 binding.numberTextView.text = "모집 완료"
             }
-            binding.fieldTextView.text = post.field
+            binding.fieldTextView.text = "# ${post.field}"
             binding.currentTextView.text = post.currentTime
         }
 
