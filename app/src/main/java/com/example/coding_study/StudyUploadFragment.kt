@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -29,7 +30,6 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         val filters = arrayListOf("안드로이드", "ios", "알고리즘", "데이터베이스", "운영체제", "서버", "웹", "머신러닝", "기타")
     }
      */
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +61,15 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
             binding.spinner.setSelection(0)
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+
+            val parentFragment = parentFragment
+            if (parentFragment is StudyFragment) {
+                parentFragment.onResume()
+            }
+        }
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
@@ -110,9 +119,17 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                     Toast.makeText(context, "통신에 실패했습니다", Toast.LENGTH_LONG).show()
                 }
             })
+
+            val parentFragment = parentFragment
+            if (parentFragment is StudyFragment) {
+                parentFragment.onResume()
+            }
+
             //업로드 후 리스트로 돌아감
             val parentFragmentManager = requireActivity().supportFragmentManager
             parentFragmentManager.popBackStackImmediate()
+
+
         }
     }
         return binding.root

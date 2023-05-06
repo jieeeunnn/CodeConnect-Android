@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.WriteStudyBinding
 import com.google.gson.Gson
@@ -38,6 +39,11 @@ class StudyEditFragment : Fragment(R.layout.write_study) {
     ): View? {
         // 이전 프래그먼트에서 전달받은 글 정보
         binding = WriteStudyBinding.inflate(inflater, container, false)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+        }
 
         val gson = Gson()
         val json = arguments?.getString("recruitmentJson")
@@ -112,6 +118,10 @@ class StudyEditFragment : Fragment(R.layout.write_study) {
                         parentFragmentManager.popBackStack()
                         parentFragmentManager.popBackStack() // popBackStack()을 두번 호출해서 StudyFragment로 이동
 
+                        val parentFragment = parentFragment
+                        if (parentFragment is StudyFragment) {
+                            parentFragment.onResume()
+                        }
 
                     }else{
                         Log.e("StudyEditFragment_onResponse", "But not success")

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.StudyFragmentBinding
@@ -41,6 +42,17 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         }
     }
 
+    // StudyDeleteFragment에서 사용하기 위해서 선택된 게시글 번호 저장
+    fun savePostHostIds(context: Context, hostIds: Long) {
+        val sharedPreferencesHostId = context.getSharedPreferences("MyHostIds", Context.MODE_PRIVATE)
+        val editor = sharedPreferencesHostId.edit()
+        editor.putLong("MyHostIds", hostIds)
+        Log.e("savePostHostIds", "$hostIds")
+        if (!editor.commit()) {
+            Log.e("saveHostIds", "Failed to save post IDs")
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -48,7 +60,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         setHasOptionsMenu(true) // 옵션 메뉴 사용을 알림
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -63,8 +74,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         // SwipeRefreshLayout 초기화
         binding.swipeRefreshLayout.setOnRefreshListener { // 게시판을 swipe해서 새로고침하면 새로 추가된 게시글 업로드
             loadStudyList()
-            //binding.floatingActionButton.visibility = View.VISIBLE
-
         }
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyAddress", Context.MODE_PRIVATE)
@@ -113,6 +122,11 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                 val selectedPostId = postIds.getOrNull(position)// postIds 리스트에서 position에 해당하는 인덱스의 값을 가져옴
                 Log.e("StudyFragment","selectedPostId: $selectedPostId")
+                context?.let {
+                    if (selectedPostId != null) {
+                        savePostHostIds(it, selectedPostId)
+                    }
+                }
 
                 //저장된 토큰값 가져오기
                 val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
@@ -126,7 +140,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                             .addInterceptor { chain ->
                                 val request = chain.request().newBuilder()
                                     .addHeader("Authorization", "Bearer " + token.orEmpty())
-                                    //.addHeader("Authorization", "Bearer $token")
                                     .build()
                                 Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
                                 chain.proceed(request)
@@ -206,8 +219,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                 .addToBackStack("STUDY_FRAGMENT")
                 .replace(R.id.study_fragment_layout, studyuploadFragment, "STUDY_FRAGMENT")
                 .commit()
-            //binding.floatingActionButton.visibility = View.GONE
-
         }
 
         return view
@@ -215,7 +226,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
     override fun onPause() {
         super.onPause()
-        // onPause() 함수가 수행될 때 실행될 코드 작성
         Log.e("onPause", "***********")
     }
 
@@ -225,7 +235,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         Log.e("StudyFragment", "onResume---------------------------")
         loadStudyList()
         fab.show()
-        //binding.floatingActionButton.visibility = View.VISIBLE
     }
 
     fun hideFloatingButton() {
@@ -305,7 +314,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu_study, menu)
         Log.e("studySearchView", "onCreateOptionsMenu")
-        onResume()
+        //onResume()
 
         val searchItem = menu.findItem(R.id.toolbar_study_search)
         searchItem.isVisible = true // 검색 아이템을 보이도록 설정
@@ -341,7 +350,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                             //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
 
                             if (studyListResponse?.result == true) {
-                                studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
+                                studyAdapter.postList = postListResponse // 어댑터의 postList 변수 업데이트
                                 studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
 
                             }

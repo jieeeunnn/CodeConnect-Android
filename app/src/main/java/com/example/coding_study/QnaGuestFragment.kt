@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.QnaGuestBinding
 import com.google.gson.Gson
@@ -31,6 +32,16 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         val parentFragment = parentFragment
         if (parentFragment is QnAFragment) {
             parentFragment.hideFloatingButton()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+
+            val parentFragment = parentFragment
+            if (parentFragment is QnAFragment) {
+                parentFragment.onResume()
+            }
         }
 
         // 가져온 qnaRecruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성

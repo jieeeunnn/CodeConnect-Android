@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.StudyGuestBinding
@@ -29,8 +30,14 @@ interface StudyParticipateService {
     fun participateStudy(
         @Path("id") id:Long,
         @Query("isParticipating") isParticipating: Boolean
-    ): Call<StudyOnlyResponse>
+    ): Call<StudyGuestCurrentCount>
 }
+
+data class StudyGuestCurrentCount( // 참여하기, 취소하기 버튼 누를 때 currentCount 응답값
+    var result: Boolean,
+    var message: String,
+    var data: Int
+)
 
 class GuestParticipateDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -38,6 +45,16 @@ class GuestParticipateDialog : DialogFragment() {
             setTitle("스터디 참여 신청")
             setMessage("스터디 참여 신청이 완료되었습니다")
             setPositiveButton("확인") {dialog, id -> println("스터디 참여 신청 확인")}
+        }.create()
+    }
+}
+
+class GuestCancelDialog : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext()).apply {
+            setTitle("스터디 신청 취소")
+            setMessage("스터디 신청이 취소되었습니다")
+            setPositiveButton("확인") {dialog, id -> println("스터디 신청 취소")}
         }.create()
     }
 }
@@ -69,6 +86,22 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
             parentFragment.hideFloatingButton()
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+
+            val parentFragment = parentFragment
+            if (parentFragment is StudyFragment) {
+                parentFragment.onResume()
+            }
+        }
+
+        /*
+        binding.swipeRefreshLayoutStudyGuest.setOnRefreshListener {
+            loadStudyGuest(currentCount = 11)
+        }
+         */
+
         Log.e("StudyGuest participantExist", "$participantExist")
 
         if (participantExist == true) {
@@ -80,14 +113,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         }
 
         Log.e("StudyGuestFragment","$recruitment")
-
-        // recruitment 변수에서 게시글 정보를 가져와서 레이아웃에 표시
-        binding.guestNicknameText.text = recruitment.nickname
-        binding.guestTitleText.text = recruitment.title
-        binding.guestContentText.text = recruitment.content
-        binding.guestFieldText.text = recruitment.field
-        binding.guestCountText.text = "${recruitment.currentCount} / ${recruitment.count}"
-        binding.guestCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
 
         //저장된 토큰값 가져오기
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
@@ -101,7 +126,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            //.addHeader("Authorization", "Bearer $token")
                             .build()
                         Log.d("TokenInterceptor_StudyGuestFragment", "Token: " + token.orEmpty())
                         chain.proceed(request)
@@ -115,15 +139,21 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
 
         binding.guestButton.setOnClickListener { // 참여하기 버튼을 누를 시
-            studyParticipateService.participateStudy(postId, isParticipating = true).enqueue(object : Callback<StudyOnlyResponse>{
-                override fun onResponse( call: Call<StudyOnlyResponse>, response: Response<StudyOnlyResponse>
+            studyParticipateService.participateStudy(postId, isParticipating = true).enqueue(object : Callback<StudyGuestCurrentCount>{
+                override fun onResponse( call: Call<StudyGuestCurrentCount>, response: Response<StudyGuestCurrentCount>
                 ) {
                     if (response.isSuccessful) {
+                        val studyGuestCurrentCount = response.body()
                         Log.e("guestButton response code", "${response.code()}")
-                        Log.e("guestButton response body", "${response.body()}")
+                        Log.e("guestButton response body", "$studyGuestCurrentCount")
 
                         binding.guestButton.visibility = View.GONE
                         binding.guestCancelButton.visibility = View.VISIBLE
+
+                        val studyCurrentCount = studyGuestCurrentCount?.data
+                        if (studyCurrentCount != null) {
+                            loadStudyGuest(studyCurrentCount)
+                        }
 
                         GuestParticipateDialog().show(childFragmentManager, "GuestJoin Dialog")
                     }else{
@@ -131,35 +161,62 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                     }
                 }
 
-                override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
+                override fun onFailure(call: Call<StudyGuestCurrentCount>, t: Throwable) {
                     Toast.makeText(context, "참여하기 버튼_서버 연결 실패", Toast.LENGTH_SHORT).show()
-                    Log.e("studyHostFragment_", "$t")
-                }
+                    Log.e("studyHostFragment_", "$t")                }
             })
         }
 
         binding.guestCancelButton.setOnClickListener { // 취소하기 버튼 누를 시
-            studyParticipateService.participateStudy(postId, isParticipating = false).enqueue(object : Callback<StudyOnlyResponse>{
-                override fun onResponse( call: Call<StudyOnlyResponse>, response: Response<StudyOnlyResponse>
+            studyParticipateService.participateStudy(postId, isParticipating = false).enqueue(object : Callback<StudyGuestCurrentCount>{
+                override fun onResponse( call: Call<StudyGuestCurrentCount>, response: Response<StudyGuestCurrentCount>
                 ) {
                     if (response.isSuccessful) {
+                        val studyGuestCurrentCount = response.body()
                         Log.e("guestButton response code", "${response.code()}")
-                        Log.e("guestButton response body", "${response.body()}")
+                        Log.e("guestButton response body", "$studyGuestCurrentCount")
 
                         binding.guestButton.visibility = View.VISIBLE
                         binding.guestCancelButton.visibility = View.GONE
+
+                        val studyCurrentCount = studyGuestCurrentCount?.data
+                        if (studyCurrentCount != null) {
+                            loadStudyGuest(studyCurrentCount)
+                        }
+
+                        GuestCancelDialog().show(childFragmentManager, "Guest Cancel")
+
                     } else {
                         Log.e("StudyGuestFragment guestCancelButton onResponse", "But not success")
-
                     }
                 }
-
-                override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
+                override fun onFailure(call: Call<StudyGuestCurrentCount>, t: Throwable) {
                     Toast.makeText(context, "참여 취소하기 버튼_서버 연결 실패", Toast.LENGTH_SHORT).show()
                     Log.e("studyHostFragment_", "$t")
-
                 }
             })
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        val gson = Gson()
+        val json = arguments?.getString("recruitmentJson")
+        val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
+        loadStudyGuest(recruitment.currentCount)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun loadStudyGuest(currentCount: Int) {
+        val gson = Gson()
+        val json = arguments?.getString("recruitmentJson")
+        val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
+
+        binding.guestNicknameText.text = recruitment.nickname
+        binding.guestTitleText.text = recruitment.title
+        binding.guestContentText.text = recruitment.content
+        binding.guestFieldText.text = recruitment.field
+        binding.guestCountText.text = "$currentCount / ${recruitment.count}"
+        binding.guestCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
+
     }
 }

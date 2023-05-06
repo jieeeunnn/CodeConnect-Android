@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +34,16 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
         // 프래그먼트에서 사용할 레이아웃 파일을 inflate 합니다.
         binding = AddressFragmentBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+
+            val parentFragment = parentFragment
+            if (parentFragment is StudyFragment) {
+                parentFragment.onResume()
+            }
+        }
 
         val recyclerView = binding.addressRecyclerView
         val itemDecoration = AddressAdapter.MyItemDecoration(30,30) // 아이템 간 간격 설정
@@ -86,6 +97,11 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
                         Log.e("StudyAddressService response body", "${response.body()}")
 
                         parentFragmentManager.popBackStack()
+
+                        val parentFragment = parentFragment
+                        if (parentFragment is StudyFragment) {
+                            parentFragment.onResume()
+                        }
 
                     } else {
                         Log.e("StudyAddressService onResponse", "But not success")

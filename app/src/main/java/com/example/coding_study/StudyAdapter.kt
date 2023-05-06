@@ -25,7 +25,11 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
             binding.idTextView.text = post.nickname
             binding.titleTextView.text = post.title
             binding.contentTextView.text = post.content
-            binding.numberTextView.text = "${post.currentCount} / ${post.num}"
+            if (post.num > post.currentCount) {
+                binding.numberTextView.text = "${post.currentCount} / ${post.num}"
+            } else {
+                binding.numberTextView.text = "모집 완료"
+            }
             binding.fieldTextView.text = post.field
             binding.currentTextView.text = post.currentTime
         }

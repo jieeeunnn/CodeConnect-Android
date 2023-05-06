@@ -66,6 +66,7 @@
         android:textColor="#515151"
         android:text="댓글"
         app:layout_constraintBaseline_toBaselineOf="@+id/guestComment"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:stateListAnimator="@null" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

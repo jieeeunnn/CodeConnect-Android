@@ -257,7 +257,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu_qna, menu)
         Log.e("qnaSearchView", "onCreateOptionsMenu")
-        onResume()
+        //onResume()
 
         val searchItem = menu.findItem(R.id.toolbar_qna_search)
         searchItem.isVisible = true // 검색 아이템을 보이도록 설정

@@ -7,102 +7,121 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-    <TextView
-        android:id="@+id/guestNicknameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="150dp"
-        android:text="nickname"
-        android:textSize="16sp"
-        android:textStyle="normal"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayoutStudyGuest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/guestTitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="32dp"
-        android:text="title"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guestNicknameText" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/guestContentText"
-        android:layout_width="270dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="content"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/guestTitleText"
-        app:layout_constraintTop_toBottomOf="@+id/guestTitleText" />
 
-    <TextView
-        android:id="@+id/guestFieldText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="field"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/guestContentText"
-        app:layout_constraintTop_toBottomOf="@+id/guestContentText" />
+            <TextView
+                android:id="@+id/guestNicknameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="150dp"
+                android:text="nickname"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/guestPersonText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="참여인원"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/guestFieldText"
-        app:layout_constraintTop_toBottomOf="@+id/guestFieldText" />
+            <TextView
+                android:id="@+id/guestTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="32dp"
+                android:text="title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guestNicknameText" />
 
-    <TextView
-        android:id="@+id/guestCountText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:text="TextView"
-        android:textSize="16sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/guestPersonText"
-        app:layout_constraintStart_toEndOf="@+id/guestPersonText" />
+            <TextView
+                android:id="@+id/guestContentText"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="content"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/guestTitleText"
+                app:layout_constraintTop_toBottomOf="@+id/guestTitleText" />
 
-    <TextView
-        android:id="@+id/guestCurrentText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="70dp"
-        android:text="currentTime"
-        android:textSize="16sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/guestNicknameText"
-        app:layout_constraintEnd_toEndOf="parent" />
+            <TextView
+                android:id="@+id/guestFieldText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="field"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/guestContentText"
+                app:layout_constraintTop_toBottomOf="@+id/guestContentText" />
+
+            <TextView
+                android:id="@+id/guestPersonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="참여인원"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/guestFieldText"
+                app:layout_constraintTop_toBottomOf="@+id/guestFieldText" />
+
+            <TextView
+                android:id="@+id/guestCountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:text="TextView"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/guestPersonText"
+                app:layout_constraintStart_toEndOf="@+id/guestPersonText" />
+
+            <TextView
+                android:id="@+id/guestCurrentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="70dp"
+                android:text="currentTime"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/guestNicknameText"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/guestCancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginBottom="150dp"
         android:backgroundTint="#CFDCFF"
-        android:textColor="#515151"
         android:text="취소하기"
+        android:textColor="#515151"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guestCountText" />
+        tools:ignore="NotSibling" />
 
     <Button
         android:id="@+id/guestButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginBottom="150dp"
         android:backgroundTint="#CFDCFF"
         android:text="참여하기"
         android:textColor="#515151"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guestCountText" />
+        tools:ignore="NotSibling" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

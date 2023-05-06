@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.WriteQnaBinding
 import com.google.gson.Gson
@@ -34,6 +35,11 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
         savedInstanceState: Bundle?
     ): View? {
         binding = WriteQnaBinding.inflate(inflater, container, false)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+        }
 
         val qnaGson = Gson()
         val qnaJson = arguments?.getString("qnaRecruitmentJson")
@@ -84,6 +90,11 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
                         qnaBundle.putString("qnaRecruitmentJson", qnaGson.toJson(response.body()))
                         val qnaHostFragment = QnaHostFragment()
                         qnaHostFragment.arguments = qnaBundle
+
+                        val parentFragment = parentFragment
+                        if (parentFragment is QnAFragment) {
+                            parentFragment.onResume()
+                        }
 
                         val parentFragmentManager = requireActivity().supportFragmentManager
                         parentFragmentManager.popBackStack()

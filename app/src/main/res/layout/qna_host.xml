@@ -54,7 +54,8 @@
         android:textColor="#515151"
         android:text="수정"
         app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostDeleteButton"
-        app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton" />
+        app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton"
+        android:stateListAnimator="@null" />
 
     <Button
         android:id="@+id/qnaHostDeleteButton"
@@ -66,7 +67,8 @@
         android:text="삭제"
         android:textColor="#E45050"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:stateListAnimator="@null" />
 
     <EditText
         android:id="@+id/hostComment"
@@ -90,5 +92,6 @@
         android:textColor="#515151"
         android:text="댓글"
         app:layout_constraintBaseline_toBaselineOf="@+id/hostComment"
-        app:layout_constraintEnd_toEndOf="parent"  />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:stateListAnimator="@null" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.WriteQnaBinding
 import okhttp3.OkHttpClient
@@ -25,6 +26,16 @@ class QnaUpload : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = WriteQnaBinding.inflate(inflater, container, false)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+
+            val parentFragment = parentFragment
+            if (parentFragment is QnAFragment) {
+                parentFragment.onResume()
+            }
+        }
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
@@ -69,6 +80,12 @@ class QnaUpload : Fragment() {
                 }
             })
             //업로드 후 qna 게시판으로 돌아감
+
+            val parentFragment = parentFragment
+            if (parentFragment is QnAFragment) {
+                parentFragment.onResume()
+            }
+
             val parentFragmentManager = requireActivity().supportFragmentManager
             parentFragmentManager.popBackStackImmediate()
         }

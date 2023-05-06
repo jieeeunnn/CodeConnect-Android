@@ -58,7 +58,6 @@
         android:id="@+id/qnaFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
         android:clickable="true"
         app:backgroundTint="#CFDCFF"
         app:layout_constraintBottom_toBottomOf="parent"
