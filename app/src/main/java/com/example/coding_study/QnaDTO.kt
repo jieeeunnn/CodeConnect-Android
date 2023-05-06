@@ -21,12 +21,6 @@ data class QnaUploadDto(
     var comments: List<Comment>
 )
 
-data class Comment (
-    var commentId: Long,
-    var comment: String,
-    var nickname: String,
-    var currentDateTime: String
-    )
 
 
 
@@ -92,9 +86,22 @@ interface QnaSearchService { // qna 게시판 검색 api
 
 interface QnaCommentCreateService {
     @POST("comment/create/{qnaId}")
-    fun qnaCommentCreate(@Path("qnaId") qnaPostId: Long ,@Body qnaCommentRequest : QnaCommentRequest) : Call<Comment>
+    fun qnaCommentCreate(@Path("qnaId") qnaPostId: Long ,@Body qnaCommentRequest : QnaCommentRequest) : Call<QnaCommentResponse>
 }
 
 data class QnaCommentRequest(
     var comment: String
+)
+
+data class QnaCommentResponse ( // qnaUpload에서 사용
+    var result: Boolean,
+    var message: String,
+    var data: Comment
+)
+
+data class Comment (
+    var commentId: Long,
+    var comment: String,
+    var nickname: String,
+    var currentDateTime: String
 )

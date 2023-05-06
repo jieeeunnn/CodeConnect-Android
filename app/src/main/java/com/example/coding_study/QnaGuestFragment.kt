@@ -6,11 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.QnaGuestBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -65,7 +69,6 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            //.addHeader("Authorization", "Bearer $token")
                             .build()
                         Log.d("TokenInterceptor", "Token: " + token.orEmpty())
                         chain.proceed(request)
@@ -78,10 +81,22 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
 
         binding.guestCommentButton.setOnClickListener {
             val comment = binding.guestComment.text.toString()
-
+            val qnaId = qnaRecruitment.qnaId
             val qnaCommentRequest = QnaCommentRequest(comment)
 
-            //qnaCommentCreateService.qnaCommentCreate()
+            qnaCommentCreateService.qnaCommentCreate(qnaId, qnaCommentRequest).enqueue(object : Callback<QnaCommentResponse>{
+                override fun onResponse(call: Call<QnaCommentResponse>, response: Response<QnaCommentResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.e("Qna post comment response code", "${response.code()}")
+                        Log.e("Qna post comment response body", "${response.body()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<QnaCommentResponse>, t: Throwable) {
+                    Toast.makeText(context, "qna comment 서버 연결 실패", Toast.LENGTH_LONG).show()
+                }
+            })
         }
 
 

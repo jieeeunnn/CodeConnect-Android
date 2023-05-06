@@ -59,6 +59,16 @@ class GuestCancelDialog : DialogFragment() {
     }
 }
 
+class GuestRecruitmentCompletedDialog : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext()).apply {
+            setTitle("모집 완료 스터디")
+            setMessage("모집이 완료된 스터디입니다")
+            setPositiveButton("확인") {dialog, id -> println("모집 완료 스터디")}
+        }.create()
+    }
+}
+
 class StudyGuestFragment : Fragment(R.layout.study_guest) {
     private lateinit var binding: StudyGuestBinding
 
@@ -147,15 +157,19 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                         Log.e("guestButton response code", "${response.code()}")
                         Log.e("guestButton response body", "$studyGuestCurrentCount")
 
-                        binding.guestButton.visibility = View.GONE
-                        binding.guestCancelButton.visibility = View.VISIBLE
+                        if (studyGuestCurrentCount != null) {
+                            if (studyGuestCurrentCount.data == -1) {
+                                GuestRecruitmentCompletedDialog().show(childFragmentManager, "Guest Recruitment Completed")
+                            }else{
+                                binding.guestButton.visibility = View.GONE
+                                binding.guestCancelButton.visibility = View.VISIBLE
 
-                        val studyCurrentCount = studyGuestCurrentCount?.data
-                        if (studyCurrentCount != null) {
-                            loadStudyGuest(studyCurrentCount)
+                                val studyCurrentCount = studyGuestCurrentCount.data
+                                loadStudyGuest(studyCurrentCount)
+                                GuestParticipateDialog().show(childFragmentManager, "GuestJoin Dialog")
+                            }
                         }
 
-                        GuestParticipateDialog().show(childFragmentManager, "GuestJoin Dialog")
                     }else{
                         Log.e("StudyGuestFragment guestButton onResponse", "But not success")
                     }

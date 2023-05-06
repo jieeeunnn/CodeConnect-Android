@@ -10,7 +10,7 @@ data class Post(
     var title: String,
     var content: String,
     var currentCount: Int,
-    var num: Long,
+    var num: Int,
     var field: String,
     var currentTime: String
 )

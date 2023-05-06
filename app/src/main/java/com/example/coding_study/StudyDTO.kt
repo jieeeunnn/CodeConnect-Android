@@ -20,7 +20,7 @@ data class RecruitmentDto (
     var modifiedDateTime : String = "",
     var recruitmentId : Long, // 게시글 번호
     var address: String ="",
-    var count : Long,
+    var count : Int,
     var currentCount: Int,
     var field: String
 )

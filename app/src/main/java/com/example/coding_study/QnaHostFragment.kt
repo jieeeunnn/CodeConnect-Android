@@ -17,6 +17,7 @@ import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.DELETE
@@ -155,7 +156,28 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
                 .replace(R.id.qna_host_fragment, qnaEditFragment)
                 .addToBackStack(null)
                 .commit()
+        }
 
+        val qnaCommentCreateService = retrofitBearer.create(QnaCommentCreateService::class.java)
+
+        binding.hostCommentButton.setOnClickListener {
+            val comment = binding.hostComment.text.toString()
+            val qnaId = qnaRecruitment.qnaId
+            val qnaCommentRequest = QnaCommentRequest(comment)
+
+            qnaCommentCreateService.qnaCommentCreate(qnaId, qnaCommentRequest).enqueue(object : Callback<QnaCommentResponse>{
+                override fun onResponse(call: Call<QnaCommentResponse>, response: Response<QnaCommentResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.e("Qna post comment response code", "${response.code()}")
+                        Log.e("Qna post comment response body", "${response.body()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<QnaCommentResponse>, t: Throwable) {
+                    Toast.makeText(context, "qna comment 서버 연결 실패", Toast.LENGTH_LONG).show()
+                }
+            })
         }
 
 

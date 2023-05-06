@@ -166,8 +166,6 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                 .addToBackStack("QNA_FRAGMENT")
                 .replace(R.id.qna_fragment_layout, qnaUploadFragment, "QNA_FRAGMENT")
                 .commit()
-            //binding.floatingActionButton.visibility = View.GONE
-
         }
 
         return view
