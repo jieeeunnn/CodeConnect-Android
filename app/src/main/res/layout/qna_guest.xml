@@ -14,6 +14,7 @@
         android:layout_marginStart="70dp"
         android:layout_marginTop="80dp"
         android:text="nickname"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,6 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="title"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/qnaGuestNickname"
         app:layout_constraintTop_toBottomOf="@+id/qnaGuestNickname" />
 
@@ -32,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="content"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/qnaGuestTitle"
         app:layout_constraintTop_toBottomOf="@+id/qnaGuestTitle" />
 
@@ -42,7 +46,8 @@
         android:layout_marginEnd="70dp"
         android:text="currentTime"
         app:layout_constraintBaseline_toBaselineOf="@+id/qnaGuestNickname"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/guestCommentEdit"

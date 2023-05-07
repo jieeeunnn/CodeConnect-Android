@@ -7,8 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="grey">#515151</color>
 
-    <color name="selectedButtonBackground">#CFDCFF</color>
-    <color name="defaultButtonBackground">#F3F8FF</color>
+    <color name="blue_sky">#CFDCFF</color>
+    <color name="blue_main">#F3F8FF</color>
+    <color name="grey">#DADADA</color>
+    <color name="grey_dark">#515151</color>
+
 </resources>

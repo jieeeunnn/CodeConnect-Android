@@ -71,9 +71,9 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
 
         fun updateButtonAppearance(button: Button, isSelected: Boolean) {  // field 버튼이 눌리면 색상 변경하는 함수
             if (isSelected) {
-                button.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.selectedButtonBackground)
+                button.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.blue_sky)
             } else {
-                button.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.defaultButtonBackground)
+                button.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.blue_main)
             }
         }
 
