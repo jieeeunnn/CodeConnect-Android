@@ -105,6 +105,8 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                     qnaOnlyService.qnaGetOnlyPost(qnaSelectedPostId).enqueue(object :Callback<QnaOnlyResponse>{
                         override fun onResponse( call: Call<QnaOnlyResponse>, response: Response<QnaOnlyResponse>
                         ) {
+                            Log.e("QnaOnlyResponse onResponse_response.code", "is : ${response.code()}")
+
                             if (response.isSuccessful) {
                                 val qnaOnlyResponse = response.body() // 서버에서 받아온 응답 데이터
                                 Log.e("QnaOnlyResponse_reponse.body", "is : $qnaOnlyResponse")
@@ -112,11 +114,21 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
                                 if (qnaOnlyResponse?.result == true && qnaOnlyResponse.data.containsKey(QnaRole.HOST)) {
                                     // QnaHostFragment로 게시글 정보를 넘겨주기 위해 받은 데이터 저장
-                                    val qnaRecruitment = qnaOnlyResponse.data[QnaRole.HOST] as QnaUploadDto
+                                    val qnaRecruitment = qnaOnlyResponse.data[QnaRole.HOST] as Any
+                                    val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? QnaCommentListResponse
+                                    val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? QnaCommentListResponse
+
                                     val qnaGson = Gson()
-                                    val qnaJson = qnaGson.toJson(qnaRecruitment)
                                     val qnaBundle = Bundle()
-                                    qnaBundle.putString("qnaRecruitmentJson", qnaJson)
+
+                                    val qnaJson = qnaGson.toJson(qnaRecruitment)
+                                    val commentHostJson = qnaGson.toJson(commentHost)
+                                    val commentGuestJson = qnaGson.toJson(commentGuest)
+
+                                    qnaBundle.putString("qnaHostRecruitmentJson", qnaJson)
+                                    qnaBundle.putString("commentHostJson", commentHostJson)
+                                    qnaBundle.putString("commentGuestJson", commentGuestJson)
+
                                     val qnaHostFragment = QnaHostFragment()
                                     qnaHostFragment.arguments = qnaBundle
 
@@ -126,11 +138,21 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                                         .commit()
 
                                 } else if (qnaOnlyResponse?.result == true && qnaOnlyResponse.data.containsKey(QnaRole.GUEST)) {
-                                    val qnaRecruitment = qnaOnlyResponse.data[QnaRole.GUEST] as QnaUploadDto
+                                    val qnaRecruitment = qnaOnlyResponse.data[QnaRole.GUEST] as Any
+                                    val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? QnaCommentListResponse
+                                    val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? QnaCommentListResponse
+
                                     val qnaGson = Gson()
-                                    val qnaJson = qnaGson.toJson(qnaRecruitment)
                                     val qnaBundle = Bundle()
-                                    qnaBundle.putString("qnaRecruitmentJson", qnaJson)
+
+                                    val qnaJson = qnaGson.toJson(qnaRecruitment)
+                                    val commentHostJson = qnaGson.toJson(commentHost)
+                                    val commentGuestJson = qnaGson.toJson(commentGuest)
+
+                                    qnaBundle.putString("qnaGuestRecruitmentJson", qnaJson)
+                                    qnaBundle.putString("commentHostJson", commentHostJson)
+                                    qnaBundle.putString("commentGuestJson", commentGuestJson)
+
                                     val qnaGuestFragment = QnaGuestFragment()
                                     qnaGuestFragment.arguments = qnaBundle
 
@@ -194,7 +216,6 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            //.addHeader("Authorization", "Bearer $token")
                             .build()
                         Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
                         chain.proceed(request)
@@ -217,11 +238,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                     Log.e("QnaList_response.code", "is: ${response.code()}")
 
                     val qnaList = qnaListResponse?.data
-                    val qnapostListResponse = qnaList?.map {
-                        QnaPost(it.nickname, it.title, it.content, it.currentDateTime)
-                        //QnaPost("nickname", it.title, it.content, "2023")
-
-                    }
+                    val qnapostListResponse = qnaList?.map { QnaPost(it.nickname, it.title, it.content, it.currentDateTime) }
                     //qnaList의 형식은 List<QnaUploadDto>이므로 서버에서 받은 게시글을 qnaPostList에 넣어주기 위해 List<qnaPost>로 변환
 
                     if (qnaListResponse?.result == true) {
@@ -231,7 +248,6 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                             context?.let { saveQnaPostIds(it, qnaRecruitmentIds) } // 게시물 아이디 리스트 저장
                         }
                         Log.e("StudyFragment", "recruitmentIds: $qnaRecruitmentIds")
-
 
                         if (qnapostListResponse != null) {
                             qnaAdapter.qnaPostList = qnapostListResponse
@@ -270,15 +286,11 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                qnaSearchService.qnaSearch("$newText").enqueue(object : Callback<QnaListResponse> {
+                qnaSearchService.qnaSearch("$query").enqueue(object : Callback<QnaListResponse> {
                     override fun onResponse(
                         call: Call<QnaListResponse>, response: Response<QnaListResponse>
                     ) {
-                        Log.e("QnaSearch", "keyword: $newText")
+                        Log.e("QnaSearch", "keyword: $query")
                         Log.e("QnaSearchService", "response code : ${response.code()}")
 
                         if (response.isSuccessful) {
@@ -301,6 +313,11 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                         TODO("Not yet implemented")
                     }
                 })
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
                 return false
             }
         })

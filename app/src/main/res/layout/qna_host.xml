@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         android:text="nickname"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
         android:id="@+id/qnaHostTItle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="title"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -34,7 +34,7 @@
         android:id="@+id/qnaHostContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:text="content"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/qnaHostTItle"
@@ -53,27 +53,27 @@
     <Button
         android:id="@+id/qnaHostEditButton"
         android:layout_width="70dp"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:backgroundTint="#CFDCFF"
-        android:textColor="#515151"
+        android:stateListAnimator="@null"
         android:text="수정"
+        android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostDeleteButton"
-        app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton"
-        android:stateListAnimator="@null" />
+        app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton" />
 
     <Button
         android:id="@+id/qnaHostDeleteButton"
         android:layout_width="70dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="70dp"
         android:backgroundTint="#CFDCFF"
+        android:stateListAnimator="@null"
         android:text="삭제"
         android:textColor="#E45050"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:stateListAnimator="@null" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/hostComment"

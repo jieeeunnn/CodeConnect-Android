@@ -147,7 +147,7 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
                     }
 
                     override fun onFailure(call: Call<Welcome7>, t: Throwable) {
-                        ErrorDialogFragment().show(childFragmentManager, "Address_ErrorDialogFragment")
+                        Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                     }
                 })
                 return false

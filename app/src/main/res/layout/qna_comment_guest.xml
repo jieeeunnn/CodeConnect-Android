@@ -32,4 +32,25 @@
         android:text="comment"
         app:layout_constraintStart_toStartOf="@+id/guestCommentNickname"
         app:layout_constraintTop_toBottomOf="@+id/guestCommentNickname" />
+
+    <ImageButton
+        android:id="@+id/cgReplyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/guestCommentTextView"
+        app:layout_constraintTop_toBottomOf="@+id/guestCommentTextView"
+        app:srcCompat="@drawable/ic_baseline_chat_24" />
+
+    <Button
+        android:id="@+id/cgReplyMoreButton"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        android:text="더보기"
+        app:layout_constraintStart_toEndOf="@+id/cgReplyButton"
+        app:layout_constraintTop_toBottomOf="@+id/guestCommentTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

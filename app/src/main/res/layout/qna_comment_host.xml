@@ -32,4 +32,36 @@
         android:text="currentDateTime"
         app:layout_constraintBaseline_toBaselineOf="@+id/hostCommentNickname"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:text="host"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/hostCommentCurrentDateTime"
+        app:layout_constraintTop_toBottomOf="@+id/hostCommentCurrentDateTime" />
+
+    <ImageButton
+        android:id="@+id/chReplyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/hostCommentTextView"
+        app:layout_constraintTop_toBottomOf="@+id/hostCommentTextView"
+        app:srcCompat="@drawable/ic_baseline_chat_24" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        android:text="더보기"
+        app:layout_constraintStart_toEndOf="@+id/chReplyButton"
+        app:layout_constraintTop_toBottomOf="@+id/hostCommentTextView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

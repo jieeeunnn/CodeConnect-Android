@@ -106,7 +106,7 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
                 }
 
                 override fun onFailure(call: Call<QnaResponse>, t: Throwable) {
-                    Toast.makeText(context, "통신에 실패했습니다", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                 }
             })
         }

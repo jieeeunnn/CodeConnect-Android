@@ -95,14 +95,23 @@ class MainActivity : AppCompatActivity() {
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java) // 스터디 게시글 화면으로 이동
                             startActivity(nextIntent)
                         }
+                        val cofirmDialog = loginResponse?.let { it1 -> ConfirmDialog(it1.message) }
+                        if (cofirmDialog != null) {
+                            cofirmDialog.isCancelable = false
+                            cofirmDialog.show(supportFragmentManager, "studyGuestFragment_guestButton")
+
+                        }
                     } else {
                          //서버로부터 응답이 실패한 경우
-                        LoginDialogFragment().show(supportFragmentManager,"")
-                    }
+                        val cofirmDialog = ConfirmDialog("아이디, 비밀번호를 확인해주세요")
+                        cofirmDialog.isCancelable = false
+                        cofirmDialog.show(supportFragmentManager, "studyGuestFragment_guestButton")                    }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) { // 통신에 실패했을 때
-                    ErrorDialogFragment().show(supportFragmentManager,"")
+                    val cofirmDialog = ConfirmDialog("서버 연결 실패")
+                    cofirmDialog.isCancelable = false
+                    cofirmDialog.show(supportFragmentManager, "studyGuestFragment_guestButton")
                 }
             })
         }

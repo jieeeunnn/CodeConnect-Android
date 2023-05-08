@@ -85,7 +85,25 @@ enum class Role{ //
 
 interface StudySearchService { // 스터디 게시판 검색 api
     @GET("recruitments/search")
-    fun studySearch( //
-        @Query("keyword") keyword: String
+    fun studySearch(
+        @Query("keyword") keyword: String,
+        @Query("address") address: String?
     ): Call<StudyListResponse>
 }
+
+
+
+
+interface StudyParticipateService { // 참여하기 api
+    @PUT("recruitments/participate/{id}")
+    fun participateStudy(
+        @Path("id") id:Long,
+        @Query("isParticipating") isParticipating: Boolean
+    ): Call<StudyGuestCurrentCount>
+}
+
+data class StudyGuestCurrentCount( // 참여하기, 취소하기 버튼 누를 때 currentCount 응답값
+    var result: Boolean,
+    var message: String,
+    var data: Int
+)

@@ -25,50 +25,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface StudyParticipateService {
-    @PUT("recruitments/participate/{id}")
-    fun participateStudy(
-        @Path("id") id:Long,
-        @Query("isParticipating") isParticipating: Boolean
-    ): Call<StudyGuestCurrentCount>
-}
-
-data class StudyGuestCurrentCount( // 참여하기, 취소하기 버튼 누를 때 currentCount 응답값
-    var result: Boolean,
-    var message: String,
-    var data: Int
-)
-
-class GuestParticipateDialog : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext()).apply {
-            setTitle("스터디 참여 신청")
-            setMessage("스터디 참여 신청이 완료되었습니다")
-            setPositiveButton("확인") {dialog, id -> println("스터디 참여 신청 확인")}
-        }.create()
-    }
-}
-
-class GuestCancelDialog : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext()).apply {
-            setTitle("스터디 신청 취소")
-            setMessage("스터디 신청이 취소되었습니다")
-            setPositiveButton("확인") {dialog, id -> println("스터디 신청 취소")}
-        }.create()
-    }
-}
-
-class GuestRecruitmentCompletedDialog : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext()).apply {
-            setTitle("모집 완료 스터디")
-            setMessage("모집이 완료된 스터디입니다")
-            setPositiveButton("확인") {dialog, id -> println("모집 완료 스터디")}
-        }.create()
-    }
-}
-
 class StudyGuestFragment : Fragment(R.layout.study_guest) {
     private lateinit var binding: StudyGuestBinding
 
@@ -105,12 +61,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                 parentFragment.onResume()
             }
         }
-
-        /*
-        binding.swipeRefreshLayoutStudyGuest.setOnRefreshListener {
-            loadStudyGuest(currentCount = 11)
-        }
-         */
 
         Log.e("StudyGuest participantExist", "$participantExist")
 
@@ -159,7 +109,9 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
                         if (studyGuestCurrentCount != null) {
                             if (studyGuestCurrentCount.data == -1) {
-                                GuestRecruitmentCompletedDialog().show(childFragmentManager, "Guest Recruitment Completed")
+                                val cofirmDialog = ConfirmDialog("모집이 완료된 스터디입니다")
+                                cofirmDialog.isCancelable = false
+                                cofirmDialog.show(childFragmentManager, "studyGuestFragment_Recruitment Completed")
                             }else{
                                 binding.guestButton.visibility = View.GONE
                                 binding.guestCancelButton.visibility = View.VISIBLE
@@ -169,7 +121,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
                                 val cofirmDialog = ConfirmDialog("스터디 참여 신청이 완료되었습니다")
                                 cofirmDialog.isCancelable = false
-                                cofirmDialog.show(childFragmentManager, "deleteDialog")
+                                cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
                             }
                         }
 
@@ -203,7 +155,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
                         val cofirmDialog = ConfirmDialog("스터디 신청이 취소되었습니다")
                         cofirmDialog.isCancelable = false
-                        cofirmDialog.show(childFragmentManager, "deleteDialog")
+                        cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestCancelButton")
 
                     } else {
                         Log.e("StudyGuestFragment guestCancelButton onResponse", "But not success")

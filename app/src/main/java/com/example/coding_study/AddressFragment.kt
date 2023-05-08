@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -111,7 +112,7 @@ class AddressFragment: Fragment(R.layout.address_fragment){
                     }
 
                     override fun onFailure(call: Call<Welcome7>, t: Throwable) {
-                        ErrorDialogFragment().show(childFragmentManager, "Address_ErrorDialogFragment")
+                        Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                     }
                 })
                 return false

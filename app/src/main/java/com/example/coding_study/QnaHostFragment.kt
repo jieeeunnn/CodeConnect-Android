@@ -1,17 +1,13 @@
 package com.example.coding_study
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaHostBinding
@@ -22,10 +18,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.DELETE
-import retrofit2.http.Path
 
-class QnaHostFragment : Fragment(R.layout.qna_host){
+class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
     private lateinit var binding: QnaHostBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
 
@@ -36,41 +30,32 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
     ): View? {
         binding = QnaHostBinding.inflate(inflater, container, false)
 
-        qnaCommentAdapter = QnaCommentAdapter(listOf())
-        val qnaHostRecyclerView = binding.qnaHostRecyclerView
-        qnaHostRecyclerView.adapter = qnaCommentAdapter
-        binding.qnaHostRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val parentFragment = parentFragment
-        if (parentFragment is QnAFragment) {
-            parentFragment.hideFloatingButton()
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
-            val parentFragmentManager = requireActivity().supportFragmentManager
-            parentFragmentManager.popBackStack()
-
-            val parentFragment = parentFragment
-            if (parentFragment is QnAFragment) {
-                parentFragment.onResume()
-            }
-        }
-
         // 가져온 qnaRecruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
         val qnaGson = Gson()
-        val qnaJson = arguments?.getString("qnaRecruitmentJson")
-        val qnaRecruitment = qnaGson.fromJson(qnaJson, QnaUploadDto::class.java)
+        val qnaJson = arguments?.getString("qnaHostRecruitmentJson")
+        val commentHostJson = arguments?.getString("commentHostJson")
+        val commentGuestJson = arguments?.getString("commentGuestJson")
+
+        val qnaRecruitment = qnaGson.fromJson(qnaJson,QnaUploadDto::class.java)
+        val commentHost = qnaGson.fromJson(commentHostJson, QnaCommentListResponse::class.java)
+        val commentGuest = qnaGson.fromJson(commentGuestJson, QnaCommentListResponse::class.java)
+
+        if (commentHost != null && commentGuest != null) {
+            val commentHostList = commentHost.comments.map { QnaComment(it.nickname, it.comment, it.currentDateTime, it.commentId) }
+            val commentGuestList = commentGuest.comments.map { QnaComment(it.nickname, it.comment, it.currentDateTime, it.commentId) }
+
+            qnaCommentAdapter = QnaCommentAdapter(commentHostList, commentGuestList)
+            val qnaHostRecyclerView = binding.qnaHostRecyclerView
+            qnaHostRecyclerView.adapter = qnaCommentAdapter
+            binding.qnaHostRecyclerView.layoutManager = LinearLayoutManager(context)
+        }
+
 
         binding.qnaHostNickname.text = qnaRecruitment.nickname
         binding.qnaHostTItle.text = qnaRecruitment.title
         binding.qnaHostContent.text = qnaRecruitment.content
         binding.qnaHostCurrentTime.text = qnaRecruitment.currentDateTime
+
 
         //저장된 토큰값 가져오기
         val sharedPreferences =
@@ -85,7 +70,6 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            //.addHeader("Authorization", "Bearer $token")
                             .build()
                         Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
                         chain.proceed(request)
@@ -94,56 +78,11 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
             )
             .build()
 
-        val qnaPostId = qnaRecruitment.qnaId
-        val qnaDeleteService = retrofitBearer.create(QnaDeleteService::class.java)
-
-        class QnaDeleteFragment : DialogFragment() { // 게시글 삭제 여부 다이얼로그
-            override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-                return AlertDialog.Builder(requireContext()).apply {
-                    setTitle("게시글 삭제")
-                    setMessage("게시글을 삭제 하시겠습니까?")
-                    setPositiveButton("예") {dialog, id ->
-
-                        qnaDeleteService.qnaDeletePost(qnaPostId).enqueue(object : Callback<Void> {
-                            override fun onResponse(call: Call<Void>, response: retrofit2.Response<Void>) {
-                                if (response.isSuccessful) {
-                                    Log.e("QnaList_response.body", "is : ${response.body()}") // 서버에서 받아온 응답 데이터 log 출력
-                                    Log.e("response code", "is : ${response.code()}") // 서버 응답 코드 log 출력
-
-                                    Toast.makeText(context, "QnA 게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-
-                                    //글 삭제 후 스터디 게시판으로 돌아감
-                                    //requireActivity().supportFragmentManager.popBackStack()
-
-                                    /*
-                                    val parentFragment = parentFragment
-                                    if (parentFragment is StudyHostFragment) {
-                                        requireActivity().supportFragmentManager.popBackStack()
-                                    }
-                                     */
-                                    dismiss()
-
-                                }
-                            }
-                            override fun onFailure(call: Call<Void>, t: Throwable) {
-                                // 삭제 요청에 대한 예외 처리
-                                Toast.makeText(context, "게시글 삭제 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                            }
-                        })
-                        println("QnaHostFragment 확인")}
-
-                    setNegativeButton("아니오") { dialog, id ->
-                        println("QnaHostFragment Delete 취소")
-                    }
-                }.create()
-            }
-        }
-
         //qna 삭제 버튼
         binding.qnaHostDeleteButton.setOnClickListener {
-            val qnaDeleteDialog= QnaDeleteFragment()
-            qnaDeleteDialog.show(childFragmentManager, "QnaDeleteDialog")
+            val deleteDialog = DeleteDialog(this, qnaRecruitment.qnaId)
+            deleteDialog.isCancelable = false
+            deleteDialog.show(this.childFragmentManager, "deleteDialog")
         }
 
         //qna 수정 버튼
@@ -181,6 +120,74 @@ class QnaHostFragment : Fragment(R.layout.qna_host){
             })
         }
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val parentFragment = parentFragment
+        if (parentFragment is QnAFragment) {
+            parentFragment.hideFloatingButton()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+
+            val parentFragment = parentFragment
+            if (parentFragment is QnAFragment) {
+                parentFragment.onResume()
+            }
+        }
+    }
+
+    override fun onYesButtonClick(id: Long) { // 삭제 다이얼로그 확인 버튼 클릭시 게시글 삭제
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("TokenInterceptor_StudyDeleteFragment", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val qnaDeleteService = retrofitBearer.create(QnaDeleteService::class.java)
+
+        qnaDeleteService.qnaDeletePost(id).enqueue(object : Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                Log.e("QnaHostFragment Delete Id----------------------------", "$id")
+                if (response.isSuccessful) {
+                    Log.e("QnaHostFragment Delete_response code", "${response.code()}")
+
+                    val parentFragment = parentFragment
+                    if (parentFragment is StudyFragment) {
+                        parentFragment.onResume()
+                    }
+
+                    //글 삭제 후 스터디 게시판으로 돌아감
+                    requireActivity().supportFragmentManager.popBackStack()
+
+                    Toast.makeText(context, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(context, "게시글 삭제 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
     }
 }

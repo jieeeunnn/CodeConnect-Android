@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/round_rect_mainblue"
@@ -13,7 +12,7 @@
         android:id="@+id/dialogTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,9 +21,9 @@
 
     <Button
         android:id="@+id/dialogNoButton"
-        android:layout_width="90dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="32dp"
+        android:layout_width="100dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:backgroundTint="#CFDCFF"
         android:text="취소"
@@ -34,12 +33,13 @@
 
     <Button
         android:id="@+id/dialogYesButton"
-        android:layout_width="90dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="32dp"
+        android:layout_width="100dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="24dp"
         android:backgroundTint="#CFDCFF"
         android:text="확인"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/dialogNoButton"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

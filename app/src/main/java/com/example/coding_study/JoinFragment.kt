@@ -125,7 +125,9 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
 
         binding.joinButton2.setOnClickListener {
             if (selectedFields.size < 2) { // 필드를 2개 선택하지 않았을 경우 Toast 메세지 띄우기
-                Toast.makeText(context, "관심사 2개를 선택해주세요", Toast.LENGTH_LONG).show()
+                val cofirmDialog = ConfirmDialog("관심사 2개를 선택해 주세요")
+                cofirmDialog.isCancelable = false
+                cofirmDialog.show(childFragmentManager, "joinFragment joinButton2_관심사 선택")
             } else {
                 val nickname = binding.editNickname.text.toString()
                 val email = binding.editEmailAddress.text.toString()
@@ -160,12 +162,14 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
                             }
                         } else {
                             //서버로부터 응답이 실패한 경우
-                            JoinDialogFragment().show(childFragmentManager, "JoinDialogFragment")
+                            val cofirmDialog = ConfirmDialog("모든 값을 입력했는지 확인하세요")
+                            cofirmDialog.isCancelable = false
+                            cofirmDialog.show(childFragmentManager, "JoinFragment joinButton2")
                         }
                     }
 
                     override fun onFailure(call: Call<JoinResponse>, t: Throwable) { // 통신에 실패했을 때
-                        ErrorDialogFragment().show(childFragmentManager, "Join_ErrorDialogFragment")
+                        Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                     }
                 })
             }

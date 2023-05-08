@@ -1,10 +1,11 @@
 package com.example.coding_study
 
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.http.*
 
 // 게시글 작성 시 응답값
-data class QnaResponse ( // qnaUpload에서 사용
+data class QnaResponse ( // qnaUpload에서 사용, qnaEdit에서 사용(댓글 구현하고 edit에서는 댓글도 받아야함. edit 콜백 수정하기)
     var result: Boolean,
     var message: String,
     var data: QnaUploadDto
@@ -18,7 +19,6 @@ data class QnaUploadDto(
     var modifiedDateTime: String,
     var qnaId: Long,
     var commentCount: Int,
-    var comments: List<Comment>
 )
 
 
@@ -63,13 +63,19 @@ interface QnaOnlyService { // 게시글 하나만 조회 인터페이스
 data class QnaOnlyResponse( // 게시글 하나만 조회할 때 응답값 (Map으로 Role 정보 받음)
     var result: Boolean,
     var message: String,
-    var data: Map<QnaRole, QnaUploadDto> // 서버에서 Role-게시물 정보를 Map으로 전달해줌
+    var data: Map<QnaRole, Any> // 서버에서 Role-게시물 정보를 Map으로 전달해줌
 )
 
 enum class QnaRole{
-    GUEST,
-    HOST
+    GUEST, // data: QnaUploadDto
+    HOST, // data: QnaUploadDto
+    COMMENT_GUEST, // data: List<Comment>
+    COMMENT_HOST // data: List<Comment>
 }
+
+data class QnaCommentListResponse (
+    var comments: List<Comment>
+    )
 
 
 
@@ -92,11 +98,11 @@ interface QnaCommentCreateService {
     fun qnaCommentCreate(@Path("qnaId") qnaPostId: Long ,@Body qnaCommentRequest : QnaCommentRequest) : Call<QnaCommentResponse>
 }
 
-data class QnaCommentRequest(
+data class QnaCommentRequest( // 댓글 작성시 전송값
     var comment: String
 )
 
-data class QnaCommentResponse ( // qnaUpload에서 사용
+data class QnaCommentResponse ( // 댓글 작성시 반환값
     var result: Boolean,
     var message: String,
     var data: Comment

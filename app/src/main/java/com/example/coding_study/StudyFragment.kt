@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -39,17 +40,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         }
         if (!editor.commit()) {
             Log.e("savePostIds", "Failed to save post IDs")
-        }
-    }
-
-    // StudyDeleteFragment에서 사용하기 위해서 선택된 게시글 번호 저장
-    fun savePostHostIds(context: Context, hostIds: Long) {
-        val sharedPreferencesHostId = context.getSharedPreferences("MyHostIds", Context.MODE_PRIVATE)
-        val editor = sharedPreferencesHostId.edit()
-        editor.putLong("MyHostIds", hostIds)
-        Log.e("savePostHostIds", "$hostIds")
-        if (!editor.commit()) {
-            Log.e("saveHostIds", "Failed to save post IDs")
         }
     }
 
@@ -123,11 +113,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                 val selectedPostId = postIds.getOrNull(position)// postIds 리스트에서 position에 해당하는 인덱스의 값을 가져옴
                 Log.e("StudyFragment","selectedPostId: $selectedPostId")
-                context?.let {
-                    if (selectedPostId != null) {
-                        savePostHostIds(it, selectedPostId)
-                    }
-                }
 
                 //저장된 토큰값 가져오기
                 val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
@@ -203,7 +188,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                         override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
                             Log.e("StudyFragment_StudyOnlyResponse", "Failed to get study list", t)
-                            ErrorDialogFragment().show(childFragmentManager, "StudyFragment_Error")
+                            Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                         }
                     })
                 }
@@ -306,7 +291,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
             override fun onFailure(call: Call<StudyListResponse>, t: Throwable) {
                 Log.e("StudyFragment", "Failed to get study list", t)
-                ErrorDialogFragment().show(childFragmentManager, "StudyFragment_Error")
+                Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -315,7 +300,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu_study, menu)
         Log.e("studySearchView", "onCreateOptionsMenu")
-        //onResume()
+
+        viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
+        val searchPostAddress = viewModel.getSelectedAddress().value
+
 
         val searchItem = menu.findItem(R.id.toolbar_study_search)
         searchItem.isVisible = true // 검색 아이템을 보이도록 설정
@@ -329,15 +317,11 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         val studySearchService = retrofit.create(StudySearchService::class.java)
 
         searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                studySearchService.studySearch(keyword = "$newText").enqueue(object :Callback<StudyListResponse>{
+            override fun onQueryTextSubmit(query: String?): Boolean { // 검색 버튼을 누를 때 호출
+                studySearchService.studySearch(keyword = "$query", address = searchPostAddress).enqueue(object :Callback<StudyListResponse>{
                     override fun onResponse( call: Call<StudyListResponse>, response: Response<StudyListResponse>
                     ) {
-                        Log.e("StudySearch", "keyword: $newText")
+                        Log.e("StudySearch", "keyword: $query, address= $searchPostAddress")
                         Log.e("studySearchService", "onResponse")
                         if (response.isSuccessful) {
                             val studyListResponse = response.body() // 서버에서 받아온 응답 데이터
@@ -362,9 +346,14 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                     }
 
                     override fun onFailure(call: Call<StudyListResponse>, t: Throwable) {
-                        ErrorDialogFragment().show(childFragmentManager, "StudySearchService_ErrorDialogFragment")
+                        Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                     }
                 })
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean { // 검색어가 바뀔때마다 호출
+
                 return false
             }
         })
