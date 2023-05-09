@@ -90,7 +90,6 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                             .addInterceptor { chain ->
                                 val request = chain.request().newBuilder()
                                     .addHeader("Authorization", "Bearer " + token.orEmpty())
-                                    //.addHeader("Authorization", "Bearer $token")
                                     .build()
                                 Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
                                 chain.proceed(request)
@@ -105,8 +104,6 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                     qnaOnlyService.qnaGetOnlyPost(qnaSelectedPostId).enqueue(object :Callback<QnaOnlyResponse>{
                         override fun onResponse( call: Call<QnaOnlyResponse>, response: Response<QnaOnlyResponse>
                         ) {
-                            Log.e("QnaOnlyResponse onResponse_response.code", "is : ${response.code()}")
-
                             if (response.isSuccessful) {
                                 val qnaOnlyResponse = response.body() // 서버에서 받아온 응답 데이터
                                 Log.e("QnaOnlyResponse_reponse.body", "is : $qnaOnlyResponse")
@@ -115,8 +112,10 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                                 if (qnaOnlyResponse?.result == true && qnaOnlyResponse.data.containsKey(QnaRole.HOST)) {
                                     // QnaHostFragment로 게시글 정보를 넘겨주기 위해 받은 데이터 저장
                                     val qnaRecruitment = qnaOnlyResponse.data[QnaRole.HOST] as Any
-                                    val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? QnaCommentListResponse
-                                    val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? QnaCommentListResponse
+                                    val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? List<Comment>
+                                    val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? List<Comment>
+                                    Log.e("QnaFragment onlyResponse Bundle commentHost", "$commentHost")
+                                    Log.e("QnaFragment onlyResponse Bundle commentGuest", "$commentGuest")
 
                                     val qnaGson = Gson()
                                     val qnaBundle = Bundle()
@@ -139,8 +138,11 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
                                 } else if (qnaOnlyResponse?.result == true && qnaOnlyResponse.data.containsKey(QnaRole.GUEST)) {
                                     val qnaRecruitment = qnaOnlyResponse.data[QnaRole.GUEST] as Any
-                                    val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? QnaCommentListResponse
-                                    val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? QnaCommentListResponse
+                                    val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? List<Comment>
+                                    val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? List<Comment>
+                                    Log.e("QnaFragment Guest onlyResponse Bundle commentHost", "$commentHost")
+                                    Log.e("QnaFragment Guest onlyResponse Bundle commentGuest", "$commentGuest")
+
 
                                     val qnaGson = Gson()
                                     val qnaBundle = Bundle()
@@ -197,6 +199,9 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         super.onResume()
         Log.e("QnaFragment", "onResume-----------------------")
         loadQnaList()
+    }
+
+    fun showFloatingButton() {
         qnaFab.show()
     }
 

@@ -21,9 +21,6 @@ data class QnaUploadDto(
     var commentCount: Int,
 )
 
-
-
-
 interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사용
     @POST("qna/create")
     fun requestQna(@Body qnaRequest: QnaRequest): Call<QnaResponse>
@@ -80,6 +77,11 @@ data class QnaCommentListResponse (
 
 
 
+interface QnaEditService { // qna 게시글 수정
+    @PUT("qna/update/{qnaId}")
+    fun qnaEditPost(@Path("qnaId") id:Long, @Body qnaEdit: QnaRequest): Call<QnaResponse>
+}
+
 interface QnaSearchService { // qna 게시판 검색 api
     @GET("qna/search/{text}")
     fun qnaSearch(
@@ -93,7 +95,10 @@ interface QnaDeleteService { // qna 게시글 삭제
 }
 
 
-interface QnaCommentCreateService {
+
+
+//comment api
+interface QnaCommentCreateService { // 댓글 작성
     @POST("comment/create/{qnaId}")
     fun qnaCommentCreate(@Path("qnaId") qnaPostId: Long ,@Body qnaCommentRequest : QnaCommentRequest) : Call<QnaCommentResponse>
 }
@@ -109,8 +114,19 @@ data class QnaCommentResponse ( // 댓글 작성시 반환값
 )
 
 data class Comment (
-    var commentId: Long,
-    var comment: String,
-    var nickname: String,
-    var currentDateTime: String
+    val commentId: Long,
+    val comment: String,
+    val nickname: String,
+    val currentDateTime: String,
+    val modifiedDateTime: Any?,
+    val cocommentCount: Long,
+    var commentRole: QnaRole
 )
+
+
+
+
+interface CommentDeleteService { // 댓글 삭제
+    @DELETE("comment/delete/{commentId}")
+    fun commentDeletePost(@Path("commentId") id: Long): Call<Void>
+}

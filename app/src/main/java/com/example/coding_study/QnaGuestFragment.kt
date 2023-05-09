@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaGuestBinding
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +25,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
     private lateinit var binding: QnaGuestBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,21 +36,22 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         // 가져온 qnaRecruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
         val qnaGson = Gson()
         val qnaJson = arguments?.getString("qnaGuestRecruitmentJson")
-        val commentHostJson = arguments?.getString("qnaCommentHostJson")
-        val commentGuestJson = arguments?.getString("qnaCommentGuestJson")
+        val commentHostJson = arguments?.getString("commentHostJson")
+        val commentGuestJson = arguments?.getString("commentGuestJson")
 
         val qnaRecruitment = qnaGson.fromJson(qnaJson, QnaUploadDto::class.java)
-        val commentHost = qnaGson.fromJson(commentHostJson, QnaCommentListResponse::class.java)
-        val commentGuest = qnaGson.fromJson(commentGuestJson, QnaCommentListResponse::class.java)
+        val commentHost = qnaGson.fromJson<List<Comment>>(commentHostJson, object : TypeToken<List<Comment>>() {}.type)
+        val commentGuest = qnaGson.fromJson<List<Comment>>(commentGuestJson, object : TypeToken<List<Comment>>() {}.type)
 
-        if (commentHost != null && commentGuest != null) {
-            val commentHostList = commentHost.comments.map { QnaComment(it.nickname, it.comment, it.currentDateTime, it.commentId) }
-            val commentGuestList = commentGuest.comments.map { QnaComment(it.nickname, it.comment, it.currentDateTime, it.commentId) }
-
-            qnaCommentAdapter = QnaCommentAdapter(commentHostList, commentGuestList)
-            val qnaHostRecyclerView = binding.qnaGuestRecyclerView
-            qnaHostRecyclerView.adapter = qnaCommentAdapter
+        if (commentHost != null || commentGuest != null) {
+            val qnaGuestRecyclerView = binding.qnaGuestRecyclerView
+            qnaCommentAdapter = QnaCommentAdapter(fragment = QnaHostFragment(),fragmentManager = childFragmentManager, commentHost, commentGuest)
+            qnaGuestRecyclerView.adapter = qnaCommentAdapter
             binding.qnaGuestRecyclerView.layoutManager = LinearLayoutManager(context)
+
+            qnaCommentAdapter.notifyDataSetChanged()
+        }else{
+            binding.qnaGuestRecyclerView.adapter = null
         }
 
         binding.qnaGuestNickname.text = qnaRecruitment.nickname
@@ -111,7 +115,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
 
             val parentFragment = parentFragment
             if (parentFragment is QnAFragment) {
-                parentFragment.onResume()
+                parentFragment.showFloatingButton()
             }
         }
     }

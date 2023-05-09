@@ -2,15 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/comment_guest_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/comment_drawable"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/guestCommentNickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="30dp"
         android:text="nickname"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,9 +21,9 @@
         android:id="@+id/guestCommentCurrentDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="30dp"
         android:text="currentDateTime"
-        app:layout_constraintBaseline_toBaselineOf="@+id/guestCommentNickname"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
@@ -35,8 +37,8 @@
 
     <ImageButton
         android:id="@+id/cgReplyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginTop="16dp"
         android:background="#00FFFFFF"
         app:layout_constraintStart_toStartOf="@+id/guestCommentTextView"
@@ -51,6 +53,7 @@
         android:layout_marginTop="16dp"
         android:background="#00FFFFFF"
         android:text="더보기"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/cgReplyButton"
         app:layout_constraintTop_toBottomOf="@+id/guestCommentTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

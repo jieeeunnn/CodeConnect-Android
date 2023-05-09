@@ -58,7 +58,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
             val parentFragment = parentFragment
             if (parentFragment is StudyFragment) {
-                parentFragment.onResume()
+                parentFragment.showFloatingButton()
             }
         }
 

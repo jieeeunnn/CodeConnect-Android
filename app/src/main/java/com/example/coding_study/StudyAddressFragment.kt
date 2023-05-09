@@ -41,7 +41,7 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
 
             val parentFragment = parentFragment
             if (parentFragment is StudyFragment) {
-                parentFragment.onResume()
+                parentFragment.showFloatingButton()
             }
         }
 
@@ -100,7 +100,7 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
 
                         val parentFragment = parentFragment
                         if (parentFragment is StudyFragment) {
-                            parentFragment.onResume()
+                            parentFragment.showFloatingButton()
                         }
 
                     } else {

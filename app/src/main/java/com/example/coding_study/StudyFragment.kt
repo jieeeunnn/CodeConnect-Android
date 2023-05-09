@@ -220,9 +220,11 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         super.onResume()
         Log.e("StudyFragment", "onResume---------------------------")
         loadStudyList()
-        fab.show()
     }
 
+    fun showFloatingButton() {
+        fab.show()
+    }
     fun hideFloatingButton() {
         fab.hide()
     }

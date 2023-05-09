@@ -67,7 +67,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
 
             val parentFragment = parentFragment
             if (parentFragment is StudyFragment) {
-                parentFragment.onResume()
+                parentFragment.showFloatingButton()
             }
         }
 
@@ -122,7 +122,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
 
             val parentFragment = parentFragment
             if (parentFragment is StudyFragment) {
-                parentFragment.onResume()
+                parentFragment.showFloatingButton()
             }
 
             //업로드 후 리스트로 돌아감

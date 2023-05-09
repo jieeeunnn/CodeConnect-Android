@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaHostBinding
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +25,7 @@ class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
     private lateinit var binding: QnaHostBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,19 +40,21 @@ class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         val commentGuestJson = arguments?.getString("commentGuestJson")
 
         val qnaRecruitment = qnaGson.fromJson(qnaJson,QnaUploadDto::class.java)
-        val commentHost = qnaGson.fromJson(commentHostJson, QnaCommentListResponse::class.java)
-        val commentGuest = qnaGson.fromJson(commentGuestJson, QnaCommentListResponse::class.java)
+        val commentHost = qnaGson.fromJson<List<Comment>>(commentHostJson, object : TypeToken<List<Comment>>() {}.type)
+        val commentGuest = qnaGson.fromJson<List<Comment>>(commentGuestJson, object : TypeToken<List<Comment>>() {}.type)
 
-        if (commentHost != null && commentGuest != null) {
-            val commentHostList = commentHost.comments.map { QnaComment(it.nickname, it.comment, it.currentDateTime, it.commentId) }
-            val commentGuestList = commentGuest.comments.map { QnaComment(it.nickname, it.comment, it.currentDateTime, it.commentId) }
+        if (commentHost != null || commentGuest != null) {
 
-            qnaCommentAdapter = QnaCommentAdapter(commentHostList, commentGuestList)
+            Log.e("QnaHostFragment adapter ", "$commentHost, $commentGuest")
             val qnaHostRecyclerView = binding.qnaHostRecyclerView
+            qnaCommentAdapter = QnaCommentAdapter(this, fragmentManager = childFragmentManager, commentHost, commentGuest)
             qnaHostRecyclerView.adapter = qnaCommentAdapter
             binding.qnaHostRecyclerView.layoutManager = LinearLayoutManager(context)
-        }
 
+            qnaCommentAdapter.notifyDataSetChanged()
+        } else {
+            binding.qnaHostRecyclerView.adapter = null
+        }
 
         binding.qnaHostNickname.text = qnaRecruitment.nickname
         binding.qnaHostTItle.text = qnaRecruitment.title
@@ -77,6 +82,7 @@ class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                     .build()
             )
             .build()
+
 
         //qna 삭제 버튼
         binding.qnaHostDeleteButton.setOnClickListener {
@@ -137,7 +143,7 @@ class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
 
             val parentFragment = parentFragment
             if (parentFragment is QnAFragment) {
-                parentFragment.onResume()
+                parentFragment.showFloatingButton()
             }
         }
     }
@@ -173,7 +179,7 @@ class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
 
                     val parentFragment = parentFragment
                     if (parentFragment is StudyFragment) {
-                        parentFragment.onResume()
+                        parentFragment.showFloatingButton()
                     }
 
                     //글 삭제 후 스터디 게시판으로 돌아감

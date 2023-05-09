@@ -21,11 +21,6 @@ import retrofit2.http.Body
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-interface QnaEditService {
-    @PUT("qna/update/{qnaId}")
-    fun qnaEditPost(@Path("qnaId") id:Long, @Body qnaEdit: QnaRequest): Call<QnaResponse>
-}
-
 class QnaEditFragment : Fragment(R.layout.write_qna) {
     private lateinit var binding: WriteQnaBinding
 
@@ -93,7 +88,7 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
 
                         val parentFragment = parentFragment
                         if (parentFragment is QnAFragment) {
-                            parentFragment.onResume()
+                            parentFragment.showFloatingButton()
                         }
 
                         val parentFragmentManager = requireActivity().supportFragmentManager

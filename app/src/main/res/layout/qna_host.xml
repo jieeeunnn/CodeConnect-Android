@@ -103,7 +103,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/qnaHostRecyclerView"
         android:layout_width="418dp"
-        android:layout_height="373dp"
+        android:layout_height="450dp"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
