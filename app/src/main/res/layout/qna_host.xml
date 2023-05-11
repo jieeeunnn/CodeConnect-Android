@@ -8,106 +8,126 @@
     android:background="@color/white"
     android:clickable="true">
 
-    <TextView
-        android:id="@+id/qnaHostNickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="60dp"
-        android:text="nickname"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/qnaHostTItle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="title"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/qnaHostNickname"
-        app:layout_constraintTop_toBottomOf="@+id/qnaHostNickname" />
-
-    <TextView
-        android:id="@+id/qnaHostContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="content"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/qnaHostTItle"
-        app:layout_constraintTop_toBottomOf="@+id/qnaHostTItle" />
-
-    <TextView
-        android:id="@+id/qnaHostCurrentTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="70dp"
-        android:text="currentTime"
-        android:textSize="16sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostNickname"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/qnaHostEditButton"
-        android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="#CFDCFF"
-        android:stateListAnimator="@null"
-        android:text="수정"
-        android:textColor="#515151"
-        app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostDeleteButton"
-        app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton" />
-
-    <Button
-        android:id="@+id/qnaHostDeleteButton"
-        android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="70dp"
-        android:backgroundTint="#CFDCFF"
-        android:stateListAnimator="@null"
-        android:text="삭제"
-        android:textColor="#E45050"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/hostComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="70dp"
-        android:ems="14"
-        android:hint="댓글을 입력하세요"
-        android:inputType="textPersonName"
-        android:textSize="16sp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/qnaHostSwifeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/hostCommentButton"
-        android:layout_width="65dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="#CFDCFF"
-        android:stateListAnimator="@null"
-        android:text="댓글"
-        android:textColor="#515151"
-        app:layout_constraintBaseline_toBaselineOf="@+id/hostComment"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/qnaHostRecyclerView"
-        android:layout_width="418dp"
-        android:layout_height="450dp"
-        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qnaHostContent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/qnaHostConstraintInSwife"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:clickable="true">
+
+
+            <TextView
+                android:id="@+id/qnaHostNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="60dp"
+                android:text="nickname"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/qnaHostTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/qnaHostNickname"
+                app:layout_constraintTop_toBottomOf="@+id/qnaHostNickname" />
+
+            <TextView
+                android:id="@+id/qnaHostContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="content"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/qnaHostTitle"
+                app:layout_constraintTop_toBottomOf="@+id/qnaHostTitle" />
+
+            <TextView
+                android:id="@+id/qnaHostCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="70dp"
+                android:text="currentTime"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostNickname"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/qnaHostEditButton"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#CFDCFF"
+                android:stateListAnimator="@null"
+                android:text="수정"
+                android:textColor="#515151"
+                app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostDeleteButton"
+                app:layout_constraintEnd_toStartOf="@+id/qnaHostDeleteButton" />
+
+            <Button
+                android:id="@+id/qnaHostDeleteButton"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="70dp"
+                android:backgroundTint="#CFDCFF"
+                android:stateListAnimator="@null"
+                android:text="삭제"
+                android:textColor="#E45050"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/hostComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginBottom="70dp"
+                android:ems="14"
+                android:hint="댓글을 입력하세요"
+                android:inputType="textPersonName"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/hostCommentButton"
+                android:layout_width="65dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="32dp"
+                android:backgroundTint="#CFDCFF"
+                android:stateListAnimator="@null"
+                android:text="댓글"
+                android:textColor="#515151"
+                app:layout_constraintBaseline_toBaselineOf="@+id/hostComment"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/qnaHostRecyclerView"
+                android:layout_width="418dp"
+                android:layout_height="450dp"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qnaHostContent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

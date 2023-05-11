@@ -84,6 +84,7 @@ class QnaUpload : Fragment() {
             val parentFragment = parentFragment
             if (parentFragment is QnAFragment) {
                 parentFragment.showFloatingButton()
+                parentFragment.onResume()
             }
 
             val parentFragmentManager = requireActivity().supportFragmentManager

@@ -48,31 +48,9 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         val commentGuest = qnaGson.fromJson<List<Comment>>(commentGuestJson, object : TypeToken<List<Comment>>() {}.type)
 
 
-        /*
-        val gson = GsonBuilder().registerTypeAdapter(Comment::class.java, JsonDeserializer { json, _, _ ->
-            val jsonObject = json.asJsonObject["comment"].asJsonObject
-            val commentId = jsonObject.get("commentId").asLong
-            val commentText = jsonObject.get("comment").asString
-            val nickname = jsonObject.get("nickname").asString
-            val currentDateTime = jsonObject.get("currentDateTime").asString
-            val modifiedDateTime = jsonObject.get("modifiedDateTime")?.asString
-            val cocommentCount = jsonObject.get("cocommentCount").asLong
-            val role = jsonObject.get("role").asString
-            Comment(commentId, commentText, nickname, currentDateTime, modifiedDateTime, cocommentCount, role)
-        }).create()
-
-        val commentListType = object : TypeToken<List<Comment>>() {}.type
-        val commentHost = gson.fromJson<List<Comment>>(commentHostJson, commentListType)
-        val commentGuest = gson.fromJson<List<Comment>>(commentGuestJson, commentListType)
-
-
-         */
         var commentList: List<Comment> = ((commentHost ?: emptyList()) + (commentGuest ?: emptyList())).sortedBy { it.currentDateTime }
 
-
         if (commentHost != null || commentGuest != null) {
-
-            Log.e("QnaHostFragment adapter ", "$commentHost, $commentGuest")
             val qnaHostRecyclerView = binding.qnaHostRecyclerView
             qnaCommentAdapter = QnaCommentAdapter( fragmentManager = childFragmentManager, commentList)
             qnaHostRecyclerView.adapter = qnaCommentAdapter
@@ -80,18 +58,25 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
 
             qnaCommentAdapter.notifyDataSetChanged()
         } else {
-            binding.qnaHostRecyclerView.adapter = null
+            commentList = emptyList()
+            qnaCommentAdapter = QnaCommentAdapter(childFragmentManager, commentList)
+            binding.qnaHostRecyclerView.adapter = qnaCommentAdapter
+            binding.qnaHostRecyclerView.layoutManager = LinearLayoutManager(context)
+
+            qnaCommentAdapter.notifyDataSetChanged()
         }
 
         binding.qnaHostNickname.text = qnaRecruitment.nickname
-        binding.qnaHostTItle.text = qnaRecruitment.title
+        binding.qnaHostTitle.text = qnaRecruitment.title
         binding.qnaHostContent.text = qnaRecruitment.content
         binding.qnaHostCurrentTime.text = qnaRecruitment.currentDateTime
 
+        binding.qnaHostSwifeRefreshLayout.setOnRefreshListener {
+            loadQnaHost()
+        }
 
         //저장된 토큰값 가져오기
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
@@ -132,7 +117,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
 
         val qnaCommentCreateService = retrofitBearer.create(QnaCommentCreateService::class.java)
 
-        // 댓글 버튼
+        // 댓글 버튼 (댓글 전송)
         binding.hostCommentButton.setOnClickListener {
             val comment = binding.hostComment.text.toString()
             val qnaId = qnaRecruitment.qnaId
@@ -145,6 +130,8 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                         Log.e("Qna post comment response code", "${response.code()}")
                         Log.e("Qna post comment response body", "${response.body()}")
                         binding.hostComment.text = null
+
+                        loadQnaHost()
                     }
                 }
 
@@ -206,8 +193,9 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                     Log.e("QnaHostFragment Delete_response code", "${response.code()}")
 
                     val parentFragment = parentFragment
-                    if (parentFragment is StudyFragment) {
+                    if (parentFragment is QnAFragment) {
                         parentFragment.showFloatingButton()
+                        parentFragment.onResume()
                     }
 
                     //글 삭제 후 스터디 게시판으로 돌아감
@@ -223,5 +211,80 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
 
         })
 
+    }
+
+    fun loadQnaHost() {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val qnaGson = Gson()
+        val qnaJson = arguments?.getString("qnaHostRecruitmentJson")
+        val qnaRecruitment = qnaGson.fromJson(qnaJson,QnaUploadDto::class.java)
+
+        val qnaId = qnaRecruitment.qnaId
+        val qnaOnlyService = retrofitBearer.create(QnaOnlyService::class.java)
+
+        qnaOnlyService.qnaGetOnlyPost(qnaId).enqueue(object : Callback<QnaOnlyResponse>{
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onResponse(
+                call: Call<QnaOnlyResponse>,
+                response: Response<QnaOnlyResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val qnaOnlyResponse = response.body()
+                    Log.e("QnaOnlyResponse_reponse.body", "is : $qnaOnlyResponse")
+                    Log.e("QnaOnlyResponse_response.code", "is : ${response.code()}")
+
+                    if (qnaOnlyResponse?.result == true && qnaOnlyResponse.data.containsKey(QnaRole.HOST)) {
+                        val qnaHost = qnaOnlyResponse.data[QnaRole.HOST] as Any
+                        val qnaUploadDto = qnaGson.fromJson(qnaGson.toJson(qnaHost), QnaUploadDto::class.java)
+
+                        binding.qnaHostNickname.text = qnaUploadDto.nickname
+                        binding.qnaHostTitle.text = qnaUploadDto.title
+                        binding.qnaHostContent.text = qnaUploadDto.content
+                        binding.qnaHostCurrentTime.text = qnaUploadDto.currentDateTime
+
+                        val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? List<Comment>
+                        val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? List<Comment>
+                        Log.e("QnaHostFragment LoadQnaHost commentHost", "$commentHost")
+                        Log.e("QnaHostFragment LoadQnaHost commentGuest", "$commentGuest")
+
+                        val commentHostJson = qnaGson.toJson(commentHost)
+                        val commentGuestJson = qnaGson.toJson(commentGuest)
+
+                        val commentHostList = qnaGson.fromJson<List<Comment>>(commentHostJson, object : TypeToken<List<Comment>>() {}.type)
+                        val commentGuestList = qnaGson.fromJson<List<Comment>>(commentGuestJson, object : TypeToken<List<Comment>>() {}.type)
+
+                        var commentList: List<Comment> = ((commentHostList ?: emptyList()) + (commentGuestList ?: emptyList())).sortedBy { it.currentDateTime }
+
+                        qnaCommentAdapter.commentList = commentList
+                        qnaCommentAdapter.notifyDataSetChanged()
+
+                        binding.qnaHostSwifeRefreshLayout.isRefreshing = false
+
+                    }
+                }
+            }
+            override fun onFailure(call: Call<QnaOnlyResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 }

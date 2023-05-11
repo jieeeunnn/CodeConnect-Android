@@ -121,6 +121,7 @@ class StudyEditFragment : Fragment(R.layout.write_study) {
                         val parentFragment = parentFragment
                         if (parentFragment is StudyFragment) {
                             parentFragment.showFloatingButton()
+                            parentFragment.onResume()
                         }
 
                     }else{

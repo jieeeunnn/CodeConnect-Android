@@ -112,6 +112,13 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                     if (response.isSuccessful) {
                         Log.e("StudyUploadFragment", "is: ${response.body()}")
                         Log.e("StudyUploadFragment", "is : ${response.code()}")
+
+                        val parentFragment = parentFragment
+                        if (parentFragment is StudyFragment) {
+                            parentFragment.showFloatingButton()
+                            parentFragment.onResume()
+
+                        }
                     }
                 }
 
@@ -120,15 +127,11 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                 }
             })
 
-            val parentFragment = parentFragment
-            if (parentFragment is StudyFragment) {
-                parentFragment.showFloatingButton()
-            }
+
 
             //업로드 후 리스트로 돌아감
             val parentFragmentManager = requireActivity().supportFragmentManager
             parentFragmentManager.popBackStackImmediate()
-
 
         }
     }

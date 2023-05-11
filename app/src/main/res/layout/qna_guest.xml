@@ -2,86 +2,108 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/qna_guest_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true">
 
-    <TextView
-        android:id="@+id/qnaGuestNickname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="60dp"
-        android:text="nickname"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/qnaGuestTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="title"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/qnaGuestNickname"
-        app:layout_constraintTop_toBottomOf="@+id/qnaGuestNickname" />
-
-    <TextView
-        android:id="@+id/qnaGuestContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="content"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/qnaGuestTitle"
-        app:layout_constraintTop_toBottomOf="@+id/qnaGuestTitle" />
-
-    <TextView
-        android:id="@+id/qnaGuestCurrentTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="70dp"
-        android:text="currentTime"
-        app:layout_constraintBaseline_toBaselineOf="@+id/qnaGuestNickname"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="16sp" />
-
-    <EditText
-        android:id="@+id/guestCommentEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="70dp"
-        android:ems="14"
-        android:hint="댓글을 입력하세요"
-        android:inputType="textPersonName"
-        android:textSize="16sp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/qnaGuestSwifeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/guestCommentButton"
-        android:layout_width="65dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="24dp"
-        android:backgroundTint="#CFDCFF"
-        android:stateListAnimator="@null"
-        android:text="댓글"
-        android:textColor="#515151"
-        app:layout_constraintBaseline_toBaselineOf="@+id/guestCommentEdit"
-        app:layout_constraintStart_toEndOf="@+id/guestCommentEdit" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/qnaGuestRecyclerView"
-        android:layout_width="418dp"
-        android:layout_height="450dp"
-        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qnaGuestContent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/qnaGuestConstraintInSwife"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:clickable="true">
+
+
+            <TextView
+                android:id="@+id/qnaGuestNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="60dp"
+                android:text="nickname"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/qnaGuestTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/qnaGuestNickname"
+                app:layout_constraintTop_toBottomOf="@+id/qnaGuestNickname" />
+
+            <TextView
+                android:id="@+id/qnaGuestContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="content"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/qnaGuestTitle"
+                app:layout_constraintTop_toBottomOf="@+id/qnaGuestTitle" />
+
+            <TextView
+                android:id="@+id/qnaGuestCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="70dp"
+                android:text="currentTime"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/qnaGuestNickname"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <EditText
+                android:id="@+id/guestCommentEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginBottom="70dp"
+                android:ems="14"
+                android:hint="댓글을 입력하세요"
+                android:inputType="textPersonName"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/guestCommentButton"
+                android:layout_width="65dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="24dp"
+                android:backgroundTint="#CFDCFF"
+                android:stateListAnimator="@null"
+                android:text="댓글"
+                android:textColor="#515151"
+                app:layout_constraintBaseline_toBaselineOf="@+id/guestCommentEdit"
+                app:layout_constraintStart_toEndOf="@+id/guestCommentEdit" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/qnaGuestRecyclerView"
+                android:layout_width="418dp"
+                android:layout_height="450dp"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qnaGuestContent"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

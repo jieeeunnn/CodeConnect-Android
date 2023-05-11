@@ -121,6 +121,8 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
                     val parentFragment = parentFragment
                     if (parentFragment is StudyFragment) {
                         parentFragment.showFloatingButton()
+                        parentFragment.onResume()
+
                     }
 
                     //글 삭제 후 스터디 게시판으로 돌아감

@@ -68,19 +68,17 @@ class CommentDeleteDialog(id:Long) : DialogFragment() {
                     if (response.isSuccessful) {
                         Log.e("QnaComment Delete_response code", "${response.code()}")
                         dismiss()
+
+                    }
                         Toast.makeText(context, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                     }
-                }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
                     Toast.makeText(context, "게시글 삭제 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+
                 }
-
             })
-
-
         }
-
         return binding.root
         }
 }
