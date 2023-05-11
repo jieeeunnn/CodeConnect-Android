@@ -43,9 +43,12 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         val commentHost = qnaGson.fromJson<List<Comment>>(commentHostJson, object : TypeToken<List<Comment>>() {}.type)
         val commentGuest = qnaGson.fromJson<List<Comment>>(commentGuestJson, object : TypeToken<List<Comment>>() {}.type)
 
+        var commentList: List<Comment> = ((commentHost ?: emptyList()) + (commentGuest ?: emptyList())).sortedBy { it.currentDateTime }
+
+
         if (commentHost != null || commentGuest != null) {
             val qnaGuestRecyclerView = binding.qnaGuestRecyclerView
-            qnaCommentAdapter = QnaCommentAdapter(fragment = QnaHostFragment(),fragmentManager = childFragmentManager, commentHost, commentGuest)
+            qnaCommentAdapter = QnaCommentAdapter(fragmentManager = childFragmentManager, commentList)
             qnaGuestRecyclerView.adapter = qnaCommentAdapter
             binding.qnaGuestRecyclerView.layoutManager = LinearLayoutManager(context)
 

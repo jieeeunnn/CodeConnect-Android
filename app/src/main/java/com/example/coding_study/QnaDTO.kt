@@ -120,8 +120,8 @@ data class Comment (
     val currentDateTime: String,
     val modifiedDateTime: Any?,
     val cocommentCount: Long,
-    var commentRole: QnaRole
-)
+    val role: String
+    )
 
 
 
@@ -130,3 +130,9 @@ interface CommentDeleteService { // 댓글 삭제
     @DELETE("comment/delete/{commentId}")
     fun commentDeletePost(@Path("commentId") id: Long): Call<Void>
 }
+
+
+
+data class QnaCommentList( // 댓글 리스트로 가져올 때 사용
+    var comment: List<Comment>?
+)

@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaHostBinding
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializer
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -21,7 +23,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
+open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
     private lateinit var binding: QnaHostBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
 
@@ -39,15 +41,40 @@ class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         val commentHostJson = arguments?.getString("commentHostJson")
         val commentGuestJson = arguments?.getString("commentGuestJson")
 
+        Log.e("QnaHostFragment adapter ", "$qnaJson, $commentHostJson")
+
         val qnaRecruitment = qnaGson.fromJson(qnaJson,QnaUploadDto::class.java)
         val commentHost = qnaGson.fromJson<List<Comment>>(commentHostJson, object : TypeToken<List<Comment>>() {}.type)
         val commentGuest = qnaGson.fromJson<List<Comment>>(commentGuestJson, object : TypeToken<List<Comment>>() {}.type)
+
+
+        /*
+        val gson = GsonBuilder().registerTypeAdapter(Comment::class.java, JsonDeserializer { json, _, _ ->
+            val jsonObject = json.asJsonObject["comment"].asJsonObject
+            val commentId = jsonObject.get("commentId").asLong
+            val commentText = jsonObject.get("comment").asString
+            val nickname = jsonObject.get("nickname").asString
+            val currentDateTime = jsonObject.get("currentDateTime").asString
+            val modifiedDateTime = jsonObject.get("modifiedDateTime")?.asString
+            val cocommentCount = jsonObject.get("cocommentCount").asLong
+            val role = jsonObject.get("role").asString
+            Comment(commentId, commentText, nickname, currentDateTime, modifiedDateTime, cocommentCount, role)
+        }).create()
+
+        val commentListType = object : TypeToken<List<Comment>>() {}.type
+        val commentHost = gson.fromJson<List<Comment>>(commentHostJson, commentListType)
+        val commentGuest = gson.fromJson<List<Comment>>(commentGuestJson, commentListType)
+
+
+         */
+        var commentList: List<Comment> = ((commentHost ?: emptyList()) + (commentGuest ?: emptyList())).sortedBy { it.currentDateTime }
+
 
         if (commentHost != null || commentGuest != null) {
 
             Log.e("QnaHostFragment adapter ", "$commentHost, $commentGuest")
             val qnaHostRecyclerView = binding.qnaHostRecyclerView
-            qnaCommentAdapter = QnaCommentAdapter(this, fragmentManager = childFragmentManager, commentHost, commentGuest)
+            qnaCommentAdapter = QnaCommentAdapter( fragmentManager = childFragmentManager, commentList)
             qnaHostRecyclerView.adapter = qnaCommentAdapter
             binding.qnaHostRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -117,6 +144,7 @@ class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                     if (response.isSuccessful) {
                         Log.e("Qna post comment response code", "${response.code()}")
                         Log.e("Qna post comment response body", "${response.body()}")
+                        binding.hostComment.text = null
                     }
                 }
 
