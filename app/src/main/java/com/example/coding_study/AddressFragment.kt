@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -39,6 +40,7 @@ class AddressFragment: Fragment(R.layout.address_fragment){
     private lateinit var viewModel: AddressViewModel
     private var mAddress: String = ""
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +53,19 @@ class AddressFragment: Fragment(R.layout.address_fragment){
         val recyclerView = binding.addressRecyclerView
         val itemDecoration = AddressAdapter.MyItemDecoration(30,30) // 아이템 간 간격 설정
         recyclerView.addItemDecoration(itemDecoration)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {// 뒤로가기 눌렀을 시 수행
+            val backStackEntryCount = requireActivity().supportFragmentManager.backStackEntryCount
+            if (backStackEntryCount > 0) {
+                val backStackEntry = requireActivity().supportFragmentManager.getBackStackEntryAt(backStackEntryCount - 1)
+                if (backStackEntry.name == "JOIN_FRAGMENT") {
+                    requireActivity().supportFragmentManager.popBackStack()
+                    return@addCallback
+                }
+            }
+            parentFragmentManager.popBackStack()
+        }
+
 
         // Retrofit 인스턴스 생성
         val retrofit = Retrofit.Builder()
@@ -70,11 +85,6 @@ class AddressFragment: Fragment(R.layout.address_fragment){
         binding.OkButton.setOnClickListener {
             // ViewModel에 데이터 저장
             viewModel.selectAddress(mAddress)
-            /*
-            childFragmentManager.beginTransaction()
-                .add(R.id.addressFragment, JoinFragment())
-                .commit()
-             */
             parentFragmentManager.popBackStack()
         }
 
@@ -122,4 +132,5 @@ class AddressFragment: Fragment(R.layout.address_fragment){
 
         return binding.root
     }
+
 }

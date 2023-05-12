@@ -5,15 +5,22 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import androidx.constraintlayout.widget.ConstraintSet.GONE
+import androidx.fragment.app.FragmentManager
 import com.example.coding_study.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
     val binding by lazy {ActivityMainBinding.inflate(layoutInflater)}
+    private lateinit var logButton: Button
+    private lateinit var joinButton: Button
 
     fun saveToken(context: Context, token: String?) { // 토큰 저장 함수
         if (token == null) {
@@ -50,11 +57,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        logButton = binding.logButton
+        joinButton = binding.joinButton
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://112.154.249.74:8080/")
@@ -124,6 +132,26 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.mainLayout, joinFragment)
                 .addToBackStack(null)
                 .commit()
+
         }
     }
+    fun showButton() {
+        logButton.visibility = View.VISIBLE
+        joinButton.visibility = View.VISIBLE
+    }
+
+    fun hideButton() {
+        logButton.visibility = View.GONE
+        joinButton.visibility = View.GONE
+    }
+
+    override fun onBackPressed() { // AddressFragment에서 뒤로가기 버튼 처리 (JoinFragment로 이동)
+        val joinFragment = supportFragmentManager.findFragmentByTag("JOIN_FRAGMENT") as? JoinFragment
+        if (joinFragment != null) {
+            supportFragmentManager.popBackStack("JOIN_FRAGMENT", 0)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
 }

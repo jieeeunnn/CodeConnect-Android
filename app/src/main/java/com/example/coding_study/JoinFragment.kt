@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +32,17 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
     ): View {
         binding = JoinFragmentBinding.inflate(inflater, container, false)
 
+        val activity = requireActivity() as MainActivity
+        activity.hideButton()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
+            val parentFragmentManager = requireActivity().supportFragmentManager
+            parentFragmentManager.popBackStack()
+
+            val activity = requireActivity() as MainActivity
+            activity.showButton()
+        }
+
         // ViewModel 초기화
         viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
 
@@ -52,7 +64,7 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
             val addressFragment = AddressFragment()
 
             childFragmentManager.beginTransaction()
-                .add(R.id.join_fragment, addressFragment, "JOIN_FRAGMENT")
+                .replace(R.id.join_fragment, addressFragment, "JOIN_FRAGMENT")
                 .addToBackStack("JOIN_FRAGMENT")
                 .commit()
         }
