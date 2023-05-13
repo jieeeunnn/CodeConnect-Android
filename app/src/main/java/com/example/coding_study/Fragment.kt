@@ -4,14 +4,8 @@ import android.os.Bundle
 import android.view.View
 import com.example.coding_study.databinding.*
 import androidx.fragment.app.*
+import com.example.coding_study.databinding.ChatFragmentBinding
 
-
-class ChatFragment : Fragment(R.layout.chat_fragment) {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = ChatFragmentBinding.bind(view)
-
-    }
-}
 
 class MypageFragment : Fragment(R.layout.mypage_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -105,5 +105,13 @@ interface StudyParticipateService { // 참여하기 api
 data class StudyGuestCurrentCount( // 참여하기, 취소하기 버튼 누를 때 currentCount 응답값
     var result: Boolean,
     var message: String,
-    var data: Int
+    var data: Any
 )
+
+data class ChatRoom (
+    var roomId: Long,
+    var title: String,
+    var hostNickname: String,
+    var currentDateTime: String,
+    var currentCount: Int
+    )

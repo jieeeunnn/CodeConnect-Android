@@ -108,31 +108,23 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                 override fun onResponse(
                     call: Call<StudyResponse>, response: Response<StudyResponse> // 통신에 성공했을 때
                 ) {
-
                     if (response.isSuccessful) {
                         Log.e("StudyUploadFragment", "is: ${response.body()}")
                         Log.e("StudyUploadFragment", "is : ${response.code()}")
-
-                        val parentFragment = parentFragment
-                        if (parentFragment is StudyFragment) {
-                            parentFragment.showFloatingButton()
-                            parentFragment.onResume()
-
-                        }
                     }
                 }
-
                 override fun onFailure(call: Call<StudyResponse>, t: Throwable) { // 통신에 실패했을 때
                     Toast.makeText(context, "통신에 실패했습니다", Toast.LENGTH_LONG).show()
                 }
             })
-
-
-
+            val parentFragment = parentFragment
+            if (parentFragment is StudyFragment) {
+                parentFragment.showFloatingButton()
+                parentFragment.onResume()
+            }
             //업로드 후 리스트로 돌아감
             val parentFragmentManager = requireActivity().supportFragmentManager
             parentFragmentManager.popBackStackImmediate()
-
         }
     }
         return binding.root

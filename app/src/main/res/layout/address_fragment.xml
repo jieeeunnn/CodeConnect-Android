@@ -31,10 +31,10 @@
 
     <Button
         android:id="@+id/OkButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="70dp"
-        android:backgroundTint="#CFDCFF"
+        android:background="@drawable/round_rect_skyblue"
         android:text="확인"
         android:textColor="#515151"
         app:layout_constraintBottom_toBottomOf="parent"

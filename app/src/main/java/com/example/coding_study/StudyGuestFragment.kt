@@ -1,8 +1,6 @@
 package com.example.coding_study
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.coding_study.databinding.StudyGuestBinding
 import com.google.gson.Gson
@@ -21,12 +18,23 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 class StudyGuestFragment : Fragment(R.layout.study_guest) {
     private lateinit var binding: StudyGuestBinding
+
+    fun saveStudy(context: Context, study: ChatRoom) {
+        val sharedPreferences = context.getSharedPreferences("MyStudy", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putLong("study_roomId", study.roomId)
+        editor.putString("study_title", study.title)
+        editor.putString("study_hostNickname", study.hostNickname)
+        editor.putString("study_currentDateTime", study.currentDateTime)
+        editor.putInt("study_currentCount", study.currentCount)
+        if (!editor.commit()) {
+            Log.e("saveStudy", "Failed to save study information")
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -103,12 +111,12 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                 override fun onResponse( call: Call<StudyGuestCurrentCount>, response: Response<StudyGuestCurrentCount>
                 ) {
                     if (response.isSuccessful) {
-                        val studyGuestCurrentCount = response.body()
+                        val studyGuestParticipate = response.body()
                         Log.e("guestButton response code", "${response.code()}")
-                        Log.e("guestButton response body", "$studyGuestCurrentCount")
+                        Log.e("guestButton response body", "$studyGuestParticipate")
 
-                        if (studyGuestCurrentCount != null) {
-                            if (studyGuestCurrentCount.data == -1) {
+                        if (studyGuestParticipate != null) {
+                            if (studyGuestParticipate.data == -1.0) {
                                 val cofirmDialog = ConfirmDialog("모집이 완료된 스터디입니다")
                                 cofirmDialog.isCancelable = false
                                 cofirmDialog.show(childFragmentManager, "studyGuestFragment_Recruitment Completed")
@@ -116,15 +124,30 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                                 binding.guestButton.visibility = View.GONE
                                 binding.guestCancelButton.visibility = View.VISIBLE
 
-                                val studyCurrentCount = studyGuestCurrentCount.data
-                                loadStudyGuest(studyCurrentCount)
+                                if (studyGuestParticipate.data is Double) {
+                                    val studyCurrentCount = (studyGuestParticipate.data as? Double)?.toInt() ?: studyGuestParticipate.data as? Int ?: -5
+                                    loadStudyGuest(studyCurrentCount)
 
-                                val cofirmDialog = ConfirmDialog("스터디 참여 신청이 완료되었습니다")
-                                cofirmDialog.isCancelable = false
-                                cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
+                                    val cofirmDialog = ConfirmDialog("스터디 참여 신청이 완료되었습니다")
+                                    cofirmDialog.isCancelable = false
+                                    cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
+                                }
+
+                                else if (studyGuestParticipate.data is ChatRoom) { // 마지막 참가자가 참여버튼 클릭 시 채팅방 정보 받음
+                                    val chatRoom = studyGuestParticipate.data as ChatRoom
+                                    val completeCurrentCount = chatRoom.currentCount
+                                    loadStudyGuest(completeCurrentCount)
+
+                                    context?.let { it1 -> saveStudy(it1, chatRoom) } // 서버에서 받은 chatRoom 정보 저장
+                                    Log.e("StudyGuestFragment chatRoom response", "$chatRoom")
+
+                                    val chatTitle = chatRoom.title
+                                    val cofirmDialog = ConfirmDialog("$chatTitle 채팅방이 생성되었습니다!")
+                                    cofirmDialog.isCancelable = false
+                                    cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
+                                }
                             }
                         }
-
                     }else{
                         Log.e("StudyGuestFragment guestButton onResponse", "But not success")
                     }
@@ -132,7 +155,8 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
                 override fun onFailure(call: Call<StudyGuestCurrentCount>, t: Throwable) {
                     Toast.makeText(context, "참여하기 버튼_서버 연결 실패", Toast.LENGTH_SHORT).show()
-                    Log.e("studyHostFragment_", "$t")                }
+                    Log.e("studyHostFragment_", "$t")
+                }
             })
         }
 
@@ -145,17 +169,24 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                         Log.e("guestButton response code", "${response.code()}")
                         Log.e("guestButton response body", "$studyGuestCurrentCount")
 
-                        binding.guestButton.visibility = View.VISIBLE
-                        binding.guestCancelButton.visibility = View.GONE
+                        if (studyGuestCurrentCount != null) {
+                            if (studyGuestCurrentCount.data == -1.0) {
+                                val cofirmDialog = ConfirmDialog("모집이 완료된 스터디는 취소할 수 없습니다")
+                                cofirmDialog.isCancelable = false
+                                cofirmDialog.show(childFragmentManager, "studyGuestFragment_Recruitment Completed")
+                            } else{
+                                binding.guestButton.visibility = View.VISIBLE
+                                binding.guestCancelButton.visibility = View.GONE
 
-                        val studyCurrentCount = studyGuestCurrentCount?.data
-                        if (studyCurrentCount != null) {
-                            loadStudyGuest(studyCurrentCount)
+                                val studyCurrentCount = (studyGuestCurrentCount.data as? Double)?.toInt() ?: studyGuestCurrentCount.data as? Int ?: -5
+                                loadStudyGuest(studyCurrentCount)
+
+                                val cofirmDialog = ConfirmDialog("스터디 신청이 취소되었습니다")
+                                cofirmDialog.isCancelable = false
+                                cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestCancelButton")
+                            }
                         }
 
-                        val cofirmDialog = ConfirmDialog("스터디 신청이 취소되었습니다")
-                        cofirmDialog.isCancelable = false
-                        cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestCancelButton")
 
                     } else {
                         Log.e("StudyGuestFragment guestCancelButton onResponse", "But not success")
@@ -173,7 +204,8 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val gson = Gson()
         val json = arguments?.getString("recruitmentJson")
         val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
-        loadStudyGuest(recruitment.currentCount)
+        val currentCountDouble = recruitment.currentCount
+        loadStudyGuest(currentCountDouble)
     }
 
     @SuppressLint("SetTextI18n")

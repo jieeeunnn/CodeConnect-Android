@@ -301,11 +301,9 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu_study, menu)
-        Log.e("studySearchView", "onCreateOptionsMenu")
 
         viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
         val searchPostAddress = viewModel.getSelectedAddress().value
-
 
         val searchItem = menu.findItem(R.id.toolbar_study_search)
         searchItem.isVisible = true // 검색 아이템을 보이도록 설정
