@@ -108,7 +108,7 @@ data class StudyGuestCurrentCount( // 참여하기, 취소하기 버튼 누를 �
     var data: Any
 )
 
-data class ChatRoom (
+data class ChatRoom(
     var roomId: Long,
     var title: String,
     var hostNickname: String,

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.coding_study.databinding.StudyGuestBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -21,19 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyGuestFragment : Fragment(R.layout.study_guest) {
     private lateinit var binding: StudyGuestBinding
-
-    fun saveStudy(context: Context, study: ChatRoom) {
-        val sharedPreferences = context.getSharedPreferences("MyStudy", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putLong("study_roomId", study.roomId)
-        editor.putString("study_title", study.title)
-        editor.putString("study_hostNickname", study.hostNickname)
-        editor.putString("study_currentDateTime", study.currentDateTime)
-        editor.putInt("study_currentCount", study.currentCount)
-        if (!editor.commit()) {
-            Log.e("saveStudy", "Failed to save study information")
-        }
-    }
 
 
     override fun onCreateView(
@@ -54,6 +42,9 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
         val bundle = arguments
         val participantExist = bundle?.getBoolean("participateJson")
+
+        val viewModel = ViewModelProvider(this).get(ChatRoomViewModel::class.java)
+
 
         val parentFragment = parentFragment
         if (parentFragment is StudyFragment) {
@@ -117,36 +108,38 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
                         if (studyGuestParticipate != null) {
                             if (studyGuestParticipate.data == -1.0) {
-                                val cofirmDialog = ConfirmDialog("모집이 완료된 스터디입니다")
-                                cofirmDialog.isCancelable = false
-                                cofirmDialog.show(childFragmentManager, "studyGuestFragment_Recruitment Completed")
-                            }else{
+                                val confirmDialog = ConfirmDialog("모집이 완료된 스터디입니다")
+                                confirmDialog.isCancelable = false
+                                confirmDialog.show(childFragmentManager, "studyGuestFragment_Recruitment Completed")
+
+                            }else if(studyGuestParticipate.data is Double){
                                 binding.guestButton.visibility = View.GONE
                                 binding.guestCancelButton.visibility = View.VISIBLE
 
-                                if (studyGuestParticipate.data is Double) {
-                                    val studyCurrentCount = (studyGuestParticipate.data as? Double)?.toInt() ?: studyGuestParticipate.data as? Int ?: -5
-                                    loadStudyGuest(studyCurrentCount)
+                                val studyCurrentCount = (studyGuestParticipate.data as? Double)?.toInt() ?: studyGuestParticipate.data as? Int ?: -5
+                                loadStudyGuest(studyCurrentCount)
 
-                                    val cofirmDialog = ConfirmDialog("스터디 참여 신청이 완료되었습니다")
-                                    cofirmDialog.isCancelable = false
-                                    cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
-                                }
-
-                                else if (studyGuestParticipate.data is ChatRoom) { // 마지막 참가자가 참여버튼 클릭 시 채팅방 정보 받음
-                                    val chatRoom = studyGuestParticipate.data as ChatRoom
-                                    val completeCurrentCount = chatRoom.currentCount
-                                    loadStudyGuest(completeCurrentCount)
-
-                                    context?.let { it1 -> saveStudy(it1, chatRoom) } // 서버에서 받은 chatRoom 정보 저장
-                                    Log.e("StudyGuestFragment chatRoom response", "$chatRoom")
-
-                                    val chatTitle = chatRoom.title
-                                    val cofirmDialog = ConfirmDialog("$chatTitle 채팅방이 생성되었습니다!")
-                                    cofirmDialog.isCancelable = false
-                                    cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
-                                }
+                                val confirmDialog = ConfirmDialog("스터디 참여 신청이 완료되었습니다")
+                                confirmDialog.isCancelable = false
+                                confirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
                             }
+                            else { // 마지막 참가자가 참여버튼 클릭 시 채팅방 정보 받음
+                                val gson = Gson()
+                                val chatRoomJson = gson.toJson(studyGuestParticipate.data) // LinkedTreeMap을 JSON 문자열로 변환
+                                val chatRoom = gson.fromJson(chatRoomJson, ChatRoom::class.java) // JSON 문자열을 ChatRoom 객체로 변환
+
+                                val completeCurrentCount = chatRoom.currentCount
+                                loadStudyGuest(completeCurrentCount)
+
+                                viewModel.setChatRoom(chatRoom) // 서버에서 받은 chatRoom 정보 저장
+                                Log.e("StudyGuestFragment chatRoom response", "$chatRoom")
+
+                                val chatTitle = chatRoom.title
+                                val confirmDialog = ConfirmDialog("$chatTitle 채팅방이 생성되었습니다!")
+                                confirmDialog.isCancelable = false
+                                confirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
+                                }
+
                         }
                     }else{
                         Log.e("StudyGuestFragment guestButton onResponse", "But not success")
@@ -171,9 +164,9 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
                         if (studyGuestCurrentCount != null) {
                             if (studyGuestCurrentCount.data == -1.0) {
-                                val cofirmDialog = ConfirmDialog("모집이 완료된 스터디는 취소할 수 없습니다")
-                                cofirmDialog.isCancelable = false
-                                cofirmDialog.show(childFragmentManager, "studyGuestFragment_Recruitment Completed")
+                                val confirmDialog = ConfirmDialog("모집이 완료된 스터디는 취소할 수 없습니다")
+                                confirmDialog.isCancelable = false
+                                confirmDialog.show(childFragmentManager, "studyGuestFragment_Recruitment Completed")
                             } else{
                                 binding.guestButton.visibility = View.VISIBLE
                                 binding.guestCancelButton.visibility = View.GONE
@@ -181,9 +174,9 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                                 val studyCurrentCount = (studyGuestCurrentCount.data as? Double)?.toInt() ?: studyGuestCurrentCount.data as? Int ?: -5
                                 loadStudyGuest(studyCurrentCount)
 
-                                val cofirmDialog = ConfirmDialog("스터디 신청이 취소되었습니다")
-                                cofirmDialog.isCancelable = false
-                                cofirmDialog.show(childFragmentManager, "studyGuestFragment_guestCancelButton")
+                                val confirmDialog = ConfirmDialog("스터디 신청이 취소되었습니다")
+                                confirmDialog.isCancelable = false
+                                confirmDialog.show(childFragmentManager, "studyGuestFragment_guestCancelButton")
                             }
                         }
 
