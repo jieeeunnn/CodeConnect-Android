@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -87,13 +88,14 @@ class AddressAdapter(private var addressList: List<Feature>, private var itemCli
 
         // 클릭 이벤트 설정
         textView.setOnClickListener {
-            itemClickListener?.onItemClick(addressItem.properties.full_nm)
+            itemClickListener.onItemClick(addressItem.properties.full_nm)
             setSelectedItem(position) // 선택된 주소 text 색상 변경
         }
     }
 
     override fun getItemCount() = addressList.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun submitList(newList: List<Feature>?) {
         addressList = (newList ?: emptyList())
         notifyDataSetChanged()

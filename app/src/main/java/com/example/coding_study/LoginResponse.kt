@@ -37,16 +37,6 @@ interface LoginService {
     fun requestLogin(@Body loginrequest: LoginRequest): Call<LoginResponse>
 }
 
-/*
-interface LoginService {
-    @GET("members/signIn")
-    fun requestLogin(
-        @Query("email") email: String,
-        @Query("password") password: String
-    ): Call<LoginResponse>
-}
- */
-
 
 // 요청 데이터
 data class LoginRequest(

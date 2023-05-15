@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.coding_study.databinding.StudyGuestBinding
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyGuestFragment : Fragment(R.layout.study_guest) {
     private lateinit var binding: StudyGuestBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,9 +44,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
         val bundle = arguments
         val participantExist = bundle?.getBoolean("participateJson")
-
-        val viewModel = ViewModelProvider(this).get(ChatRoomViewModel::class.java)
-
 
         val parentFragment = parentFragment
         if (parentFragment is StudyFragment) {
@@ -131,15 +130,17 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                                 val completeCurrentCount = chatRoom.currentCount
                                 loadStudyGuest(completeCurrentCount)
 
-                                viewModel.setChatRoom(chatRoom) // 서버에서 받은 chatRoom 정보 저장
-                                Log.e("StudyGuestFragment chatRoom response", "$chatRoom")
+                                val chatRoomViewModel = ViewModelProvider(requireActivity()).get(ChatRoomViewModel::class.java)
+
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    chatRoomViewModel.saveChatRoom(chatRoom)
+                                }
 
                                 val chatTitle = chatRoom.title
                                 val confirmDialog = ConfirmDialog("$chatTitle 채팅방이 생성되었습니다!")
                                 confirmDialog.isCancelable = false
                                 confirmDialog.show(childFragmentManager, "studyGuestFragment_guestButton")
                                 }
-
                         }
                     }else{
                         Log.e("StudyGuestFragment guestButton onResponse", "But not success")
@@ -179,8 +180,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                                 confirmDialog.show(childFragmentManager, "studyGuestFragment_guestCancelButton")
                             }
                         }
-
-
                     } else {
                         Log.e("StudyGuestFragment guestCancelButton onResponse", "But not success")
                     }
@@ -213,6 +212,20 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         binding.guestFieldText.text = recruitment.field
         binding.guestCountText.text = "$currentCount / ${recruitment.count}"
         binding.guestCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
-
     }
+
+    suspend fun saveChatRoom(chatRoom: ChatRoom) {
+        val chatRoomEntity = ChatRoomEntity(
+            roomId = chatRoom.roomId,
+            title = chatRoom.title,
+            hostNickname = chatRoom.hostNickname,
+            currentDateTime = chatRoom.currentDateTime,
+            currentCount = chatRoom.currentCount
+        )
+
+        val chatRoomDatabase = context?.let { ChatRoomDatabase.getInstance(it) }
+        val chatRoomDao = chatRoomDatabase?.chatRoomDao()
+        chatRoomDao?.insertChatRoom(chatRoomEntity)
+    }
+
 }
