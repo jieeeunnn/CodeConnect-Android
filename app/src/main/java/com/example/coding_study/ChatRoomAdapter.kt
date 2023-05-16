@@ -3,11 +3,10 @@ package com.example.coding_study
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.OneShotPreDrawListener.add
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.ChatRoomBinding
 
-class ChatRoomAdapter(private var chatList: List<ChatRoomEntity>, private var onItemClickListener: OnItemClickListener): RecyclerView.Adapter<ChatRoomAdapter.ChatRoomViewHolder>() {
+class ChatRoomAdapter(var chatList: List<ChatRoom>, private var onItemClickListener: OnItemClickListener): RecyclerView.Adapter<ChatRoomAdapter.ChatRoomViewHolder>() {
 
     interface OnItemClickListener{
         fun onItemClick(position: Int)
@@ -18,7 +17,7 @@ class ChatRoomAdapter(private var chatList: List<ChatRoomEntity>, private var on
     }
 
     inner class ChatRoomViewHolder(private val binding: ChatRoomBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chatRoomEntity: ChatRoomEntity) {
+        fun bind(chatRoomEntity: ChatRoom) {
             binding.chatRoomTitleTextView.text = chatRoomEntity.title
         }
     }
@@ -36,7 +35,7 @@ class ChatRoomAdapter(private var chatList: List<ChatRoomEntity>, private var on
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(newList: List<ChatRoomEntity>) {
+    fun submitList(newList: List<ChatRoom>) {
         chatList = (ArrayList(newList))
         notifyDataSetChanged()
     }

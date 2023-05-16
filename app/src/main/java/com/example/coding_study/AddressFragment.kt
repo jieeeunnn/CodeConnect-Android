@@ -33,13 +33,11 @@ interface AddressApiService {
     ): Call<Welcome7>
 }
 
-
 class AddressFragment: Fragment(R.layout.address_fragment){
     private lateinit var binding: AddressFragmentBinding
     private lateinit var addressAdapter: AddressAdapter
     private lateinit var viewModel: AddressViewModel
     private var mAddress: String = ""
-
 
     override fun onCreateView(
         inflater: LayoutInflater,

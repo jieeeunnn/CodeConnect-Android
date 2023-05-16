@@ -100,8 +100,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         // 게시글을 클릭할 때 서버에 토큰, 게시글 id를 주고 Role과 게시글 정보를 받아옴. 이후 Role에 따라 다른 레이아웃 띄우기
         var onItemClickListener: StudyAdapter.OnItemClickListener = object : StudyAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) { // 게시글 클릭 시
-                Log.e("StudyFragment", "onItemClick!!!")
-
                 // 저장된 게시글 id 가져오기
                 val sharedPreferencesPostId = requireActivity().getSharedPreferences("MyPostIds", Context.MODE_PRIVATE) // "MyPostIds" 라는 이름으로 SharedPreferences 객체를 생성
                 val size = sharedPreferencesPostId.all.size // SharedPreferences 객체에 저장된 모든 키-값 쌍의 개수를 구함
@@ -241,7 +239,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            //.addHeader("Authorization", "Bearer $token")
                             .build()
                         Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
                         chain.proceed(request)
@@ -264,7 +261,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                 if (response.isSuccessful) {
                     val studyListResponse = response.body() // 서버에서 받아온 응답 데이터
                     val code = response.code() // 서버 응답 코드
-                    Log.e("StudyList_response.body", "is : ${response.body()}") // 서버에서 받아온 응답 데이터 log 출력
+                    Log.e("StudyList_response.body", "is : $studyListResponse") // 서버에서 받아온 응답 데이터 log 출력
                     Log.e("response code", "is : $code") // 서버 응답 코드 log 출력
 
                     val studyList = studyListResponse?.data

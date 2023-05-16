@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.Entity
 import androidx.room.RoomDatabase
-import kotlin.coroutines.CoroutineContext
 
 
 // 채팅방 데이터 클래스

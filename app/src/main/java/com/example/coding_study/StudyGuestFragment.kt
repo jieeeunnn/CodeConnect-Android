@@ -130,11 +130,13 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                                 val completeCurrentCount = chatRoom.currentCount
                                 loadStudyGuest(completeCurrentCount)
 
+                                /*
                                 val chatRoomViewModel = ViewModelProvider(requireActivity()).get(ChatRoomViewModel::class.java)
 
                                 GlobalScope.launch(Dispatchers.IO) {
                                     chatRoomViewModel.saveChatRoom(chatRoom)
                                 }
+                                 */
 
                                 val chatTitle = chatRoom.title
                                 val confirmDialog = ConfirmDialog("$chatTitle 채팅방이 생성되었습니다!")
