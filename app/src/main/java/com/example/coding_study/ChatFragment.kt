@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.ChatFragmentBinding
 import okhttp3.OkHttpClient
@@ -26,6 +25,14 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
     private lateinit var chatRoomViewModel: ChatRoomViewModel
     private var chatList: List<ChatRoom> = emptyList() // Declare chatList as a member variable
 
+    fun saveRoomId(context: Context, roomId: Long) { // 토큰 저장 함수
+        val sharedPreferences = context.getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putLong("roomId", roomId)
+        if (!editor.commit()) {
+            Log.e("saveRoomId", "Failed to save roomId")
+        }
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -93,6 +100,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                 chatRoomOnlyService.chatRoomOnly(roomId).enqueue(object : Callback<ChatRoomOnlyResponse>{
                     override fun onResponse(call: Call<ChatRoomOnlyResponse>, response: Response<ChatRoomOnlyResponse>
                     ) {
+                        context?.let { saveRoomId(it, roomId) }
                         val chattingFragment = ChattingFragment()
                         childFragmentManager.beginTransaction()
                             .replace(R.id.chat_fragment_layout, chattingFragment)

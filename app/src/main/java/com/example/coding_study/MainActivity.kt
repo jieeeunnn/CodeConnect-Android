@@ -7,15 +7,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import androidx.constraintlayout.widget.ConstraintSet.GONE
-import androidx.fragment.app.FragmentManager
 import com.example.coding_study.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
     val binding by lazy {ActivityMainBinding.inflate(layoutInflater)}
@@ -53,6 +50,15 @@ class MainActivity : AppCompatActivity() {
         editor.putString("fields", postFieldsString)
         if (!editor.commit()) {
             Log.e("saveFields", "Failed to save Fields")
+        }
+    }
+
+    fun saveNickname(context: Context, nickname: String?) {
+        val sharedPreferences = context.getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("nickname", nickname)
+        if (!editor.commit()) {
+            Log.e("saveNickname", "Failed to save nickname")
         }
     }
 
@@ -99,6 +105,9 @@ class MainActivity : AppCompatActivity() {
 
                             val receivedFields = loginResponse.data!!.member.fieldList
                             saveFields(applicationContext, receivedFields)
+
+                            val receivedNickname = loginResponse.data!!.member.nickname
+                            saveNickname(applicationContext, receivedNickname)
 
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java) // 스터디 게시글 화면으로 이동
                             startActivity(nextIntent)
