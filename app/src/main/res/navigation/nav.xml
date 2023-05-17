@@ -23,7 +23,7 @@
         android:label="ChatFragment" />
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.example.coding_study.MypageFragment"
+        android:name="com.example.coding_study.MyPageFragment"
         android:label="MypageFragment" />
     <fragment
         android:id="@+id/writeStudyFragment"

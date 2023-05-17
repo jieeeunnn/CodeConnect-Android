@@ -16,7 +16,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/blue_main"
+        android:background="@color/blue_sky"
         app:menu="@menu/toolbar_menu_chat" >
 
         <TextView
@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:text="Chat Title"
             android:textColor="#515151"
+            android:textSize="16dp"
             tools:ignore="MissingConstraints">
         </TextView>
 

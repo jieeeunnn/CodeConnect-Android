@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/myPageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="32dp"
+        android:text="내 프로필"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/myPageNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="nickname"
+        app:layout_constraintStart_toStartOf="@+id/myPageTextView"
+        app:layout_constraintTop_toBottomOf="@+id/myPageTextView" />
+
+    <TextView
+        android:id="@+id/myPageField2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="myField2"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageField1"
+        app:layout_constraintStart_toEndOf="@+id/myPageField1" />
+
+    <TextView
+        android:id="@+id/myPageField1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="myField1"
+        app:layout_constraintStart_toStartOf="@+id/myPageField"
+        app:layout_constraintTop_toBottomOf="@+id/myPageField" />
+
+    <TextView
+        android:id="@+id/myPageField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="관심 언어"
+        app:layout_constraintStart_toStartOf="@+id/myPageNickname"
+        app:layout_constraintTop_toBottomOf="@+id/myPageNickname" />
+
+    <TextView
+        android:id="@+id/myPageAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:text="address"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageNickname"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
