@@ -8,7 +8,9 @@ import com.example.coding_study.databinding.ChatMessageReceiveBinding
 
 data class ChatMessage (
     var message : String,
-    var sender: String
+    var sender: String,
+    var nickname: String,
+    var currentCount: String
         )
 
 class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -30,12 +32,16 @@ class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): Recyc
     inner class ChatMessageViewHolder(private val binding: ChatMessageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatMessage: ChatMessage) {
             binding.chatMessageTextView.text = chatMessage.message
+            binding.myMessageNickname.text = chatMessage.nickname
+            binding.myMessageCurrentTime.text = chatMessage.currentCount
         }
     }
 
     inner class OtherChatMessageViewHolder(private val binding: ChatMessageReceiveBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatMessage: ChatMessage) {
             binding.chatReceiveMessage.text = chatMessage.message
+            binding.otherMessageNickname.text = chatMessage.nickname
+            binding.otherMessageCurrentTime.text = chatMessage.currentCount
         }
     }
 

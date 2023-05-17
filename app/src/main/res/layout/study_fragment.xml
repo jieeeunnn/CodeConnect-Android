@@ -10,7 +10,6 @@
         android:id="@+id/studyToolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,10 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/round_rect_skyblue"
-            android:textColor="#515151"
-            android:padding="7dp"
             android:elevation="3dp"
-            android:text="주소" />
+            android:padding="7dp"
+            android:text="주소"
+            android:textColor="#515151" />
 
     </androidx.appcompat.widget.Toolbar>
 

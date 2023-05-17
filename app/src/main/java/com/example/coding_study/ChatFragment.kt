@@ -21,8 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ChatFragment : Fragment(R.layout.chat_fragment) {
     private lateinit var chatAdapter: ChatRoomAdapter
     private lateinit var binding: ChatFragmentBinding
-    private lateinit var onItemClickListener: ChatRoomAdapter.OnItemClickListener
-    private lateinit var chatRoomViewModel: ChatRoomViewModel
     private var chatList: List<ChatRoom> = emptyList() // Declare chatList as a member variable
 
     fun saveRoomId(context: Context, roomId: Long) { // 토큰 저장 함수
@@ -31,6 +29,15 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         editor.putLong("roomId", roomId)
         if (!editor.commit()) {
             Log.e("saveRoomId", "Failed to save roomId")
+        }
+    }
+
+    fun saveTitle(context: Context, title: String?) {
+        val sharedPreferences = context.getSharedPreferences("MyTitle", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("title", title)
+        if (!editor.commit()) {
+            Log.e("saveTitle", "Failed to save title")
         }
     }
 
@@ -101,6 +108,11 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                     override fun onResponse(call: Call<ChatRoomOnlyResponse>, response: Response<ChatRoomOnlyResponse>
                     ) {
                         context?.let { saveRoomId(it, roomId) }
+
+                        val responseChatRoom = response.body()
+                        val chatRoomTitle = responseChatRoom?.data?.title
+                        context?.let { saveTitle(it, chatRoomTitle) } // 채팅방 title 저장
+
                         val chattingFragment = ChattingFragment()
                         childFragmentManager.beginTransaction()
                             .replace(R.id.chat_fragment_layout, chattingFragment)

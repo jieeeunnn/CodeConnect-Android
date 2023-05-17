@@ -2,6 +2,7 @@ package com.example.coding_study
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -41,6 +42,11 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
         chattingAdapter = ChattingAdapter(mutableListOf())
         binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
         chattingRecyclerView.adapter = chattingAdapter
+
+        val sharedPreferences3 = requireActivity().getSharedPreferences("MyTitle", Context.MODE_PRIVATE)
+        val roomTitle = sharedPreferences3?.getString("title", "")
+
+        binding.chattingTitleTextView.text = roomTitle
 
         connectToChatServer()
 
@@ -105,26 +111,16 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
 
     private fun sendMessage(message: String, roomId: Long, nickname: String) {
 
-        val headers = listOf(
-            StompHeader(StompHeader.DESTINATION, "/pub/chat/message"),
-            StompHeader(StompHeader.CONTENT_TYPE, "application/json"),
-            StompHeader("roomId", roomId.toString()),
-            StompHeader("nickname", nickname),
-            StompHeader(StompHeader.ID, UUID.randomUUID().toString()),
-        )
-        stompClient?.send(StompMessage(StompCommand.SEND, headers, message))
+        val data = JSONObject()
+        data.put("roomId", roomId.toString())
+        data.put("nickname", nickname)
+        data.put("message", message)
+        stompClient?.send("/pub/chat/message", data.toString())?.subscribe()
 
-        /*
-        val headers = mapOf(
-            "roomId" to roomId, // 보내고자 하는 방의 id
-            "nickname" to nickname // 메시지를 보내는 사용자의 닉네임
-        )
-        stompClient?.send("/pub/chat/message", message, headers)
-         */
-        //stompClient?.send("/pub/chat/message", message)
+
         Log.e("ChattingFragment sendMessage", "$message, $roomId, $nickname")
-
-        val chatMessage = ChatMessage(message, "me")
+        val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+        val chatMessage = ChatMessage(message, "me", nickname, currentTime)
 
         coroutineScope.launch {
             chattingAdapter.addMessage(chatMessage) // 객체를 채팅 어댑터에 추가
@@ -137,11 +133,14 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
         // 파싱 로직 구현
         val body = topicMessage.payload // payload를 이용하여 메시지 내용 추출
         val messageJson = JSONObject(body)
+        val nicknameJson = JSONObject(body)
+        val currentDateTimeJson = JSONObject(body)
         val message = messageJson.getString("message")
-        //val timestamp = messageJson.getLong("timestamp")
-        //val sender = messageJson.getString("sender")
-        Log.e("ChattingFragment parseMessage", message)
+        val nickname = nicknameJson.getString("nickname")
+        val currentDateTime = currentDateTimeJson.getString("currentDateTime")
 
-        return ChatMessage(message, "")
+        Log.e("ChattingFragment parseMessage", "$message, $nickname, $currentDateTime")
+
+        return ChatMessage(message, "", nickname, currentDateTime)
     }
 }

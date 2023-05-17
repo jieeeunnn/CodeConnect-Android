@@ -2,23 +2,37 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/round_rect_skyblue"
-    android:layout_gravity="start"
-    android:layout_margin="15dp">
+    android:layout_gravity="start">
 
     <TextView
         android:id="@+id/chatReceiveMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_rect_skyblue"
+        android:padding="7dp"
+        android:text="chatMessage"
+        app:layout_constraintStart_toStartOf="@+id/otherMessageNickname"
+        app:layout_constraintTop_toBottomOf="@+id/otherMessageNickname" />
+
+    <TextView
+        android:id="@+id/otherMessageNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="nickname"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/otherMessageCurrentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="currentTime"
+        app:layout_constraintBaseline_toBaselineOf="@+id/chatReceiveMessage"
+        app:layout_constraintStart_toEndOf="@+id/chatReceiveMessage" />
 </androidx.constraintlayout.widget.ConstraintLayout>
