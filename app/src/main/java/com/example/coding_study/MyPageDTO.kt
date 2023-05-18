@@ -19,5 +19,11 @@ data class MyProfile (
     var address: String,
     var email: String,
     var fieldList: List<String>,
-    var nickname: String
-        )
+    var nickname: String,
+    var role: MyPageRole
+    )
+
+enum class MyPageRole {
+    HOST,
+    GUEST
+}

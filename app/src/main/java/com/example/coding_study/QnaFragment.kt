@@ -23,7 +23,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class QnAFragment : Fragment(R.layout.qna_fragment) {
     private lateinit var binding:QnaFragmentBinding
     private lateinit var qnaAdapter: QnaAdapter
-    private lateinit var onQnaClickListener: QnaAdapter.OnQnaClickListener
     private lateinit var qnaFab: FloatingActionButton
 
     // saveQnaPostIds 함수 (로컬 저장소에 Qna 게시글Id 저장하는 함수)

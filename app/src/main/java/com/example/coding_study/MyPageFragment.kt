@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.MypageFragmentBinding
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -18,6 +19,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPageFragment: Fragment(R.layout.mypage_fragment) {
     private lateinit var binding: MypageFragmentBinding
+    private lateinit var myPageProfileView: View
+    private lateinit var myPageListView: View
+    private lateinit var myPageAdapter: MyPageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +29,21 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
         savedInstanceState: Bundle?
     ): View? {
         binding = MypageFragmentBinding.inflate(inflater, container, false)
+        val view = binding.root
+        val myPageRecyclerView = binding.myPageRecyclerView
+
+        myPageProfileView = binding.myPageProfileView
+        myPageListView = binding.myPageListView
+
+        var itemClickListener: MyPageAdapter.ItemClickListener = object : MyPageAdapter.ItemClickListener {
+            override fun onItemClick(position: Int) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        myPageAdapter = MyPageAdapter(listOf(), itemClickListener)
+        myPageRecyclerView.adapter = myPageAdapter
+        binding.myPageRecyclerView.layoutManager = LinearLayoutManager(context)
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
@@ -59,18 +78,17 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                         binding.myPageAddress.text = myPageResponse.data.address
                         binding.myPageField1.text = myPageResponse.data.fieldList[0]
                         binding.myPageField2.text = myPageResponse.data.fieldList[1]
-
-
                     }
                 }
             }
 
             override fun onFailure(call: Call<MyPageProfileResponse>, t: Throwable) {
+                Log.e("MyPageFragment", "Failed to get profile", t)
                 Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
             }
 
         })
 
-        return binding.root
+        return view
     }
 }
