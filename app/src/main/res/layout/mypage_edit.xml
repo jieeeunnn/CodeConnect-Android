@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:background="@drawable/round_rect_mainblue">
+
+    <TextView
+        android:id="@+id/myPageEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="내 프로필 수정"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/myPageIdEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="아이디"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/myPageEdit"
+        app:layout_constraintTop_toBottomOf="@+id/myPageEdit" />
+
+    <TextView
+        android:id="@+id/myPageAddressEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="주소"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/myPageIdEdit"
+        app:layout_constraintTop_toBottomOf="@+id/myPageIdEdit" />
+
+    <TextView
+        android:id="@+id/myPageFieldEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="관심 언어"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/myPageAddressEdit"
+        app:layout_constraintTop_toBottomOf="@+id/myPageAddressEdit" />
+
+    <EditText
+        android:id="@+id/myPageNewId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageIdEdit"
+        app:layout_constraintStart_toEndOf="@+id/myPageIdEdit" />
+
+    <EditText
+        android:id="@+id/myPageNewFields"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageFieldEdit"
+        app:layout_constraintStart_toStartOf="@+id/textView8" />
+
+    <Button
+        android:id="@+id/myPageUploadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/round_rect_skyblue"
+        android:text="수정"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myPageNewFields" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageAddressEdit"
+        app:layout_constraintStart_toStartOf="@+id/myPageNewId" />
+</androidx.constraintlayout.widget.ConstraintLayout>

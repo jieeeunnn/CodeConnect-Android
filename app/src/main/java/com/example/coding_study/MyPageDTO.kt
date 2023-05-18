@@ -12,7 +12,7 @@ interface MyPageGetService {
 data class MyPageProfileResponse (
     var result: Boolean,
     var message: String,
-    var data: MyProfile
+    var data: List<MyProfile>
         )
 
 data class MyProfile (

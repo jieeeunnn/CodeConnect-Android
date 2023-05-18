@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.MypageFragmentBinding
+import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,18 +31,26 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
     ): View? {
         binding = MypageFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
-        val myPageRecyclerView = binding.myPageRecyclerView
 
         myPageProfileView = binding.myPageProfileView
         myPageListView = binding.myPageListView
 
+        val myPageRecyclerView = binding.myPageRecyclerView
+
         var itemClickListener: MyPageAdapter.ItemClickListener = object : MyPageAdapter.ItemClickListener {
             override fun onItemClick(position: Int) {
-                TODO("Not yet implemented")
+                Log.e("MypageFragment", "onclick")
+                if (position == 0) {
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.study_fragment_layout, MyPageEditFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
 
-        myPageAdapter = MyPageAdapter(listOf(), itemClickListener)
+        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 쓴 글")
+        myPageAdapter = MyPageAdapter(textList, itemClickListener)
         myPageRecyclerView.adapter = myPageAdapter
         binding.myPageRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -73,11 +82,16 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                     Log.e("MyPageFragment response body", "$myPageResponse")
                     Log.e("MyPageFragment response code", "${response.code()}")
 
+                    val gson = Gson()
+                    val myPageData = myPageResponse?.data
+                    val myPageDto = gson.fromJson(gson.toJson(myPageData), Array<MyProfile>::class.java)
+                    val myProfile: MyProfile = myPageDto[0]
+
                     if (myPageResponse != null) {
-                        binding.myPageNickname.text = myPageResponse.data.nickname
-                        binding.myPageAddress.text = myPageResponse.data.address
-                        binding.myPageField1.text = myPageResponse.data.fieldList[0]
-                        binding.myPageField2.text = myPageResponse.data.fieldList[1]
+                        binding.myPageNickname.text = myProfile.nickname
+                        binding.myPageAddress.text = myProfile.address
+                        binding.myPageField1.text = myProfile.fieldList[0]
+                        binding.myPageField2.text = myProfile.fieldList[1]
                     }
                 }
             }
