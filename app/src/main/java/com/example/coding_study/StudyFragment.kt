@@ -26,7 +26,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Suppress("DEPRECATION")
 class StudyFragment : Fragment(R.layout.study_fragment) {
     private lateinit var studyAdapter: StudyAdapter
-    private lateinit var onItemClickListener: StudyAdapter.OnItemClickListener
     private lateinit var binding:StudyFragmentBinding
     private lateinit var viewModel: AddressViewModel
     private lateinit var fab: FloatingActionButton

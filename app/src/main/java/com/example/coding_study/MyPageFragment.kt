@@ -92,16 +92,29 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
             override fun onItemClick(position: Int) {
                 Log.e("MypageFragment", "onclick")
 
-                if (position == 0) {
+                if (position == 0) { // 내 프로필 수정
                     childFragmentManager.beginTransaction()
                         .replace(R.id.myPageProfileView, MyPageEditFragment())
                         .addToBackStack(null)
                         .commit()
                 }
+
+                if (position == 1) { // 신청한 스터디
+                    
+                }
+                if (position == 2) { // 내가 작성한 스터디
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.myPageProfileView, MyPageMyStudy())
+                        .addToBackStack(null)
+                        .commit()
+                }
+                if (position == 3) { // 내가 작성한 Q&A
+
+                }
             }
         }
 
-        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 쓴 글")
+        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 작성한 스터디", "내가 작성한 Q&A")
         myPageAdapter = MyPageAdapter(textList, onItemClickListener)
         myPageRecyclerView.adapter = myPageAdapter
         binding.myPageRecyclerView.layoutManager = LinearLayoutManager(context)

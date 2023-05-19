@@ -70,7 +70,14 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
             }
 
             addressViewModel.getSelectedAddress().observe(viewLifecycleOwner) {
-                address -> binding.myPageNewAddress.text = address
+                address ->
+                if (address == "") {
+                    binding.myPageNewAddress.text = myProfile.address
+                } else {
+                    binding.myPageNewAddress.text = address
+
+                }
+
                 Log.e("MyPageEditFragment", "selected address: $address")
             }
 
@@ -182,10 +189,10 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
 
                 var myPageEdit = MyPageEdit(nickname, address, fieldList)
 
-                myPageEditService.myPageEditPost(myPageEdit).enqueue(object : Callback<MyPageProfileResponse> {
+                myPageEditService.myPageEditPost(myPageEdit).enqueue(object : Callback<MyPageEditResponse> {
                     override fun onResponse(
-                        call: Call<MyPageProfileResponse>,
-                        response: Response<MyPageProfileResponse>
+                        call: Call<MyPageEditResponse>,
+                        response: Response<MyPageEditResponse>
                     ) {
                         if (response.isSuccessful) {
                             Log.e("MyPageEditFragment response code is", "${response.code()}")
@@ -200,7 +207,7 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
                         }
                     }
 
-                    override fun onFailure(call: Call<MyPageProfileResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<MyPageEditResponse>, t: Throwable) {
                         Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                     }
 

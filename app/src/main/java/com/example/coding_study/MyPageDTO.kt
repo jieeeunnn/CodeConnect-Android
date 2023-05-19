@@ -36,8 +36,13 @@ enum class MyPageRole {
 
 interface MyPageEditService { // 마이페이지 수정 api
     @PUT("")
-    fun myPageEditPost(@Body myPageEdit: MyPageEdit) : Call<MyPageProfileResponse>
+    fun myPageEditPost(@Body myPageEdit: MyPageEdit) : Call<MyPageEditResponse>
 }
+data class MyPageEditResponse (
+    var result: Boolean,
+    var message: String,
+    var data: MyPageEdit
+        )
 
 data class MyPageEdit (
     var nickname: String,
