@@ -1,28 +1,25 @@
 package com.example.coding_study
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.AddressFragmentBinding
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class StudyAddressFragment : Fragment(R.layout.address_fragment) {
+class MyPageAddressFragment: Fragment(R.layout.address_fragment) {
     private lateinit var binding: AddressFragmentBinding
-    private lateinit var viewModel: AddressViewModel
+    private lateinit var viewModel: MyPageAddressViewModel
     private var mAddress: String = ""
 
     override fun onCreateView(
@@ -30,25 +27,13 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // 프래그먼트에서 사용할 레이아웃 파일을 inflate 합니다.
         binding = AddressFragmentBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
-            val parentFragmentManager = requireActivity().supportFragmentManager
-            parentFragmentManager.popBackStack()
-
-            val parentFragment = parentFragment
-            if (parentFragment is StudyFragment) {
-                parentFragment.showFloatingButton()
-            }
-        }
+        viewModel = ViewModelProvider(requireActivity()).get(MyPageAddressViewModel::class.java)
 
         val recyclerView = binding.addressRecyclerView
         val itemDecoration = AddressAdapter.MyItemDecoration(30,30) // 아이템 간 간격 설정
         recyclerView.addItemDecoration(itemDecoration)
 
-        // Retrofit 인스턴스 생성
         val retrofit = Retrofit.Builder()
             .baseUrl("http://api.vworld.kr/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -63,55 +48,11 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
             }
         })
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
-        val studyAddressService = retrofitBearer.create(StudyGetService::class.java)
-
         binding.OkButton.setOnClickListener {
             // ViewModel에 데이터 저장
             viewModel.selectAddress(mAddress)
-
-            studyAddressService.studyGetList(address = mAddress).enqueue(object : Callback<StudyListResponse>{
-                override fun onResponse(call: Call<StudyListResponse>, response: Response<StudyListResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.e("StudyAddressService response code", "${response.code()}")
-                        Log.e("StudyAddressService response body", "${response.body()}")
-
-                        parentFragmentManager.popBackStack()
-
-                        val parentFragment = parentFragment
-                        if (parentFragment is StudyFragment) {
-                            parentFragment.showFloatingButton()
-                        }
-
-                    } else {
-                        Log.e("StudyAddressService onResponse", "But not success")
-                    }
-                }
-                override fun onFailure(call: Call<StudyListResponse>, t: Throwable) {
-                    Toast.makeText(context, "StudyAddressService_서버 연결 실패", Toast.LENGTH_SHORT).show()
-                }
-            })
+            parentFragmentManager.popBackStack()
         }
-
         binding.addressRecyclerView.layoutManager = LinearLayoutManager(context)
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -154,15 +95,7 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
         })
         binding.addressRecyclerView.adapter = addressAdapter
 
+
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val parentFragment = parentFragment
-        if (parentFragment is StudyFragment) {
-            parentFragment.hideFloatingButton()
-        }
     }
 }

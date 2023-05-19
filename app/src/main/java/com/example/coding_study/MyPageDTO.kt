@@ -1,9 +1,12 @@
 package com.example.coding_study
 
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
-interface MyPageGetService {
+interface MyPageGetService { // 마이페이지 정보 조회
     @GET("/profile")
     fun myPageGetProfile(
     ): Call<MyPageProfileResponse>
@@ -27,3 +30,17 @@ enum class MyPageRole {
     HOST,
     GUEST
 }
+
+
+
+
+interface MyPageEditService { // 마이페이지 수정 api
+    @PUT("")
+    fun myPageEditPost(@Body myPageEdit: MyPageEdit) : Call<MyPageProfileResponse>
+}
+
+data class MyPageEdit (
+    var nickname: String,
+    var address: String,
+    var fieldList: List<String>
+        )

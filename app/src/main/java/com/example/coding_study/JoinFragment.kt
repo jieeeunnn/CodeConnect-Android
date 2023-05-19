@@ -22,7 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class JoinFragment : Fragment(R.layout.join_fragment) {
     private lateinit var binding: JoinFragmentBinding
-    private var field: String? = null
     private lateinit var viewModel: AddressViewModel
 
     override fun onCreateView(

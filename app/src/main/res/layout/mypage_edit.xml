@@ -2,16 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/myPageEdit_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="20dp"
-    android:background="@drawable/round_rect_mainblue">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/myPageEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
         android:text="내 프로필 수정"
         android:textSize="18sp"
@@ -53,40 +53,139 @@
         android:id="@+id/myPageNewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="32dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintBaseline_toBaselineOf="@+id/myPageIdEdit"
         app:layout_constraintStart_toEndOf="@+id/myPageIdEdit" />
 
-    <EditText
-        android:id="@+id/myPageNewFields"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBaseline_toBaselineOf="@+id/myPageFieldEdit"
-        app:layout_constraintStart_toStartOf="@+id/textView8" />
-
     <Button
         android:id="@+id/myPageUploadButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/round_rect_skyblue"
         android:text="수정"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myPageNewFields" />
+        android:stateListAnimator="@null"/>
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/myPageNewAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/myPageAddressEdit"
         app:layout_constraintStart_toStartOf="@+id/myPageNewId" />
+
+    <android.widget.Button
+        android:id="@+id/myPageAndroidBtn"
+        android:layout_width="95dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="안드로이드"
+        android:textColor="#515151"
+        app:layout_constraintStart_toStartOf="@+id/myPageFieldEdit"
+        app:layout_constraintTop_toBottomOf="@+id/myPageFieldEdit"
+        android:stateListAnimator="@null"/>
+
+    <android.widget.Button
+        android:id="@+id/myPageIosBtn"
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="IOS"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageAndroidBtn"
+        app:layout_constraintStart_toEndOf="@+id/myPageAndroidBtn"
+        android:stateListAnimator="@null"/>
+
+    <android.widget.Button
+        android:id="@+id/myPageAlgorithmBtn"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="알고리즘"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageIosBtn"
+        app:layout_constraintStart_toEndOf="@+id/myPageIosBtn"
+        android:stateListAnimator="@null"/>
+
+    <android.widget.Button
+        android:id="@+id/myPageDatabaseBtn"
+        android:layout_width="110dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="데이터베이스"
+        android:textColor="#515151"
+        app:layout_constraintStart_toStartOf="@+id/myPageAndroidBtn"
+        app:layout_constraintTop_toBottomOf="@+id/myPageAndroidBtn"
+        android:stateListAnimator="@null"/>
+
+    <android.widget.Button
+        android:id="@+id/myPageOsBtn"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="운영체제"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageDatabaseBtn"
+        app:layout_constraintStart_toEndOf="@+id/myPageDatabaseBtn"
+        android:stateListAnimator="@null"/>
+
+    <android.widget.Button
+        android:id="@+id/myPageServerBtn"
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="서버"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageOsBtn"
+        app:layout_constraintStart_toEndOf="@+id/myPageOsBtn"
+        android:stateListAnimator="@null"/>
+
+    <android.widget.Button
+        android:id="@+id/myPageWebBtn"
+        android:layout_width="45dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="웹"
+        android:textColor="#515151"
+        app:layout_constraintStart_toStartOf="@+id/myPageDatabaseBtn"
+        app:layout_constraintTop_toBottomOf="@+id/myPageDatabaseBtn"
+        android:stateListAnimator="@null"/>
+
+    <android.widget.Button
+        android:id="@+id/myPageMachinBtn"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="머신러닝"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageWebBtn"
+        app:layout_constraintStart_toEndOf="@+id/myPageWebBtn"
+        android:stateListAnimator="@null"/>
+
+    <android.widget.Button
+        android:id="@+id/myPageEtcBtn"
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/round_rect_mainblue"
+        android:text="기타"
+        android:textColor="#515151"
+        app:layout_constraintBaseline_toBaselineOf="@+id/myPageMachinBtn"
+        app:layout_constraintStart_toEndOf="@+id/myPageMachinBtn"
+        android:stateListAnimator="@null"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

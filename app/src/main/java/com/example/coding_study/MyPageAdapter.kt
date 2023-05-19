@@ -1,21 +1,30 @@
 package com.example.coding_study
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.MypageListBinding
 
-class MyPageAdapter(private val textList: List<String>, private var itemClickListener: ItemClickListener): RecyclerView.Adapter<MyPageAdapter.MyPageListViewHolder>() {
+class MyPageAdapter(private val textList: List<String>, private var onItemClickListener: OnItemClickListener): RecyclerView.Adapter<MyPageAdapter.MyPageListViewHolder>() {
 
-    interface ItemClickListener {
+    interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
 
-    fun setOnMyPageClickListener(listener: ItemClickListener) {
-        this.itemClickListener = listener
+    fun setOnMyPageClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
     }
 
     inner class MyPageListViewHolder(private val binding: MypageListBinding) : RecyclerView.ViewHolder(binding.root){
+        init {
+            binding.textView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClickListener.onItemClick(position)
+                }
+            }
+        }
         fun bind(text: String){
             binding.textView.text = text
         }

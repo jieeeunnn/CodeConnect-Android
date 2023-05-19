@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.MypageFragmentBinding
 import com.google.gson.Gson
@@ -21,8 +22,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MyPageFragment: Fragment(R.layout.mypage_fragment) {
     private lateinit var binding: MypageFragmentBinding
     private lateinit var myPageProfileView: View
-    private lateinit var myPageListView: View
     private lateinit var myPageAdapter: MyPageAdapter
+    private val myPageViewModel: MyPageViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,29 +32,10 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
         savedInstanceState: Bundle?
     ): View? {
         binding = MypageFragmentBinding.inflate(inflater, container, false)
-        val view = binding.root
 
         myPageProfileView = binding.myPageProfileView
-        myPageListView = binding.myPageListView
 
         val myPageRecyclerView = binding.myPageRecyclerView
-
-        var itemClickListener: MyPageAdapter.ItemClickListener = object : MyPageAdapter.ItemClickListener {
-            override fun onItemClick(position: Int) {
-                Log.e("MypageFragment", "onclick")
-                if (position == 0) {
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.study_fragment_layout, MyPageEditFragment())
-                        .addToBackStack(null)
-                        .commit()
-                }
-            }
-        }
-
-        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 쓴 글")
-        myPageAdapter = MyPageAdapter(textList, itemClickListener)
-        myPageRecyclerView.adapter = myPageAdapter
-        binding.myPageRecyclerView.layoutManager = LinearLayoutManager(context)
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
@@ -87,6 +70,8 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                     val myPageDto = gson.fromJson(gson.toJson(myPageData), Array<MyProfile>::class.java)
                     val myProfile: MyProfile = myPageDto[0]
 
+                    myPageViewModel.setMyProfile(myProfile)
+
                     if (myPageResponse != null) {
                         binding.myPageNickname.text = myProfile.nickname
                         binding.myPageAddress.text = myProfile.address
@@ -103,6 +88,24 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
 
         })
 
-        return view
+        var onItemClickListener: MyPageAdapter.OnItemClickListener = object : MyPageAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                Log.e("MypageFragment", "onclick")
+
+                if (position == 0) {
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.myPageProfileView, MyPageEditFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+        }
+
+        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 쓴 글")
+        myPageAdapter = MyPageAdapter(textList, onItemClickListener)
+        myPageRecyclerView.adapter = myPageAdapter
+        binding.myPageRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        return binding.root
     }
 }
