@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/myPageMyStudy"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/white">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/myPageMyStudyToolbar"
@@ -19,7 +21,7 @@
             android:id="@+id/myPageMyStudyToolbarTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="내가 작성한 스터디 게시글"
+            android:text="마이 페이지"
             android:textColor="@color/grey_dark">
 
         </TextView>
@@ -27,14 +29,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myPageMyStudyRecyclerView"
-        android:layout_width="409dp"
-        android:layout_height="600dp"
-        android:layout_marginBottom="70dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myPageMyStudyToolbar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/myPageMyStudyToolbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

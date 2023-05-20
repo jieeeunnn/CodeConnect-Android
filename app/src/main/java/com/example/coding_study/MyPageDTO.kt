@@ -1,21 +1,25 @@
 package com.example.coding_study
 
+import androidx.room.Delete
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MyPageGetService { // 마이페이지 정보 조회
-    @GET("/profile")
+    @GET("profile/userinfo/{nickname}")
     fun myPageGetProfile(
+        @Path("nickname") nickname: String
     ): Call<MyPageProfileResponse>
 }
 
 data class MyPageProfileResponse (
     var result: Boolean,
     var message: String,
-    var data: List<MyProfile>
+    var data: MyProfile
         )
 
 data class MyProfile (
@@ -34,8 +38,9 @@ enum class MyPageRole {
 
 
 
+
 interface MyPageEditService { // 마이페이지 수정 api
-    @PUT("")
+    @PUT("profile/update")
     fun myPageEditPost(@Body myPageEdit: MyPageEdit) : Call<MyPageEditResponse>
 }
 data class MyPageEditResponse (
@@ -49,3 +54,28 @@ data class MyPageEdit (
     var address: String,
     var fieldList: List<String>
         )
+
+
+
+
+
+interface MyPageMyStudyService { // 마이페이지 내가 쓴 스터디 게시글 조회
+    @GET("profile/userRecruitment/{nickname}")
+    fun myStudyGetList(
+        @Path("nickname") nickname: String
+    ):Call<StudyListResponse>
+}
+
+
+interface MyPageMyQnaService{ // 마이페이지 내가 쓴 Qna 게시글 조회
+    @GET("profile/userQna/{nickname}")
+    fun myQnaGetList(
+        @Path("nickname") nickname: String
+    ): Call<QnaListResponse>
+}
+
+
+interface MyPageDeleteMemberService { // 회원 탈퇴
+    @DELETE("profile/delete")
+    fun memberDelete(): Call<Void>
+}

@@ -25,19 +25,19 @@
         android:id="@+id/qnaEditContent"
         android:layout_width="wrap_content"
         android:layout_height="286dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:ems="15"
         android:gravity="start|top"
         android:hint="내용을 입력하세요"
         android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="@+id/qnaEditTitle"
-        app:layout_constraintTop_toBottomOf="@+id/qnaImageButton" />
+        app:layout_constraintTop_toBottomOf="@+id/qnaImageView" />
 
     <Button
         android:id="@+id/qnaButtonUpload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="#CFDCFF"
         android:text="완료"
         android:textColor="#515151"
@@ -54,4 +54,14 @@
         app:layout_constraintStart_toStartOf="@+id/qnaEditTitle"
         app:layout_constraintTop_toBottomOf="@+id/qnaEditTitle"
         app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+
+    <ImageView
+        android:id="@+id/qnaImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@+id/qnaImageButton"
+        app:layout_constraintTop_toBottomOf="@+id/qnaEditTitle"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>

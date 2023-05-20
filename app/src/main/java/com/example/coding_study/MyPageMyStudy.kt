@@ -7,20 +7,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.MypageMyStudyBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
+import retrofit2.*
 import retrofit2.Response
-import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MyPageMyStudy: Fragment(R.layout.mypage_my_study) { // 내가 작성한 스터디 게시글 프래그먼트
     private lateinit var studyAdapter: StudyAdapter
     private lateinit var binding: MypageMyStudyBinding
+
+    fun savePostIds(context: Context, postIds: List<Long>) {
+        val sharedPreferencesPostId = context.getSharedPreferences("MyPostIds", Context.MODE_PRIVATE)
+        val editor = sharedPreferencesPostId.edit()
+        postIds.forEachIndexed { index, id ->
+            editor.putLong("post_$index", id)
+        }
+        if (!editor.commit()) {
+            Log.e("savePostIds", "Failed to save post IDs")
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +40,9 @@ class MyPageMyStudy: Fragment(R.layout.mypage_my_study) { // 내가 작성한 �
     ): View? {
         binding = MypageMyStudyBinding.inflate(inflater, container, false)
         val myPageRecyclerView = binding.myPageMyStudyRecyclerView
+        var toolbarTitle = binding.myPageMyStudyToolbarTextView
+
+        toolbarTitle.text = "내가 작성한 스터디 게시글"
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
@@ -87,7 +101,7 @@ class MyPageMyStudy: Fragment(R.layout.mypage_my_study) { // 내가 작성한 �
                                     hostFragment.arguments = bundle
 
                                     childFragmentManager.beginTransaction()
-                                        .replace(R.id.study_fragment_layout, hostFragment)
+                                        .replace(R.id.myPageMyStudy, hostFragment)
                                         .addToBackStack(null)
                                         .commit()
                                 }
@@ -97,7 +111,7 @@ class MyPageMyStudy: Fragment(R.layout.mypage_my_study) { // 내가 작성한 �
                             }
                         }
                         override fun onFailure(call: Call<StudyOnlyResponse>, t: Throwable) {
-                            Log.e("StudyFragment_StudyOnlyResponse", "Failed to get study list", t)
+                            Log.e("MyPageMyStudy Fragment", "Failed to get study list", t)
                             Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                         }
                     })
@@ -109,11 +123,51 @@ class MyPageMyStudy: Fragment(R.layout.mypage_my_study) { // 내가 작성한 �
         myPageRecyclerView.adapter = studyAdapter
         binding.myPageMyStudyRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        val sharedPreferences2 = requireActivity().getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
+        val nickname = sharedPreferences2?.getString("nickname", "") // 저장해둔 토큰값 가져오기
+
+        val myStudyService = retrofitBearer.create(MyPageMyStudyService::class.java)
+
+        if (nickname != null) {
+            myStudyService.myStudyGetList(nickname).enqueue(object : Callback<StudyListResponse> {
+                override fun onResponse(
+                    call: Call<StudyListResponse>,
+                    response: Response<StudyListResponse>
+                ) {
+                    val studyListResponse = response.body() // 서버에서 받아온 응답 데이터
+                    val code = response.code() // 서버 응답 코드
+                    Log.e("StudyList_response.body", "is : $studyListResponse") // 서버에서 받아온 응답 데이터 log 출력
+                    Log.e("response code", "is : $code") // 서버 응답 코드 log 출력
+
+                    val studyList = studyListResponse?.data
+                    val postListResponse = studyList?.map {
+                        Post( it.nickname, it.title, it.content, it.currentCount, it.count, it.field, it.currentDateTime)
+                    } ?: emptyList()
+                    //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
+
+                    if (studyListResponse?.result == true) {
+                        val recruitmentIds = studyListResponse.data?.map { it.recruitmentId } // 게시물 아이디 리스트 추출
+
+
+                        if (recruitmentIds != null) {
+                            context?.let { savePostIds(it, recruitmentIds) } // 게시물 아이디 리스트 저장
+                        }
+                        Log.e("StudyFragment", "recruitmentIds: $recruitmentIds")
 
 
 
+                        studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
+                        studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
 
+                    }
+                }
 
+                override fun onFailure(call: Call<StudyListResponse>, t: Throwable) {
+                    Log.e("StudyFragment", "Failed to get study list", t)
+                    Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
 
         return binding.root
     }

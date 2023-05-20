@@ -44,6 +44,33 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
         }
     }
 
+    fun saveNickname(context: Context, nickname: String?) {
+        val sharedPreferences = context.getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("nickname", nickname)
+        if (!editor.commit()) {
+            Log.e("saveNickname_MyPageEditFragment", "Failed to save nickname")
+        }
+    }
+    fun saveAddress(context: Context, address: String?) {
+        val sharedPreferences = context.getSharedPreferences("MyAddress", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("address", address)
+        if (!editor.commit()) {
+            Log.e("saveAddress", "Failed to save address")
+        }
+    }
+    // saveFields 함수 (로컬 저장소에 필드값 저장하는 함수)
+    fun saveFields(context: Context, postFields: List<String>) {
+        val sharedPreferencesFields = context.getSharedPreferences("MyFields", Context.MODE_PRIVATE)
+        val editor = sharedPreferencesFields.edit()
+        val postFieldsString = postFields.joinToString(",")
+        editor.putString("fields", postFieldsString)
+        if (!editor.commit()) {
+            Log.e("saveFields", "Failed to save Fields")
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -197,6 +224,15 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
                         if (response.isSuccessful) {
                             Log.e("MyPageEditFragment response code is", "${response.code()}")
                             Log.e("MyPageEditFragment response body is", "${response.body()}")
+
+                            context?.let { it1 -> saveNickname(it1, nickname) } // 수정된 nickname 저장
+                            context?.let { it1 -> saveAddress(it1, address) }
+                            context?.let { it1 -> saveFields(it1, fieldList) }
+
+                            val parentFragment = parentFragment
+                            if (parentFragment is MyPageFragment) {
+                                parentFragment.onResume()
+                            }
 
                             val parentFragmentManager = requireActivity().supportFragmentManager
                             parentFragmentManager.popBackStack()

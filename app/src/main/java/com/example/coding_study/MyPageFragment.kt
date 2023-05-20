@@ -37,56 +37,6 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
 
         val myPageRecyclerView = binding.myPageRecyclerView
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
-
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
-                        chain.proceed(request)
-                    }
-                    .build()
-            )
-            .build()
-
-        val myPageService = retrofitBearer.create(MyPageGetService::class.java)
-        myPageService.myPageGetProfile().enqueue(object : Callback<MyPageProfileResponse>{
-            override fun onResponse(call: Call<MyPageProfileResponse>, response: Response<MyPageProfileResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val myPageResponse = response.body()
-                    Log.e("MyPageFragment response body", "$myPageResponse")
-                    Log.e("MyPageFragment response code", "${response.code()}")
-
-                    val gson = Gson()
-                    val myPageData = myPageResponse?.data
-                    val myPageDto = gson.fromJson(gson.toJson(myPageData), Array<MyProfile>::class.java)
-                    val myProfile: MyProfile = myPageDto[0]
-
-                    myPageViewModel.setMyProfile(myProfile)
-
-                    if (myPageResponse != null) {
-                        binding.myPageNickname.text = myProfile.nickname
-                        binding.myPageAddress.text = myProfile.address
-                        binding.myPageField1.text = myProfile.fieldList[0]
-                        binding.myPageField2.text = myProfile.fieldList[1]
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<MyPageProfileResponse>, t: Throwable) {
-                Log.e("MyPageFragment", "Failed to get profile", t)
-                Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
-            }
-
-        })
 
         var onItemClickListener: MyPageAdapter.OnItemClickListener = object : MyPageAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -109,16 +59,87 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                         .commit()
                 }
                 if (position == 3) { // 내가 작성한 Q&A
-
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.myPageProfileView, MyPageMyQna())
+                        .addToBackStack(null)
+                        .commit()
+                }
+                if (position == 4) { // 회원 탈퇴
+                    val deleteDialog = DeleteMemberDialog()
+                    deleteDialog.isCancelable = false
+                    parentFragmentManager.let { deleteDialog.show(it, "deleteDialog") }
                 }
             }
         }
 
-        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 작성한 스터디", "내가 작성한 Q&A")
+        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 작성한 스터디", "내가 작성한 Q&A", "회원 탈퇴")
         myPageAdapter = MyPageAdapter(textList, onItemClickListener)
         myPageRecyclerView.adapter = myPageAdapter
         binding.myPageRecyclerView.layoutManager = LinearLayoutManager(context)
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadMyPage()
+    }
+
+    private fun loadMyPage() {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val sharedPreferences2 = requireActivity().getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
+        val nickname = sharedPreferences2?.getString("nickname", "")
+
+        val myPageService = retrofitBearer.create(MyPageGetService::class.java)
+        if (nickname != null) {
+            myPageService.myPageGetProfile(nickname).enqueue(object : Callback<MyPageProfileResponse>{
+                override fun onResponse(call: Call<MyPageProfileResponse>, response: Response<MyPageProfileResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val myPageResponse = response.body()
+                        Log.e("MyPageFragment response body", "$myPageResponse")
+                        Log.e("MyPageFragment response code", "${response.code()}")
+
+                        val gson = Gson()
+                        val myPageData = myPageResponse?.data
+                        val myPageDto = gson.fromJson(gson.toJson(myPageData), MyProfile::class.java)
+                        val myProfile: MyProfile = myPageDto
+
+                        myPageViewModel.setMyProfile(myProfile)
+
+                        if (myPageResponse != null) {
+                            binding.myPageNickname.text = myProfile.nickname
+                            binding.myPageAddress.text = myProfile.address
+                            binding.myPageField1.text = myProfile.fieldList[0]
+                            binding.myPageField2.text = myProfile.fieldList[1]
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<MyPageProfileResponse>, t: Throwable) {
+                    Log.e("MyPageFragment", "Failed to get profile", t)
+                    Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
+                }
+
+            })
+        }
     }
 }

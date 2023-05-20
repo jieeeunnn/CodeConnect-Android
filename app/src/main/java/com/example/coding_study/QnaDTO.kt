@@ -28,7 +28,8 @@ interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사
 
 data class QnaRequest( // 게시글 작성 시 전송값, qnaUpload에서 사용
     var title: String,
-    var content: String
+    var content: String,
+    var image: String
 )
 
 

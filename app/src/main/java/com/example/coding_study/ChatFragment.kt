@@ -110,6 +110,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                         context?.let { saveRoomId(it, roomId) }
 
                         val responseChatRoom = response.body()
+                        Log.e("chatFragment response body", "$responseChatRoom")
                         val chatRoomTitle = responseChatRoom?.data?.title
                         context?.let { saveTitle(it, chatRoomTitle) } // 채팅방 title 저장
 

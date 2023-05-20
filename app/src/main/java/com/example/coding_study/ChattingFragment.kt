@@ -18,8 +18,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
-import ua.naiksoftware.stomp.dto.StompCommand
-import ua.naiksoftware.stomp.dto.StompHeader
 import ua.naiksoftware.stomp.dto.StompMessage
 import java.util.*
 

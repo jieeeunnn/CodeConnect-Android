@@ -29,6 +29,12 @@ interface StudyDeleteService {
 class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
     private lateinit var binding: StudyHostBinding
 
+    fun onBackPressed() {
+        if (parentFragmentManager.backStackEntryCount > 0) {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,12 +55,16 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
-            val parentFragmentManager = requireActivity().supportFragmentManager
-            parentFragmentManager.popBackStack()
 
             val parentFragment = parentFragment
             if (parentFragment is StudyFragment) {
+                val parentFragmentManager = requireActivity().supportFragmentManager
+                parentFragmentManager.popBackStack()
+
                 parentFragment.showFloatingButton()
+            }
+            else if (parentFragment is MyPageMyStudy) {
+                onBackPressed()
             }
         }
 
@@ -83,7 +93,7 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
         }
 
         binding.hostDeleteButton.setOnClickListener { // 삭제 버튼을 눌렀을 때
-            val deleteDialog = DeleteDialog(this, recruitment.recruitmentId)
+            val deleteDialog = DeleteDialog(this, recruitment.recruitmentId, "게시글을 삭제하시겠습니까?")
             deleteDialog.isCancelable = false
             deleteDialog.show(this.childFragmentManager, "deleteDialog")
 

@@ -21,7 +21,7 @@
         android:id="@+id/guestCommentCurrentDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="30dp"
         android:text="currentDateTime"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,15 +47,4 @@
         app:layout_constraintTop_toBottomOf="@+id/guestCommentTextView"
         app:srcCompat="@drawable/ic_baseline_chat_24" />
 
-    <Button
-        android:id="@+id/cgReplyMoreButton"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:background="#00FFFFFF"
-        android:text="더보기"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/cgReplyButton"
-        app:layout_constraintTop_toBottomOf="@+id/guestCommentTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

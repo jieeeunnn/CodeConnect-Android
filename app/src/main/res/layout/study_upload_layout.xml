@@ -32,12 +32,12 @@
         android:id="@+id/idTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="id"
         android:textColor="#515151"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/studyImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -54,12 +54,12 @@
         android:id="@+id/titleTextView"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="title"
         android:textColor="#515151"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/idTextView"
+        app:layout_constraintStart_toStartOf="@+id/studyImageView"
         app:layout_constraintTop_toBottomOf="@+id/idTextView" />
 
     <TextView
@@ -86,5 +86,15 @@
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/idTextView"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/studyImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_person_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

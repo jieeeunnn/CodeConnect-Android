@@ -27,6 +27,12 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
     private lateinit var binding: QnaHostBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
 
+    fun onBackPressed() {
+        if (parentFragmentManager.backStackEntryCount > 0) {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +40,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         savedInstanceState: Bundle?
     ): View? {
         binding = QnaHostBinding.inflate(inflater, container, false)
+
 
         // 가져온 qnaRecruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
         val qnaGson = Gson()
@@ -98,7 +105,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
 
         //qna 삭제 버튼
         binding.qnaHostDeleteButton.setOnClickListener {
-            val deleteDialog = DeleteDialog(this, qnaRecruitment.qnaId)
+            val deleteDialog = DeleteDialog(this, qnaRecruitment.qnaId, "게시글을 삭제하시겠습니까?")
             deleteDialog.isCancelable = false
             deleteDialog.show(this.childFragmentManager, "deleteDialog")
         }
@@ -153,12 +160,17 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
-            val parentFragmentManager = requireActivity().supportFragmentManager
-            parentFragmentManager.popBackStack()
+
 
             val parentFragment = parentFragment
             if (parentFragment is QnAFragment) {
+                val parentFragmentManager = requireActivity().supportFragmentManager
+                parentFragmentManager.popBackStack()
+
                 parentFragment.showFloatingButton()
+            }
+            else if (parentFragment is MyPageMyQna) {
+                onBackPressed()
             }
         }
     }
@@ -232,6 +244,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                     .build()
             )
             .build()
+
 
         val qnaGson = Gson()
         val qnaJson = arguments?.getString("qnaHostRecruitmentJson")

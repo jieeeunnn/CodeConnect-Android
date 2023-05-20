@@ -39,6 +39,11 @@ class AddressFragment: Fragment(R.layout.address_fragment){
     private lateinit var viewModel: AddressViewModel
     private var mAddress: String = ""
 
+    fun onBackPressed() {
+        if (parentFragmentManager.backStackEntryCount > 0) {
+            parentFragmentManager.popBackStack()
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,6 +67,13 @@ class AddressFragment: Fragment(R.layout.address_fragment){
                 }
             }
             parentFragmentManager.popBackStack()
+
+            if (parentFragment is MyPageMyQna) {
+                Log.e("addressFragment parentFragment", "$parentFragment")
+
+                onBackPressed()
+            }
+
         }
 
 

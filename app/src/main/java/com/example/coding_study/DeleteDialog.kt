@@ -13,14 +13,16 @@ interface DeleteDialogInterface{
     fun onYesButtonClick(id: Long)
 }
 
-class DeleteDialog(deleteDialogInterface: DeleteDialogInterface, id: Long): DialogFragment() {
+class DeleteDialog(deleteDialogInterface: DeleteDialogInterface, id: Long, text: String): DialogFragment() {
     private lateinit var binding: DeleteDialogBinding
     private var deleteDialogInterface: DeleteDialogInterface
     private var id : Long = 0
+    private var text: String
 
     init {
         this.id = id
         this.deleteDialogInterface = deleteDialogInterface
+        this.text = text
     }
 
     override fun onCreateView(
@@ -31,7 +33,7 @@ class DeleteDialog(deleteDialogInterface: DeleteDialogInterface, id: Long): Dial
         binding = DeleteDialogBinding.inflate(inflater, container, false)
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // 배경 투명
-        binding.dialogTextView.text = "게시글을 삭제하시겠습니까?"
+        binding.dialogTextView.text = text
 
         binding.dialogNoButton.setOnClickListener {
             dismiss()
