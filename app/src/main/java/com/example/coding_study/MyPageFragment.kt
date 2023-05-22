@@ -50,7 +50,10 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                 }
 
                 if (position == 1) { // 신청한 스터디
-                    
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.myPageProfileView, MyPageParticipateStudy())
+                        .addToBackStack(null)
+                        .commit()
                 }
                 if (position == 2) { // 내가 작성한 스터디
                     childFragmentManager.beginTransaction()

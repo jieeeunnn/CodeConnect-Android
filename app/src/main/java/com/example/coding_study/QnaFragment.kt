@@ -242,7 +242,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                     Log.e("QnaList_response.code", "is: ${response.code()}")
 
                     val qnaList = qnaListResponse?.data
-                    val qnapostListResponse = qnaList?.map { QnaPost(it.nickname, it.title, it.content, it.currentDateTime) }
+                    val qnapostListResponse = qnaList?.map { QnaPost(it.nickname, it.title, it.content, it.currentDateTime, it.commentCount) }
                     //qnaList의 형식은 List<QnaUploadDto>이므로 서버에서 받은 게시글을 qnaPostList에 넣어주기 위해 List<qnaPost>로 변환
 
                     if (qnaListResponse?.result == true) {
@@ -303,7 +303,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
                             val qnaList = qnaListResponse?.data
                             val qnapostListResponse = qnaList?.map {
-                                QnaPost(it.nickname, it.title, it.content, it.currentDateTime)
+                                QnaPost(it.nickname, it.title, it.content, it.currentDateTime, it.commentCount)
                             }
 
                             if (qnapostListResponse != null) {

@@ -59,7 +59,6 @@ class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): Recyc
         }
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val chatMessage = chatMessages[position]
         when(holder) {

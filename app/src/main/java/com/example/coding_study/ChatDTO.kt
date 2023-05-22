@@ -28,5 +28,20 @@ interface ChatRoomOnlyService { // 채팅방 하나 클릭시
 data class ChatRoomOnlyResponse (
     val result: Boolean,
     var message: String,
-    var data: ChatRoom
+    var data: Any
+    )
+
+data class MY_NICKNAME (
+    var nickname: String
+        )
+
+data class CHAT (
+    var data: List<ChatRoomServer>
+        )
+
+data class ChatRoomServer (
+    var chatId: Int,
+    var nickname: String,
+    var message: String,
+    var currentDateTime: String
         )

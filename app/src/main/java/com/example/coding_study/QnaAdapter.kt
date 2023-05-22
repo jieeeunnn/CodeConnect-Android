@@ -12,7 +12,8 @@ data class QnaPost (
     var nickname: String,
     var title: String,
     var content: String,
-    var currentTime: String
+    var currentTime: String,
+    var commentCount: Int
     )
 
 
@@ -32,6 +33,7 @@ class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener:
             binding.qnaUploadTitle.text = qnapost.title
             binding.qnaUploadContent.text = qnapost.content
             binding.qnaUploadTime.text = qnapost.currentTime
+            binding.qnaCommentCountTextView.text = qnapost.commentCount.toString()
         }
 
         fun onClick(v: View?) {

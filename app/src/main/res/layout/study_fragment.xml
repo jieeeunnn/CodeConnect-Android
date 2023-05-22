@@ -5,7 +5,7 @@
     android:id="@+id/study_fragment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_sky">
+    android:background="@color/white">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/studyToolBar"

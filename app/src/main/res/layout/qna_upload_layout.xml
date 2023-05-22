@@ -39,13 +39,10 @@
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
         android:text="content"
         android:textColor="#515151"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/qnaUploadTitle"
-        app:layout_constraintTop_toBottomOf="@+id/qnaUploadTitle"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadTitle" />
 
     <TextView
         android:id="@+id/qnaUploadTime"
@@ -66,5 +63,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_person_24" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/qnaUploadContent"
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/baseline_comment_24" />
+
+    <TextView
+        android:id="@+id/qnaCommentCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="commentCount"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

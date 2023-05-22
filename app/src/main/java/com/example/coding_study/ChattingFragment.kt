@@ -26,7 +26,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
     private lateinit var chattingAdapter: ChattingAdapter
     private lateinit var binding: ChattingFragmentBinding
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
     private var stompClient: StompClient? = null
     
     override fun onCreateView(
@@ -36,6 +35,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
     ): View? {
         binding = ChattingFragmentBinding.inflate(inflater, container, false)
         val chattingRecyclerView = binding.chattingRecyclerView
+
 
         chattingAdapter = ChattingAdapter(mutableListOf())
         binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -53,7 +53,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
 
         val sharedPreferences2 = requireActivity().getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
         val nickname = sharedPreferences2?.getString("nickname", "") // 저장해둔 토큰값 가져오기
-
 
         binding.chatButton.setOnClickListener {
             val message = binding.chatEditText.text.toString()
@@ -85,7 +84,12 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
             stompClient?.connect()
             Log.e("ChattingFragment connectToChatServer", " ")
 
-            subscribeToChatTopic()
+            val sharedPreferences = requireActivity().getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
+            val roomId = sharedPreferences?.getLong("roomId", 0) // 저장해둔 토큰값 가져오기
+
+            if (roomId != null) {
+                subscribeToChatTopic(roomId)
+            }
         }
     }
 
@@ -96,8 +100,8 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
     }
 
     @SuppressLint("CheckResult")
-    private fun subscribeToChatTopic() {
-        stompClient?.topic("/sub/chat/room/1")?.subscribe { // 메시지 구독
+    private fun subscribeToChatTopic(roomId: Long) {
+        stompClient?.topic("/sub/chat/room/$roomId")?.subscribe { // 메시지 구독
             val message = parseMessage(it) // 전송된 stomp 메시지를 ChatMessage 객체로 파싱
 
             coroutineScope.launch {
@@ -115,7 +119,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
         data.put("message", message)
         stompClient?.send("/pub/chat/message", data.toString())?.subscribe()
 
-
         Log.e("ChattingFragment sendMessage", "$message, $roomId, $nickname")
         val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
         val chatMessage = ChatMessage(message, "me", nickname, currentTime)
@@ -124,7 +127,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
             chattingAdapter.addMessage(chatMessage) // 객체를 채팅 어댑터에 추가
             binding.chattingRecyclerView.smoothScrollToPosition(chattingAdapter.itemCount - 1) // 채팅메시지가 표시되는 위치로 스크롤 이동
         }
-
     }
 
     private fun parseMessage(topicMessage: StompMessage): ChatMessage {

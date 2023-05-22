@@ -110,9 +110,30 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                         context?.let { saveRoomId(it, roomId) }
 
                         val responseChatRoom = response.body()
-                        Log.e("chatFragment response body", "$responseChatRoom")
-                        val chatRoomTitle = responseChatRoom?.data?.title
+                        Log.e("chatFragment onItemClick response body", "$responseChatRoom")
+
+                        val chatRoom = responseChatRoom?.data as ChatRoom
+                        val chatRoomTitle = chatRoom.title
                         context?.let { saveTitle(it, chatRoomTitle) } // 채팅방 title 저장
+
+                        val chattingList = responseChatRoom.data as CHAT
+
+                        val chatMessages: MutableList<ChatRoomServer> = chattingList.data.map { chatRoomServer ->
+                            ChatRoomServer(
+                                chatId = chatRoomServer.chatId,
+                                nickname = chatRoomServer.nickname,
+                                message = chatRoomServer.message,
+                                currentDateTime = chatRoomServer.currentDateTime
+                            )
+                        }.toMutableList()
+
+                        chatMessages.addAll(chattingList.data)
+
+                        /*
+                        val bundle = Bundle()
+                        bundle.putParcelableArrayList("chatMessages", ArrayList(chatMessages))
+
+                         */
 
                         val chattingFragment = ChattingFragment()
                         childFragmentManager.beginTransaction()
