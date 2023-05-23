@@ -11,7 +11,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.ChatFragmentBinding
+import com.google.gson.Gson
 import okhttp3.OkHttpClient
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -112,28 +115,49 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                         val responseChatRoom = response.body()
                         Log.e("chatFragment onItemClick response body", "$responseChatRoom")
 
-                        val chatRoom = responseChatRoom?.data as ChatRoom
-                        val chatRoomTitle = chatRoom.title
+                        val chatRoom = responseChatRoom?.data as Any
+
+                        val gson = Gson()
+                        val json = gson.toJson(chatRoom)
+                        val chatRoomJson = gson.fromJson(json, ChatRoom::class.java)
+
+                        val chatRoomTitle = chatRoomJson.title
                         context?.let { saveTitle(it, chatRoomTitle) } // 채팅방 title 저장
 
-                        val chattingList = responseChatRoom.data as CHAT
 
-                        val chatMessages: MutableList<ChatRoomServer> = chattingList.data.map { chatRoomServer ->
-                            ChatRoomServer(
-                                chatId = chatRoomServer.chatId,
-                                nickname = chatRoomServer.nickname,
-                                message = chatRoomServer.message,
-                                currentDateTime = chatRoomServer.currentDateTime
-                            )
-                        }.toMutableList()
+                        val chatMap = responseChatRoom?.data as? Map<*, *>
 
-                        chatMessages.addAll(chattingList.data)
+                        val chatList = chatMap?.get("CHAT") as? List<Map<String, Any>>
 
-                        /*
-                        val bundle = Bundle()
-                        bundle.putParcelableArrayList("chatMessages", ArrayList(chatMessages))
+                        if (chatList != null) {
+                            for (chat in chatList) {
+                                val chatId = chat["chatId"] as? Double
+                                val nickname = chat["nickname"] as? String
+                                val message = chat["message"] as? String
+                                val currentDateTime = chat["currentDateTime"] as? String
 
-                         */
+                                if (chatId != null && nickname != null && message != null && currentDateTime != null) {
+                                    val bundle = Bundle()
+
+                                    // chatList를 Serializable 객체로 감싸서 저장
+                                    val serializableList = ArrayList(chatList)
+                                    bundle.putSerializable("chatList", serializableList)
+
+                                    // chatList를 직렬화하기 위해 ArrayList<HashMap<String, Any>> 사용
+                                    //val serializableList = ArrayList<Map<String, Any>>(chatList)
+                                    //bundle.putSerializable("chatList", serializableList)
+
+                                    val fragment = ChattingFragment()
+                                    fragment.arguments = bundle
+                                    Log.e("ChattingFragment bundle", fragment.arguments?.getSerializable("chatList").toString())
+                                }
+                            }
+                        } else {
+                            Log.e("chatFragment chatList is ", "null")
+                        }
+                        Log.e("ChatFrgment chatList", chatList.toString())
+
+
 
                         val chattingFragment = ChattingFragment()
                         childFragmentManager.beginTransaction()
