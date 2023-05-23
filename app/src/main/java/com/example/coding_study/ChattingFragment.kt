@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.ChattingFragmentBinding
@@ -16,7 +17,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.StompMessage
@@ -42,46 +49,87 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
         binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
         chattingRecyclerView.adapter = chattingAdapter
 
-        val sharedPreferences3 = requireActivity().getSharedPreferences("MyTitle", Context.MODE_PRIVATE)
-        val roomTitle = sharedPreferences3?.getString("title", "")
-
-        binding.chattingTitleTextView.text = roomTitle
-
-        val sharedPreferences = requireActivity().getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
-        val roomId = sharedPreferences?.getLong("roomId", 0) // 저장해둔 토큰값 가져오기
+        val sharedPreferencesRoomId = requireActivity().getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
+        val roomId = sharedPreferencesRoomId?.getLong("roomId", 0) // 저장해둔 roomId 가져오기
 
         val sharedPreferences2 = requireActivity().getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
-        val nickname = sharedPreferences2?.getString("nickname", "") // 저장해둔 토큰값 가져오기
+        val nickname = sharedPreferences2?.getString("nickname", "") // 저장해둔 닉네임 가져오기
 
-        // 저장해놓은 채팅 메세지 가져와서 띄우기
-        val bundle = arguments
-        Log.e("chattingFragment bundle ", bundle.toString())
+        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
-        /*
-        if (bundle != null) {
-            val chattingListJson = bundle.getString("chatList")
-            if (!chattingListJson.isNullOrEmpty()) {
-                val chatMessages = gson.fromJson(chattingListJson, Array<ChatRoomServer>::class.java).toList()
-                chatMessages.forEach { message ->
-                    val sender = if (message.nickname == nickname) "me" else ""
-                    val chatMessage = ChatMessage(message.message, sender, message.nickname, message.currentDateTime)
-                    chattingAdapter.addMessage(chatMessage)
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val chatRoomOnlyService = retrofitBearer.create(ChatRoomOnlyService::class.java)
+
+        if (roomId != null) {
+            chatRoomOnlyService.chatRoomOnly(roomId).enqueue(object : Callback<ChatRoomOnlyResponse> {
+                override fun onResponse(call: Call<ChatRoomOnlyResponse>, response: Response<ChatRoomOnlyResponse>
+                ) {
+
+                    val responseChatRoom = response.body()
+                    Log.e("ChattingFragment chattingList+++", "$responseChatRoom")
+
+                    val roomInfoData = (responseChatRoom?.data as Map<*, *>)?.get("ROOM_INFO") as? Map<String, Any>
+                    val title = roomInfoData?.get("title") as? String
+                    if (title != null) {
+                        Log.e("chattingFragment title", title)
+                        binding.chattingTitleTextView.text = title
+
+                    }
+
+                    // 이전 채팅 내용 가져오기
+                    val chatMap = responseChatRoom?.data as? Map<*, *>
+                    val chatList = chatMap?.get("CHAT") as? List<Map<String, Any>>
+
+                    val convertedChatList = chatList?.mapNotNull { chat ->
+                        (chat["chatId"] as? Double)?.let { chatId ->
+                            (chat["nickname"] as? String)?.let { nickname ->
+                                ChatRoomServer(
+                                    chatId = chatId.toInt(),
+                                    nickname = nickname,
+                                    message = chat["message"] as? String ?: "",
+                                    currentDateTime = chat["currentDateTime"] as? String ?: ""
+                                )
+                            }
+                        }
+                    }
+
+                    // 채팅 내용 어댑터에 띄우기
+                    convertedChatList?.forEach { chat ->
+                        val sender = if (chat.nickname == nickname) "me" else ""
+                        val chatMessage = ChatMessage(
+                            chat.message,
+                            sender,
+                            chat.nickname,
+                            chat.currentDateTime
+                        )
+                        chattingAdapter.addMessage(chatMessage)
+                    }
+                    Log.e("ChattingFrgment chatList", convertedChatList.toString())
+
                 }
-            }
-        }
-        */
 
-        // ChattingFragment에서 번들을 받아올 때 타입을 맞춰줍니다.
-        if (bundle != null) {
-            val chatList = bundle.getSerializable("chatList") as? ArrayList<ChatMessage>
-            Log.e("chattingFragment chatList*******", chatList.toString())
-            if (chatList != null) {
-                for (message in chatList) {
-                    val sender = if (message.nickname == nickname) "me" else ""
-                    val chatMessage = ChatMessage(message.message, sender, message.nickname, message.currentCount)
-                    chattingAdapter.addMessage(chatMessage)
+                override fun onFailure(call: Call<ChatRoomOnlyResponse>, t: Throwable) {
+                    Log.e("ChatFragment onClickListener", "Failed", t)
+                    Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                 }
-            }
+
+            })
         }
 
         connectToChatServer()
@@ -122,16 +170,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
             if (roomId != null) {
                 subscribeToChatTopic(roomId)
             }
-            /*
-            // 채팅방 입장 요청
-            val enterDestination = "/pub/chat/enter"
-            val enterPayload = JSONObject().apply {
-                put("roomId", roomId.toString())
-            }
-            stompClient?.send(enterDestination, enterPayload.toString())
-
-             */
-
         }
     }
 
@@ -188,13 +226,13 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
     private fun parseMessage(topicMessage: StompMessage): ChatMessage {
         // 파싱 로직 구현
         val body = topicMessage.payload // payload를 이용하여 메시지 내용 추출
+
         val messageJson = JSONObject(body)
         val nicknameJson = JSONObject(body)
         val currentDateTimeJson = JSONObject(body)
+
         val message = messageJson.getString("message")
         val nickname = nicknameJson.getString("nickname")
-        Log.e("ChattingFragment parseMessage", "$message, $nickname")
-
         val currentDateTime = currentDateTimeJson.getString("currentDateTime")
 
         Log.e("ChattingFragment parseMessage", "$message, $nickname, $currentDateTime")

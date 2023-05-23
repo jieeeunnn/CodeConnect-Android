@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.ChatFragmentBinding
 import com.google.gson.Gson
@@ -35,6 +36,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         }
     }
 
+    /*
     fun saveTitle(context: Context, title: String?) {
         val sharedPreferences = context.getSharedPreferences("MyTitle", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -43,6 +45,8 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
             Log.e("saveTitle", "Failed to save title")
         }
     }
+
+     */
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -114,50 +118,6 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
 
                         val responseChatRoom = response.body()
                         Log.e("chatFragment onItemClick response body", "$responseChatRoom")
-
-                        val chatRoom = responseChatRoom?.data as Any
-
-                        val gson = Gson()
-                        val json = gson.toJson(chatRoom)
-                        val chatRoomJson = gson.fromJson(json, ChatRoom::class.java)
-
-                        val chatRoomTitle = chatRoomJson.title
-                        context?.let { saveTitle(it, chatRoomTitle) } // 채팅방 title 저장
-
-
-                        val chatMap = responseChatRoom?.data as? Map<*, *>
-
-                        val chatList = chatMap?.get("CHAT") as? List<Map<String, Any>>
-
-                        if (chatList != null) {
-                            for (chat in chatList) {
-                                val chatId = chat["chatId"] as? Double
-                                val nickname = chat["nickname"] as? String
-                                val message = chat["message"] as? String
-                                val currentDateTime = chat["currentDateTime"] as? String
-
-                                if (chatId != null && nickname != null && message != null && currentDateTime != null) {
-                                    val bundle = Bundle()
-
-                                    // chatList를 Serializable 객체로 감싸서 저장
-                                    val serializableList = ArrayList(chatList)
-                                    bundle.putSerializable("chatList", serializableList)
-
-                                    // chatList를 직렬화하기 위해 ArrayList<HashMap<String, Any>> 사용
-                                    //val serializableList = ArrayList<Map<String, Any>>(chatList)
-                                    //bundle.putSerializable("chatList", serializableList)
-
-                                    val fragment = ChattingFragment()
-                                    fragment.arguments = bundle
-                                    Log.e("ChattingFragment bundle", fragment.arguments?.getSerializable("chatList").toString())
-                                }
-                            }
-                        } else {
-                            Log.e("chatFragment chatList is ", "null")
-                        }
-                        Log.e("ChatFrgment chatList", chatList.toString())
-
-
 
                         val chattingFragment = ChattingFragment()
                         childFragmentManager.beginTransaction()

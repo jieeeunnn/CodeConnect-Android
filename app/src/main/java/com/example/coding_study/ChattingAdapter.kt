@@ -10,7 +10,7 @@ data class ChatMessage (
     var message : String,
     var sender: String,
     var nickname: String,
-    var currentCount: String
+    var currentDateTime: String
         )
 
 class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -33,7 +33,7 @@ class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): Recyc
         fun bind(chatMessage: ChatMessage) {
             binding.chatMessageTextView.text = chatMessage.message
             binding.myMessageNickname.text = chatMessage.nickname
-            binding.myMessageCurrentTime.text = chatMessage.currentCount
+            binding.myMessageCurrentTime.text = chatMessage.currentDateTime
         }
     }
 
@@ -41,7 +41,7 @@ class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): Recyc
         fun bind(chatMessage: ChatMessage) {
             binding.chatReceiveMessage.text = chatMessage.message
             binding.otherMessageNickname.text = chatMessage.nickname
-            binding.otherMessageCurrentTime.text = chatMessage.currentCount
+            binding.otherMessageCurrentTime.text = chatMessage.currentDateTime
         }
     }
 
