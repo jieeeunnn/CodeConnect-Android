@@ -59,8 +59,8 @@ data class MyPageEdit (
 
 
 
-interface MyPageParticipateStudyService {
-    @GET("")
+interface MyPageParticipateStudyService { // 마이페이지 신청한 스터디 조회
+    @GET("/profile/{nickname}")
     fun participateStudyList(
         @Path("nickname") nickname: String
     ): Call<StudyListResponse>

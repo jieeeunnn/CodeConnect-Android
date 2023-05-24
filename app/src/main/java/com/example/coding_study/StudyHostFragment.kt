@@ -20,12 +20,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.DELETE
 import retrofit2.http.Path
 
-interface StudyDeleteService {
-    @DELETE("recruitments/delete/{id}")
-    fun deletePost(@Path("id") id: Long): Call<Void>
-}
-
-
 class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
     private lateinit var binding: StudyHostBinding
 

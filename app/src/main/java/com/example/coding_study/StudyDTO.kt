@@ -91,6 +91,12 @@ interface StudySearchService { // 스터디 게시판 검색 api
     ): Call<StudyListResponse>
 }
 
+interface StudyDeleteService { // 스터디 게시글 삭제
+    @DELETE("recruitments/delete/{id}")
+    fun deletePost(@Path("id") id: Long): Call<Void>
+}
+
+
 
 
 

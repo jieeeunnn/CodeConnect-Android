@@ -21,7 +21,7 @@
             android:id="@+id/toolbarAddressTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_rect_skyblue"
+            android:background="@drawable/round_rect_mainblue"
             android:elevation="3dp"
             android:padding="7dp"
             android:text="주소"

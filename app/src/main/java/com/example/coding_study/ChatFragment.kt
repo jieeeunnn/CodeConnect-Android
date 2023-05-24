@@ -77,32 +77,6 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
             )
             .build()
 
-        val chatRoomService = retrofitBearer.create(ChatRoomGetService::class.java)
-        chatRoomService.chatRoomGetList().enqueue(object : Callback<ChatRoomListResponse>{
-            override fun onResponse(call: Call<ChatRoomListResponse>, response: Response<ChatRoomListResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val chatRoomListResponse = response.body()
-                    Log.e("ChatFragment chatRoomGetList body", "$chatRoomListResponse")
-                    Log.e("ChatFragment chatRoomGetList code", "${response.code()}")
-
-                    val chatRoomList = chatRoomListResponse?.data
-                    chatList = chatRoomList?.map {
-                        ChatRoom(it.roomId, it.title, it.hostNickname, it.currentDateTime, it.currentCount)
-                    } ?: emptyList()
-
-
-                    if (chatRoomListResponse?.result == true) {
-                        chatAdapter.chatList = chatList
-                        chatAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<ChatRoomListResponse>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-        })
-
         val chatRoomOnlyService = retrofitBearer.create(ChatRoomOnlyService::class.java)
 
         var onItemClickListener: ChatRoomAdapter.OnItemClickListener = object : ChatRoomAdapter.OnItemClickListener {
@@ -155,5 +129,57 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
 
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadChatroomList()
+    }
+
+    fun loadChatroomList() {
+        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+
+        val chatRoomService = retrofitBearer.create(ChatRoomGetService::class.java)
+        chatRoomService.chatRoomGetList().enqueue(object : Callback<ChatRoomListResponse>{
+            override fun onResponse(call: Call<ChatRoomListResponse>, response: Response<ChatRoomListResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val chatRoomListResponse = response.body()
+                    Log.e("ChatFragment chatRoomGetList body", "$chatRoomListResponse")
+                    Log.e("ChatFragment chatRoomGetList code", "${response.code()}")
+
+                    val chatRoomList = chatRoomListResponse?.data
+                    chatList = chatRoomList?.map {
+                        ChatRoom(it.roomId, it.title, it.hostNickname, it.currentDateTime, it.currentCount)
+                    } ?: emptyList()
+
+                    if (chatRoomListResponse?.result == true) {
+                        chatAdapter.chatList = chatList
+                        chatAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ChatRoomListResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 }

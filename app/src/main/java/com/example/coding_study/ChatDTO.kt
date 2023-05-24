@@ -1,6 +1,7 @@
 package com.example.coding_study
 
 import retrofit2.Call
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -46,3 +47,9 @@ data class ChatRoomServer (
     var currentDateTime: String
         )
 
+
+
+interface ChatRoomDeleteService {
+    @DELETE("/chatRoom/{id}")
+    fun deleteChatRoom(@Path("id") roomId: Long): Call<Void>
+}

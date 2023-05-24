@@ -8,21 +8,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.ChattingFragmentBinding
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
+import retrofit2.*
 import retrofit2.Response
-import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
@@ -31,7 +31,7 @@ import java.util.*
 
 
 @Suppress("DEPRECATION")
-class ChattingFragment: Fragment(R.layout.chatting_fragment) {
+class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInterface{
     private lateinit var chattingAdapter: ChattingAdapter
     private lateinit var binding: ChattingFragmentBinding
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -45,15 +45,40 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
         binding = ChattingFragmentBinding.inflate(inflater, container, false)
         val chattingRecyclerView = binding.chattingRecyclerView
 
-        chattingAdapter = ChattingAdapter(mutableListOf())
-        binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
-        chattingRecyclerView.adapter = chattingAdapter
+        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val chatMenuButton: ImageView = binding.chatMenuButton
+
+        // 채팅방 drawerLayout
+        chatMenuButton.setOnClickListener {
+            if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                drawerLayout.openDrawer(GravityCompat.END)
+            } else {
+                drawerLayout.closeDrawer(GravityCompat.END)
+            }
+        }
 
         val sharedPreferencesRoomId = requireActivity().getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
         val roomId = sharedPreferencesRoomId?.getLong("roomId", 0) // 저장해둔 roomId 가져오기
 
         val sharedPreferences2 = requireActivity().getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
         val nickname = sharedPreferences2?.getString("nickname", "") // 저장해둔 닉네임 가져오기
+
+        // 채팅방 나가기
+        binding.roomDeleteTextView.setOnClickListener {
+            val deleteDialog = roomId?.let { it1 -> DeleteDialog(this, it1, "채팅방에서 나가시겠습니까?") }
+            if (deleteDialog != null) {
+                deleteDialog.isCancelable = false
+            }
+            if (deleteDialog != null) {
+                deleteDialog.show(this.childFragmentManager, "deleteDialog")
+            }
+        }
+
+
+        chattingAdapter = ChattingAdapter(mutableListOf())
+        binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
+        chattingRecyclerView.adapter = chattingAdapter
+
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
@@ -238,5 +263,50 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment) {
         Log.e("ChattingFragment parseMessage", "$message, $nickname, $currentDateTime")
 
         return ChatMessage(message, "", nickname, currentDateTime)
+    }
+
+    override fun onYesButtonClick(id: Long) {
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+        val retrofitBearer = Retrofit.Builder()
+            .baseUrl("http://112.154.249.74:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("TokenInterceptor_StudyDeleteFragment", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
+            .build()
+
+        val chatRoomDeleteService = retrofitBearer.create(ChatRoomDeleteService::class.java)
+
+        chatRoomDeleteService.deleteChatRoom(id).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                Log.e("ChattingFragment delete chatRoom code", "${response.code()}")
+                if (response.isSuccessful) {
+                    Toast.makeText(context, "채팅방이 삭제되었습니다", Toast.LENGTH_SHORT).show()
+
+                    val parentFragment = parentFragment
+                    if (parentFragment is ChatFragment) {
+                        parentFragment.loadChatroomList()
+                    }
+                }
+                requireActivity().supportFragmentManager.popBackStack()
+
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(context, "채팅방 삭제 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 }
