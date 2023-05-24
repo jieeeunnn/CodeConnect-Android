@@ -1,6 +1,5 @@
 package com.example.coding_study
 
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -19,6 +18,7 @@ data class QnaUploadDto(
     var modifiedDateTime: String,
     var qnaId: Long,
     var commentCount: Int,
+    var imagePath: String?
 )
 
 interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사용
@@ -29,7 +29,7 @@ interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사
 data class QnaRequest( // 게시글 작성 시 전송값, qnaUpload에서 사용
     var title: String,
     var content: String,
-    var image: String
+    var base64Image: String?
 )
 
 
@@ -70,10 +70,6 @@ enum class QnaRole{
     COMMENT_GUEST, // data: List<Comment>
     COMMENT_HOST // data: List<Comment>
 }
-
-data class QnaCommentListResponse (
-    var comments: List<Comment>
-    )
 
 
 
@@ -127,13 +123,8 @@ data class Comment (
 
 
 
+
 interface CommentDeleteService { // 댓글 삭제
     @DELETE("comment/delete/{commentId}")
     fun commentDeletePost(@Path("commentId") id: Long): Call<Void>
 }
-
-
-
-data class QnaCommentList( // 댓글 리스트로 가져올 때 사용
-    var comment: List<Comment>?
-)

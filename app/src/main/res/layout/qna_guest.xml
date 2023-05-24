@@ -51,7 +51,7 @@
                 android:id="@+id/qnaGuestContent"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="content"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/qnaGuestTitle"
@@ -95,12 +95,21 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/qnaGuestRecyclerView"
                 android:layout_width="418dp"
-                android:layout_height="450dp"
-                android:layout_marginTop="32dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestContent"
+                app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView"
                 tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/qnaGuestImageView"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
+                app:layout_constraintTop_toBottomOf="@+id/qnaGuestContent"
+                tools:srcCompat="@tools:sample/avatars" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

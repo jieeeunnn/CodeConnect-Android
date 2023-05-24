@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -67,6 +68,11 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         binding.qnaGuestTitle.text = qnaRecruitment.title
         binding.qnaGuestContent.text = qnaRecruitment.content
         binding.qnaGuestCurrentTime.text = qnaRecruitment.currentDateTime
+
+        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaRecruitment.imagePath}"
+        val imageView: ImageView = binding.qnaGuestImageView
+        val loadImageTask = LoadImageTask(imageView)
+        loadImageTask.execute(imageUrl)
 
         binding.qnaGuestSwifeRefreshLayout.setOnRefreshListener {
             loadQnaGuest()

@@ -2,11 +2,15 @@ package com.example.coding_study
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -17,11 +21,15 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
+import org.java_websocket.util.Base64
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 
 open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
     private lateinit var binding: QnaHostBinding
@@ -77,6 +85,11 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         binding.qnaHostTitle.text = qnaRecruitment.title
         binding.qnaHostContent.text = qnaRecruitment.content
         binding.qnaHostCurrentTime.text = qnaRecruitment.currentDateTime
+
+        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaRecruitment.imagePath}"
+        val imageView: ImageView = binding.qnaHostImageView
+        val loadImageTask = LoadImageTask(imageView)
+        loadImageTask.execute(imageUrl)
 
         binding.qnaHostSwifeRefreshLayout.setOnRefreshListener {
             loadQnaHost()
@@ -299,5 +312,32 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
             }
 
         })
+    }
+}
+
+class LoadImageTask(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
+
+    override fun doInBackground(vararg urls: String): Bitmap? {
+        val imageUrl = urls[0]
+        var bitmap: Bitmap? = null
+        try {
+            val url = URL(imageUrl)
+            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+            val inputStream = connection.inputStream
+            bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream.close()
+            connection.disconnect()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return bitmap
+    }
+
+    override fun onPostExecute(result: Bitmap?) {
+        if (result != null) {
+            imageView.setImageBitmap(result)
+        }
     }
 }

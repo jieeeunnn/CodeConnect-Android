@@ -26,8 +26,8 @@
         android:layout_marginTop="32dp"
         android:text="아이디"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/myPageEdit"
-        app:layout_constraintTop_toBottomOf="@+id/myPageEdit" />
+        app:layout_constraintStart_toStartOf="@+id/myPageProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/myPageProfileImage" />
 
     <TextView
         android:id="@+id/myPageAddressEdit"
@@ -187,5 +187,14 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/myPageMachinBtn"
         app:layout_constraintStart_toEndOf="@+id/myPageMachinBtn"
         android:stateListAnimator="@null"/>
+
+    <ImageView
+        android:id="@+id/myPageProfileImage"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/myPageEdit"
+        app:layout_constraintTop_toBottomOf="@+id/myPageEdit"
+        app:srcCompat="@drawable/ic_baseline_person_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -75,6 +75,7 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
         binding.hostCountText.text = "${recruitment.currentCount} / ${recruitment.count}"
         binding.hostCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
 
+
         binding.hostEditButton.setOnClickListener { // 수정 버튼을 눌렀을 때
             val editFragment = StudyEditFragment()
             val bundle = Bundle()
