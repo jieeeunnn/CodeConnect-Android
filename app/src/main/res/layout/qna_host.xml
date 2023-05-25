@@ -29,33 +29,33 @@
                 android:id="@+id/qnaHostNickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="56dp"
                 android:text="nickname"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView7"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/qnaHostTitle"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="title"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/qnaHostNickname"
-                app:layout_constraintTop_toBottomOf="@+id/qnaHostNickname" />
+                app:layout_constraintStart_toStartOf="@+id/imageView7"
+                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
             <TextView
                 android:id="@+id/qnaHostContent"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="content"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/qnaHostImageView"
-                app:layout_constraintTop_toBottomOf="@+id/qnaHostImageView" />
+                app:layout_constraintStart_toStartOf="@+id/qnaHostTitle"
+                app:layout_constraintTop_toBottomOf="@+id/qnaHostTitle" />
 
             <TextView
                 android:id="@+id/qnaHostCurrentTime"
@@ -121,20 +121,30 @@
                 android:id="@+id/qnaHostRecyclerView"
                 android:layout_width="418dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/hostComment"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/qnaHostContent" />
+                app:layout_constraintTop_toBottomOf="@+id/qnaHostImageView" />
 
             <ImageView
                 android:id="@+id/qnaHostImageView"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="@+id/qnaHostTitle"
-                app:layout_constraintTop_toBottomOf="@+id/qnaHostTitle"
+                app:layout_constraintStart_toStartOf="@+id/qnaHostContent"
+                app:layout_constraintTop_toBottomOf="@+id/qnaHostContent"
                 tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_person_24" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

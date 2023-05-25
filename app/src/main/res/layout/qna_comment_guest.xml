@@ -6,15 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/comment_drawable"
-    android:padding="20dp">
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/guestCommentNickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:text="nickname"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -32,19 +33,18 @@
         android:id="@+id/guestCommentTextView"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="comment"
-        app:layout_constraintStart_toStartOf="@+id/guestCommentNickname"
-        app:layout_constraintTop_toBottomOf="@+id/guestCommentNickname" />
+        app:layout_constraintStart_toStartOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
-    <ImageButton
-        android:id="@+id/cgReplyButton"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="16dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/guestCommentTextView"
-        app:layout_constraintTop_toBottomOf="@+id/guestCommentTextView"
-        app:srcCompat="@drawable/ic_baseline_chat_24" />
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_person_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

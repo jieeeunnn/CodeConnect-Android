@@ -12,24 +12,23 @@
         android:id="@+id/hostNicknameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="150dp"
         android:text="nickname"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/studyHostImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/hostTitleText"
         android:layout_width="270dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
         android:layout_marginTop="32dp"
         android:text="title"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hostNicknameText" />
+        app:layout_constraintStart_toStartOf="@+id/studyHostImageView"
+        app:layout_constraintTop_toBottomOf="@+id/studyHostImageView" />
 
     <TextView
         android:id="@+id/hostContentText"
@@ -105,4 +104,14 @@
         android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/hostNicknameText"
         app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/studyHostImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="140dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_person_24" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,11 +17,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaHostBinding
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
-import org.java_websocket.util.Base64
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

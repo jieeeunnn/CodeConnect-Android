@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.QnaCommentGuestBinding
@@ -79,14 +78,15 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
                     binding.guestCommentTextView.text = comment.comment
                     binding.guestCommentCurrentDateTime.text = comment.currentDateTime
 
-                    binding.cgReplyButton.setOnClickListener {
+            /*
+                    binding.cgReplyButton.setOnClickListener { // 대댓글 버튼
                         val replyFragment = ReplyCommentFragment()
                         fragmentManager.beginTransaction()
                             .replace(R.id.study_fragment_layout, replyFragment)
                             .addToBackStack(null)
                             .commit()
                     }
-
+             */
         }
     }
 
@@ -121,7 +121,8 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
                         popupMenu.show()
                     }
 
-                    binding.chReplyButton.setOnClickListener {
+            /*
+                    binding.chReplyButton.setOnClickListener { // 대댓글 버튼
                         val commentHost = comment
                         val commentGson = Gson()
                         val commentBundle = Bundle()
@@ -136,6 +137,8 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
                             .addToBackStack(null)
                             .commit()
                     }
+
+             */
 
                 }
             }

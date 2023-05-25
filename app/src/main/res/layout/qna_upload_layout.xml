@@ -15,7 +15,7 @@
         android:id="@+id/quaUploadId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="nickname"
         android:textColor="#515151"
@@ -56,8 +56,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"

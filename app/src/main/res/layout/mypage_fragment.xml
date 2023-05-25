@@ -85,8 +85,8 @@
         android:layout_marginTop="16dp"
         android:text="아이디"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        app:layout_constraintStart_toStartOf="@+id/myPageImage"
+        app:layout_constraintTop_toBottomOf="@+id/myPageImage" />
 
     <TextView
         android:id="@+id/textView3"
@@ -114,7 +114,7 @@
         app:layout_constraintTop_toBottomOf="@+id/myPageField" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/myPageImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"

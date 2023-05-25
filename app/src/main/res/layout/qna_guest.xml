@@ -29,29 +29,29 @@
                 android:id="@+id/qnaGuestNickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="56dp"
                 android:text="nickname"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/qnaGuestTitle"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="title"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/qnaGuestNickname"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestNickname" />
+                app:layout_constraintStart_toStartOf="@+id/imageView6"
+                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
             <TextView
                 android:id="@+id/qnaGuestContent"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="content"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/qnaGuestTitle"
@@ -96,7 +96,7 @@
                 android:id="@+id/qnaGuestRecyclerView"
                 android:layout_width="418dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/guestCommentEdit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -111,6 +111,16 @@
                 app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
                 app:layout_constraintTop_toBottomOf="@+id/qnaGuestContent"
                 tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_person_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
