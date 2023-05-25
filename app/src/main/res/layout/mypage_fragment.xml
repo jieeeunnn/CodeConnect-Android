@@ -82,11 +82,11 @@
         android:id="@+id/myPageIdTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="아이디"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/myPageTextView"
-        app:layout_constraintTop_toBottomOf="@+id/myPageTextView" />
+        app:layout_constraintStart_toStartOf="@+id/imageView5"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <TextView
         android:id="@+id/textView3"
@@ -112,6 +112,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/myPageField" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/myPageTextView"
+        app:layout_constraintTop_toBottomOf="@+id/myPageTextView"
+        app:srcCompat="@drawable/ic_baseline_person_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

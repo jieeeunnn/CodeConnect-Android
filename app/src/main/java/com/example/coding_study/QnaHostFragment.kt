@@ -56,7 +56,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         val commentHostJson = arguments?.getString("commentHostJson")
         val commentGuestJson = arguments?.getString("commentGuestJson")
 
-        Log.e("QnaHostFragment adapter ", "$qnaJson, $commentHostJson")
+        Log.e("QnaHostFragment qnaJson ", "$qnaJson, $commentHostJson")
 
         val qnaRecruitment = qnaGson.fromJson(qnaJson,QnaUploadDto::class.java)
         val commentHost = qnaGson.fromJson<List<Comment>>(commentHostJson, object : TypeToken<List<Comment>>() {}.type)

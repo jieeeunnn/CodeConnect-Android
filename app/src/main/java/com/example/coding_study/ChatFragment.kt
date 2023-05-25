@@ -36,18 +36,6 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         }
     }
 
-    /*
-    fun saveTitle(context: Context, title: String?) {
-        val sharedPreferences = context.getSharedPreferences("MyTitle", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("title", title)
-        if (!editor.commit()) {
-            Log.e("saveTitle", "Failed to save title")
-        }
-    }
-
-     */
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -108,20 +96,6 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                 })
             }
         }
-
-        /*
-        chatRoomViewModel = ViewModelProvider(requireActivity(), ChatRoomViewModelFactory(ChatRoomDatabase.getInstance(requireContext()).chatRoomDao())).get(ChatRoomViewModel::class.java)
-
-        //chatAdapter = ChatRoomAdapter(listOf(), onItemClickListener)
-        chatAdapter = ChatRoomAdapter(emptyList(), onItemClickListener)
-        binding.chatRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        chatRoomViewModel.chatRooms.observe(viewLifecycleOwner) { chatRooms ->
-            chatAdapter.submitList(chatRooms)
-        }
-
-        chatRecyclerView.adapter = chatAdapter
-         */
 
         chatAdapter = ChatRoomAdapter(listOf(), onItemClickListener)
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(context)
