@@ -16,7 +16,7 @@
         android:text="nickname"
         android:textSize="16sp"
         android:textStyle="normal"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
+        app:layout_constraintStart_toEndOf="@+id/studyGuestImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -27,8 +27,8 @@
         android:text="title"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        app:layout_constraintStart_toStartOf="@+id/studyGuestImage"
+        app:layout_constraintTop_toBottomOf="@+id/studyGuestImage" />
 
             <TextView
                 android:id="@+id/guestContentText"
@@ -108,7 +108,7 @@
         tools:ignore="NotSibling" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/studyGuestImage"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="70dp"

@@ -24,7 +24,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="nickname"
-        app:layout_constraintStart_toEndOf="@+id/imageView11"
+        app:layout_constraintStart_toEndOf="@+id/chatOtherImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -37,7 +37,7 @@
         app:layout_constraintStart_toEndOf="@+id/chatReceiveMessage" />
 
     <ImageView
-        android:id="@+id/imageView11"
+        android:id="@+id/chatOtherImage"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"

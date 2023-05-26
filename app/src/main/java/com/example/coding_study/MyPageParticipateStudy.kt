@@ -180,7 +180,7 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
 
                     val studyList = studyListResponse?.data
                     val postListResponse = studyList?.map {
-                        Post( it.nickname, it.title, it.content, it.currentCount, it.count, it.field, it.currentDateTime)
+                        Post( it.nickname, it.title, it.content, it.currentCount, it.count, it.field, it.currentDateTime, it.profileImagePath)
                     } ?: emptyList()
                     //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
 
@@ -192,10 +192,8 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
                         }
                         Log.e("MyPageParticipateStudy Fragment", "recruitmentIds: $recruitmentIds")
 
-
                         studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
                         studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
-
                     }
                 }
 

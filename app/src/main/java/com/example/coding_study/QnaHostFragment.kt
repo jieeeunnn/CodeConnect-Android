@@ -46,7 +46,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
     ): View? {
         binding = QnaHostBinding.inflate(inflater, container, false)
 
-
         // 가져온 qnaRecruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성
         val qnaGson = Gson()
         val qnaJson = arguments?.getString("qnaHostRecruitmentJson")

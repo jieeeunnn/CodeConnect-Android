@@ -1,17 +1,27 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.coding_study.databinding.MypageEditBinding
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -20,11 +30,33 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.io.InputStream
 
 class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
     private lateinit var binding: MypageEditBinding
     private var selectedFields = mutableListOf<String>() // selectedFields 리스트 정의
     private lateinit var addressViewModel: MyPageAddressViewModel
+
+    @SuppressLint("CheckResult")
+    private fun displaySelectedImage(selectedImageUri: Uri?) {
+        val imageView = binding.myPageProfileImage
+        if (selectedImageUri != null) {
+            val glideRequest = Glide.with(this)
+                .load(selectedImageUri)
+
+            // 이미지를 원하는 크기로 제한
+            val targetWidth = 300 // 원하는 가로 크기
+            val targetHeight = 300 // 원하는 세로 크기
+            glideRequest.override(targetWidth, targetHeight)
+
+            glideRequest.into(imageView)
+            imageView.visibility = View.VISIBLE
+        } else {
+            // 이미지가 없는 경우, ImageView를 빈 상태로 남겨둠
+            imageView.setImageDrawable(null)
+            imageView.visibility = View.GONE
+        }
+    }
 
     private fun updateSelectedFields(field: String) { // 클릭된 버튼을 selectedFields 리스트에 추가하는 함수 (2개 선택)
         if (selectedFields.contains(field)) { // 이미 선택된 상태였을 경우
@@ -86,6 +118,11 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
         if (myProfile != null) {
             binding.myPageNewId.setText(myProfile.nickname)
             binding.myPageNewAddress.text = myProfile.address
+
+            val imageUrl: String? = "http://112.154.249.74:8080/"+ "${myProfile.profileImagePath}"
+            val imageView: ImageView = binding.myPageProfileImage
+            val loadImageTask = LoadImageTask(imageView)
+            loadImageTask.execute(imageUrl)
 
             binding.myPageNewAddress.setOnClickListener {
                 val addressFragment = MyPageAddressFragment()
@@ -180,29 +217,59 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
             updateButtonAppearance(binding.myPageEtcBtn, selectedFields.contains("기타"))
         }
 
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
-        val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            //.addHeader("Authorization", "Bearer $token")
-                            .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
-                        chain.proceed(request)
+        binding.myPageUploadButton.setOnClickListener {// 사진은 선택 안했을 경우 사용되는 수정 버튼
+            val nickname = binding.myPageNewId.text.toString()
+            val address = binding.myPageNewAddress.text.toString()
+            val fieldList = selectedFields.toList()
+            var myPageEditRequest = MyPageEditRequest(nickname, address, fieldList, null)
+
+            editMyPage(myPageEditRequest)
+        }
+
+
+
+        val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data // 선택된 이미지를 여기서 처리
+                val selectedImageUri = intent?.data // 선택된 이미지 URI를 필요에 따라 처리
+
+                displaySelectedImage(selectedImageUri)
+
+                val contentResolver: ContentResolver = requireContext().contentResolver
+                val inputStream: InputStream? = selectedImageUri?.let { contentResolver.openInputStream(it) }
+                val imageBytes: ByteArray = inputStream?.readBytes() ?: ByteArray(0)
+
+                val base64Image: String? = if (imageBytes.isNotEmpty()) {
+                    Base64.encodeToString(imageBytes, Base64.NO_WRAP)
+                } else {
+                    null
+                }
+
+                binding.myPageUploadButton.setOnClickListener {//프로필 이미지를 선택했을 경우 사용되는 수정 버튼
+                    val nickname = binding.myPageNewId.text.toString()
+                    val address = binding.myPageNewAddress.text.toString()
+                    val fieldList = selectedFields.toList()
+
+                    if (base64Image != null) {
+                        Log.e("myPageEditFragment encoding image", base64Image)
                     }
-                    .build()
-            )
-            .build()
 
-        val myPageEditService = retrofitBearer.create(MyPageEditService::class.java)
+                    var myPageEditRequest = MyPageEditRequest(nickname, address, fieldList, base64Image)
 
+                    editMyPage(myPageEditRequest)
+                }
+
+            }
+        }
+
+        binding.myPageProfileImage.setOnClickListener {
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(galleryIntent)
+        }
+
+
+        /*
         binding.myPageUploadButton.setOnClickListener {
             if (selectedFields.size < 2) { // 필드를 2개 선택하지 않았을 경우 Toast 메세지 띄우기
                 val confirmDialog = ConfirmDialog("관심 언어 2개를 선택해 주세요")
@@ -251,6 +318,76 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
             }
         }
 
+         */
+
+
         return binding.root
+    }
+
+    fun editMyPage(MyPageEditRequest: MyPageEditRequest) {
+        if (selectedFields.size < 2) { // 필드를 2개 선택하지 않았을 경우 Toast 메세지 띄우기
+            val confirmDialog = ConfirmDialog("관심 언어 2개를 선택해 주세요")
+            confirmDialog.isCancelable = false
+            confirmDialog.show(childFragmentManager, "joinFragment joinButton2_관심사 선택")
+        } else {
+            val nickname = binding.myPageNewId.text.toString()
+            val address = binding.myPageNewAddress.text.toString()
+            val fieldList = selectedFields.toList()
+
+            val sharedPreferences =
+                requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+            val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+            val retrofitBearer = Retrofit.Builder()
+                .baseUrl("http://112.154.249.74:8080/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(
+                    OkHttpClient.Builder()
+                        .addInterceptor { chain ->
+                            val request = chain.request().newBuilder()
+                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .build()
+                            Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                            chain.proceed(request)
+                        }
+                        .build()
+                )
+                .build()
+
+            val myPageEditService = retrofitBearer.create(MyPageEditService::class.java)
+
+            myPageEditService.myPageEditPost(MyPageEditRequest)
+                .enqueue(object : Callback<MyPageEditResponse> {
+                    override fun onResponse(
+                        call: Call<MyPageEditResponse>,
+                        response: Response<MyPageEditResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.e("MyPageEditFragment response code is", "${response.code()}")
+                            Log.e("MyPageEditFragment response body is", "${response.body()}")
+
+                            context?.let { it1 -> saveNickname(it1, nickname) } // 수정된 nickname 저장
+                            context?.let { it1 -> saveAddress(it1, address) }
+                            context?.let { it1 -> saveFields(it1, fieldList) }
+
+                            val parentFragment = parentFragment
+                            if (parentFragment is MyPageFragment) {
+                                parentFragment.onResume()
+                            }
+
+                            val parentFragmentManager = requireActivity().supportFragmentManager
+                            parentFragmentManager.popBackStack()
+                        } else {
+                            Log.e("MyPageEditFragment_onResponse", "But not success")
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<MyPageEditResponse>, t: Throwable) {
+                        Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
+                    }
+
+                })
+        }
     }
 }

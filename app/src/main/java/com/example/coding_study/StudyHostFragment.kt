@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -75,6 +76,10 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
         binding.hostCountText.text = "${recruitment.currentCount} / ${recruitment.count}"
         binding.hostCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
 
+        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${recruitment.profileImagePath}"
+        val imageView: ImageView = binding.studyHostImageView
+        val loadImageTask = LoadImageTask(imageView)
+        loadImageTask.execute(imageUrl)
 
         binding.hostEditButton.setOnClickListener { // 수정 버튼을 눌렀을 때
             val editFragment = StudyEditFragment()

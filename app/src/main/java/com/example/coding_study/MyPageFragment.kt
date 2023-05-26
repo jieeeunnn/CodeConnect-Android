@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,7 +26,6 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
     private lateinit var myPageAdapter: MyPageAdapter
     private val myPageViewModel: MyPageViewModel by viewModels()
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,7 +37,6 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
 
         val myPageRecyclerView = binding.myPageRecyclerView
 
-
         var onItemClickListener: MyPageAdapter.OnItemClickListener = object : MyPageAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 Log.e("MypageFragment", "onclick")
@@ -48,7 +47,6 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                         .addToBackStack(null)
                         .commit()
                 }
-
                 if (position == 1) { // 신청한 스터디
                     childFragmentManager.beginTransaction()
                         .replace(R.id.myPageProfileView, MyPageParticipateStudy())
@@ -133,6 +131,11 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                             binding.myPageAddress.text = myProfile.address
                             binding.myPageField1.text = myProfile.fieldList[0]
                             binding.myPageField2.text = myProfile.fieldList[1]
+
+                            val imageUrl: String? = "http://112.154.249.74:8080/"+ "${myProfile.profileImagePath}"
+                            val imageView: ImageView = binding.myPageImage
+                            val loadImageTask = LoadImageTask(imageView)
+                            loadImageTask.execute(imageUrl)
                         }
                     }
                 }
@@ -141,7 +144,6 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                     Log.e("MyPageFragment", "Failed to get profile", t)
                     Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                 }
-
             })
         }
     }

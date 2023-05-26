@@ -1,13 +1,11 @@
 package com.example.coding_study
 
-import androidx.room.Delete
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface MyPageGetService { // 마이페이지 정보 조회
     @GET("profile/userinfo/{nickname}")
@@ -27,7 +25,8 @@ data class MyProfile (
     var email: String,
     var fieldList: List<String>,
     var nickname: String,
-    var role: MyPageRole
+    var role: MyPageRole,
+    var profileImagePath: String?
     )
 
 enum class MyPageRole {
@@ -41,7 +40,7 @@ enum class MyPageRole {
 
 interface MyPageEditService { // 마이페이지 수정 api
     @PUT("profile/update")
-    fun myPageEditPost(@Body myPageEdit: MyPageEdit) : Call<MyPageEditResponse>
+    fun myPageEditPost(@Body myPageEditRequest: MyPageEditRequest) : Call<MyPageEditResponse>
 }
 data class MyPageEditResponse (
     var result: Boolean,
@@ -52,7 +51,15 @@ data class MyPageEditResponse (
 data class MyPageEdit (
     var nickname: String,
     var address: String,
-    var fieldList: List<String>
+    var fieldList: List<String>,
+    var profileImagePath: String?
+    )
+
+data class MyPageEditRequest (
+    var nickname: String,
+    var address: String,
+    var fieldList: List<String>,
+    var base64Image: String?
         )
 
 

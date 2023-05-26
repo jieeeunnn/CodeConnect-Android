@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
 
@@ -32,6 +33,11 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
             }
             binding.fieldTextView.text = "# ${post.field}"
             binding.currentTextView.text = post.currentTime
+
+            val imageUrl: String? = "http://112.154.249.74:8080/"+ "${post.profileImagePath}"
+            val imageView: ImageView = binding.studyImageView
+            val loadImageTask = LoadImageTask(imageView)
+            loadImageTask.execute(imageUrl)
         }
 
         fun onClick(v: View?) {

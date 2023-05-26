@@ -12,7 +12,8 @@ data class Post(
     var currentCount: Int,
     var num: Int,
     var field: String,
-    var currentTime: String
+    var currentTime: String,
+    var profileImagePath: String?
 )
 
 class StudyViewModel : ViewModel() {
