@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaHostBinding
@@ -82,9 +84,14 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         binding.qnaHostContent.text = qnaRecruitment.content
         binding.qnaHostCurrentTime.text = qnaRecruitment.currentDateTime
 
-        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaRecruitment.imagePath}"
+        val profileImageUrl: String = "http://112.154.249.74:8080/"+ qnaRecruitment.profileImagePath // 프로필 사진 띄우기
+        val profileImageView: ImageView = binding.qnaHostProfileImage
+        val profileLoadImageTask = LoadImageTask(profileImageView)
+        profileLoadImageTask.execute(profileImageUrl)
+
+        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaRecruitment.imagePath}" // 게시글에 사진 업로드
         val imageView: ImageView = binding.qnaHostImageView
-        val loadImageTask = LoadImageTask(imageView)
+        val loadImageTask = LoadQnaImageTask(imageView)
         loadImageTask.execute(imageUrl)
 
         binding.qnaHostSwifeRefreshLayout.setOnRefreshListener {
@@ -282,6 +289,11 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                         binding.qnaHostContent.text = qnaUploadDto.content
                         binding.qnaHostCurrentTime.text = qnaUploadDto.currentDateTime
 
+                        val imageUrl: String? = "http://112.154.249.74:8080/"+ qnaUploadDto.profileImagePath // 프로필 사진 띄우기
+                        val imageView: ImageView = binding.qnaHostProfileImage
+                        val loadImageTask = LoadImageTask(imageView)
+                        loadImageTask.execute(imageUrl)
+
                         val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? List<Comment>
                         val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? List<Comment>
                         Log.e("QnaHostFragment LoadQnaHost commentHost", "$commentHost")
@@ -308,32 +320,5 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
             }
 
         })
-    }
-}
-
-class LoadImageTask(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
-
-    override fun doInBackground(vararg urls: String): Bitmap? {
-        val imageUrl = urls[0]
-        var bitmap: Bitmap? = null
-        try {
-            val url = URL(imageUrl)
-            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-            connection.doInput = true
-            connection.connect()
-            val inputStream = connection.inputStream
-            bitmap = BitmapFactory.decodeStream(inputStream)
-            inputStream.close()
-            connection.disconnect()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return bitmap
-    }
-
-    override fun onPostExecute(result: Bitmap?) {
-        if (result != null) {
-            imageView.setImageBitmap(result)
-        }
     }
 }

@@ -33,7 +33,7 @@
                 android:layout_marginTop="56dp"
                 android:text="nickname"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView7"
+                app:layout_constraintStart_toEndOf="@+id/qnaHostProfileImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -44,8 +44,8 @@
                 android:text="title"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/imageView7"
-                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+                app:layout_constraintStart_toStartOf="@+id/qnaHostProfileImage"
+                app:layout_constraintTop_toBottomOf="@+id/qnaHostProfileImage" />
 
             <TextView
                 android:id="@+id/qnaHostContent"
@@ -129,15 +129,15 @@
 
             <ImageView
                 android:id="@+id/qnaHostImageView"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="@+id/qnaHostContent"
                 app:layout_constraintTop_toBottomOf="@+id/qnaHostContent"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/qnaHostProfileImage"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="60dp"

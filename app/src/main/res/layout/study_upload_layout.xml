@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:text="id"
         android:textColor="#515151"
         android:textSize="14sp"
@@ -60,7 +60,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/studyImageView"
-        app:layout_constraintTop_toBottomOf="@+id/idTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/studyImageView" />
 
     <TextView
         android:id="@+id/fieldTextView"
@@ -89,10 +89,11 @@
 
     <ImageView
         android:id="@+id/studyImageView"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="24dp"
+        android:background="@drawable/profile_circle_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_person_24" />

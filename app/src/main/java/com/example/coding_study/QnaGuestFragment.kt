@@ -69,9 +69,14 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         binding.qnaGuestContent.text = qnaRecruitment.content
         binding.qnaGuestCurrentTime.text = qnaRecruitment.currentDateTime
 
-        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaRecruitment.imagePath}"
+        val profileImageUrl: String = "http://112.154.249.74:8080/"+ qnaRecruitment.profileImagePath // 프로필 이미지
+        val profileImageView: ImageView = binding.qnaGuestProfileImage
+        val profileLoadImageTask = LoadImageTask(profileImageView)
+        profileLoadImageTask.execute(profileImageUrl)
+
+        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaRecruitment.imagePath}" // 게시글에 이미지 첨부 시
         val imageView: ImageView = binding.qnaGuestImageView
-        val loadImageTask = LoadImageTask(imageView)
+        val loadImageTask = LoadQnaImageTask(imageView)
         loadImageTask.execute(imageUrl)
 
         binding.qnaGuestSwifeRefreshLayout.setOnRefreshListener {
@@ -186,6 +191,11 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                     binding.qnaGuestTitle.text = qnaUploadDto.title
                     binding.qnaGuestContent.text = qnaUploadDto.content
                     binding.qnaGuestCurrentTime.text = qnaUploadDto.currentDateTime
+
+                    val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaUploadDto.profileImagePath}"
+                    val imageView: ImageView = binding.qnaGuestProfileImage
+                    val loadImageTask = LoadImageTask(imageView)
+                    loadImageTask.execute(imageUrl)
 
                     val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? List<Comment>
                     val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? List<Comment>

@@ -2,6 +2,7 @@ package com.example.coding_study
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.ChatMessageBinding
 import com.example.coding_study.databinding.ChatMessageReceiveBinding
@@ -10,7 +11,8 @@ data class ChatMessage (
     var message : String,
     var sender: String,
     var nickname: String,
-    var currentDateTime: String
+    var currentDateTime: String,
+    var profileImagePath: String
         )
 
 class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -34,6 +36,11 @@ class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): Recyc
             binding.chatMessageTextView.text = chatMessage.message
             binding.myMessageNickname.text = chatMessage.nickname
             binding.myMessageCurrentTime.text = chatMessage.currentDateTime
+
+            val imageUrl: String? = "http://112.154.249.74:8080/"+ chatMessage.profileImagePath
+            val imageView: ImageView = binding.chatMyImage
+            val loadImageTask = LoadImageTask(imageView)
+            loadImageTask.execute(imageUrl)
         }
     }
 
@@ -42,6 +49,11 @@ class ChattingAdapter(private var chatMessages: MutableList<ChatMessage>): Recyc
             binding.chatReceiveMessage.text = chatMessage.message
             binding.otherMessageNickname.text = chatMessage.nickname
             binding.otherMessageCurrentTime.text = chatMessage.currentDateTime
+
+            val imageUrl: String? = "http://112.154.249.74:8080/"+ "${chatMessage.profileImagePath}"
+            val imageView: ImageView = binding.chatOtherImage
+            val loadImageTask = LoadImageTask(imageView)
+            loadImageTask.execute(imageUrl)
         }
     }
 

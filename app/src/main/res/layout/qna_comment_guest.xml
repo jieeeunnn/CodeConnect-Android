@@ -15,7 +15,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:text="nickname"
-        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintStart_toEndOf="@+id/commentGuestProfileImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -35,11 +35,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="comment"
-        app:layout_constraintStart_toStartOf="@+id/imageView9"
-        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+        app:layout_constraintStart_toStartOf="@+id/commentGuestProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/commentGuestProfileImage" />
 
     <ImageView
-        android:id="@+id/imageView9"
+        android:id="@+id/commentGuestProfileImage"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="30dp"

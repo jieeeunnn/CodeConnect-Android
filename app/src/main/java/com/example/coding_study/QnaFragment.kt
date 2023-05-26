@@ -242,7 +242,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                     Log.e("QnaList_response.code", "is: ${response.code()}")
 
                     val qnaList = qnaListResponse?.data
-                    val qnapostListResponse = qnaList?.map { QnaPost(it.nickname, it.title, it.content, it.currentDateTime, it.commentCount) }
+                    val qnapostListResponse = qnaList?.map { QnaPost(it.nickname, it.title, it.content, it.currentDateTime, it.commentCount, it.profileImagePath) }
                     //qnaList의 형식은 List<QnaUploadDto>이므로 서버에서 받은 게시글을 qnaPostList에 넣어주기 위해 List<qnaPost>로 변환
 
                     if (qnaListResponse?.result == true) {
@@ -261,6 +261,9 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                             binding.qnaSwifeRefreshLayout.isRefreshing = false // 새로고침 상태를 false로 변경해서 새로고침 완료
                         }
                     }
+                } else {
+                    Log.e("qnaFragment qna list", "onResponse but not success")
+                    Log.e("QnaList_response.code", "is: ${response.code()}")
                 }
             }
 
@@ -303,7 +306,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
                             val qnaList = qnaListResponse?.data
                             val qnapostListResponse = qnaList?.map {
-                                QnaPost(it.nickname, it.title, it.content, it.currentDateTime, it.commentCount)
+                                QnaPost(it.nickname, it.title, it.content, it.currentDateTime, it.commentCount, it.profileImagePath)
                             }
 
                             if (qnapostListResponse != null) {

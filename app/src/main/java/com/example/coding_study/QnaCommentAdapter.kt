@@ -3,6 +3,7 @@ package com.example.coding_study
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -74,9 +75,14 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
     inner class CommentGuestViewHolder(private val binding: QnaCommentGuestBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(comment: Comment) {
                     // commentHostList가 null이 아니고, 현재 아이템이 리스트 범위 내에 있을 경우에만 바인딩을 진행합니다.
-                    binding.guestCommentNickname.text = comment.nickname
-                    binding.guestCommentTextView.text = comment.comment
-                    binding.guestCommentCurrentDateTime.text = comment.currentDateTime
+            binding.guestCommentNickname.text = comment.nickname
+            binding.guestCommentTextView.text = comment.comment
+            binding.guestCommentCurrentDateTime.text = comment.currentDateTime
+
+            val imageUrl: String? = "http://112.154.249.74:8080/"+ comment.profileImagePath
+            val imageView: ImageView = binding.commentGuestProfileImage
+            val loadImageTask = LoadImageTask(imageView)
+            loadImageTask.execute(imageUrl)
 
             /*
                     binding.cgReplyButton.setOnClickListener { // 대댓글 버튼
@@ -94,9 +100,14 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
 
         fun bind(comment: Comment) {
                     // commentHostList가 null이 아니고, 현재 아이템이 리스트 범위 내에 있을 경우에만 바인딩을 진행합니다.
-                    binding.hostCommentNickname.text = comment.nickname
-                    binding.hostCommentTextView.text = comment.comment
-                    binding.hostCommentCurrentDateTime.text = comment.currentDateTime
+            binding.hostCommentNickname.text = comment.nickname
+            binding.hostCommentTextView.text = comment.comment
+            binding.hostCommentCurrentDateTime.text = comment.currentDateTime
+
+            val imageUrl: String? = "http://112.154.249.74:8080/"+ comment.profileImagePath
+            val imageView: ImageView = binding.commentHostProfileImage
+            val loadImageTask = LoadImageTask(imageView)
+            loadImageTask.execute(imageUrl)
 
                     binding.commentMenuButton.setOnClickListener { view ->
                         val popupMenu = PopupMenu(view.context, view)

@@ -45,7 +45,6 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         binding = ChatFragmentBinding.inflate(inflater, container, false)
         val chatRecyclerView = binding.chatRecyclerView
 
-
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 

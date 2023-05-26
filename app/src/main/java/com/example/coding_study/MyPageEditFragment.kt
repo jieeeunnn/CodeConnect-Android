@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -18,10 +19,14 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.example.coding_study.databinding.MypageEditBinding
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -42,7 +47,37 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
         val imageView = binding.myPageProfileImage
         if (selectedImageUri != null) {
             val glideRequest = Glide.with(this)
+                .asBitmap()
                 .load(selectedImageUri)
+
+            glideRequest.addListener(object : RequestListener<Bitmap?> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: com.bumptech.glide.request.target.Target<Bitmap?>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    // 이미지 로딩 실패 시 처리
+                    imageView.setImageDrawable(null)
+                    imageView.visibility = View.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Bitmap?,
+                    model: Any?,
+                    target: com.bumptech.glide.request.target.Target<Bitmap?>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    resource?.let { bitmap ->
+                        val croppedBitmap = cropToSquare(bitmap)
+                        setCircularImage(imageView, croppedBitmap)
+                        imageView.visibility = View.VISIBLE
+                    }
+                    return true
+                }
+            })
 
             // 이미지를 원하는 크기로 제한
             val targetWidth = 300 // 원하는 가로 크기
@@ -50,13 +85,30 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
             glideRequest.override(targetWidth, targetHeight)
 
             glideRequest.into(imageView)
-            imageView.visibility = View.VISIBLE
         } else {
             // 이미지가 없는 경우, ImageView를 빈 상태로 남겨둠
             imageView.setImageDrawable(null)
             imageView.visibility = View.GONE
         }
     }
+
+
+    // 이미지를 정사각형으로 크롭하는 함수
+    private fun cropToSquare(bitmap: Bitmap): Bitmap {
+        val size = bitmap.width.coerceAtMost(bitmap.height)
+        val x = (bitmap.width - size) / 2
+        val y = (bitmap.height - size) / 2
+        return Bitmap.createBitmap(bitmap, x, y, size, size)
+    }
+
+    // 이미지를 정사각형으로 크롭한 후 동그라미 형태로 보여주는 함수
+    private fun setCircularImage(imageView: ImageView, bitmap: Bitmap) {
+        val croppedBitmap = cropToSquare(bitmap)
+        val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(imageView.resources, croppedBitmap)
+        roundedBitmapDrawable.isCircular = true
+        imageView.setImageDrawable(roundedBitmapDrawable)
+    }
+
 
     private fun updateSelectedFields(field: String) { // 클릭된 버튼을 selectedFields 리스트에 추가하는 함수 (2개 선택)
         if (selectedFields.contains(field)) { // 이미 선택된 상태였을 경우

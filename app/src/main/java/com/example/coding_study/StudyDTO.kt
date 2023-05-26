@@ -23,7 +23,7 @@ data class RecruitmentDto (
     var count : Int,
     var currentCount: Int,
     var field: String,
-    var profileImagePath: String?
+    var profileImagePath: String
 )
 
 //input

@@ -54,9 +54,8 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
 
         val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaRecruitment.imagePath}"
         val imageView: ImageView = binding.qnaImageView
-        val loadImageTask = LoadImageTask(imageView)
+        val loadImageTask = LoadQnaImageTask(imageView)
         loadImageTask.execute(imageUrl)
-
 
         binding.qnaButtonUpload.setOnClickListener {
             val title = binding.qnaEditTitle.text.toString()

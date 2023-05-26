@@ -3,6 +3,7 @@ package com.example.coding_study
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.QnaUploadLayoutBinding
 
@@ -13,8 +14,9 @@ data class QnaPost (
     var title: String,
     var content: String,
     var currentTime: String,
-    var commentCount: Int
-    )
+    var commentCount: Int,
+    var profileImagePath: String
+)
 
 
 class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener: OnQnaClickListener) : RecyclerView.Adapter<QnaAdapter.QnaUploadViewHolder>() {
@@ -34,6 +36,11 @@ class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener:
             binding.qnaUploadContent.text = qnapost.content
             binding.qnaUploadTime.text = qnapost.currentTime
             binding.qnaCommentCountTextView.text = qnapost.commentCount.toString()
+
+            val imageUrl: String? = "http://112.154.249.74:8080/"+ qnapost.profileImagePath
+            val imageView: ImageView = binding.qnaProfileImage
+            val loadImageTask = LoadImageTask(imageView)
+            loadImageTask.execute(imageUrl)
         }
 
         fun onClick(v: View?) {

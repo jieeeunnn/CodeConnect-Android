@@ -18,7 +18,8 @@ data class QnaUploadDto(
     var modifiedDateTime: String,
     var qnaId: Long,
     var commentCount: Int,
-    var imagePath: String?
+    var imagePath: String?, // 게시글 업로드 사진
+    var profileImagePath: String // 프로필 사진
 )
 
 interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사용
@@ -110,14 +111,15 @@ data class QnaCommentResponse ( // 댓글 작성시 반환값
     var data: Comment
 )
 
-data class Comment (
+data class Comment ( // 댓글
     val commentId: Long,
     val comment: String,
     val nickname: String,
     val currentDateTime: String,
     val modifiedDateTime: Any?,
     val cocommentCount: Long,
-    val role: String
+    val role: String,
+    var profileImagePath: String
     )
 
 

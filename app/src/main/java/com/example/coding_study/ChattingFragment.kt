@@ -79,7 +79,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
         chattingRecyclerView.adapter = chattingAdapter
 
-
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
@@ -118,7 +117,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                     }
 
                     // 이전 채팅 내용 가져오기
-                    val chatMap = responseChatRoom?.data as? Map<*, *>
+                    val chatMap = responseChatRoom.data as? Map<*, *>
                     val chatList = chatMap?.get("CHAT") as? List<Map<String, Any>>
 
                     val convertedChatList = chatList?.mapNotNull { chat ->
@@ -128,7 +127,8 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                                     chatId = chatId.toInt(),
                                     nickname = nickname,
                                     message = chat["message"] as? String ?: "",
-                                    currentDateTime = chat["currentDateTime"] as? String ?: ""
+                                    currentDateTime = chat["currentDateTime"] as? String ?: "",
+                                    profileImagePath = chat["profileImagePath"] as String
                                 )
                             }
                         }
@@ -141,7 +141,8 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                             chat.message,
                             sender,
                             chat.nickname,
-                            chat.currentDateTime
+                            chat.currentDateTime,
+                            chat.profileImagePath
                         )
                         chattingAdapter.addMessage(chatMessage)
                     }
@@ -236,7 +237,10 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         data.put("message", message)
         val currentDateTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
 
-        val chatMessage = ChatMessage(message, "me", nickname, currentDateTime)
+        //val myProfileImagePath =
+        //data.put("profileImagePath", myProfileImagePath)
+
+        val chatMessage = ChatMessage(message, "me", nickname, currentDateTime, "")
 
         stompClient?.send("/pub/chat/message", data.toString())?.subscribe()
 
@@ -255,14 +259,16 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         val messageJson = JSONObject(body)
         val nicknameJson = JSONObject(body)
         val currentDateTimeJson = JSONObject(body)
+        val profileImagePathJson = JSONObject(body)
 
         val message = messageJson.getString("message")
         val nickname = nicknameJson.getString("nickname")
         val currentDateTime = currentDateTimeJson.getString("currentDateTime")
+        val profileImagePath = profileImagePathJson.getString("profileImagePath")
 
-        Log.e("ChattingFragment parseMessage", "$message, $nickname, $currentDateTime")
+        Log.e("ChattingFragment parseMessage", "$message, $nickname, $currentDateTime, $profileImagePath")
 
-        return ChatMessage(message, "", nickname, currentDateTime)
+        return ChatMessage(message, "", nickname, currentDateTime, profileImagePath)
     }
 
     override fun onYesButtonClick(id: Long) {
