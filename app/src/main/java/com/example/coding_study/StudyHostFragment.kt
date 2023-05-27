@@ -61,6 +61,9 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
             else if (parentFragment is MyPageMyStudy) {
                 onBackPressed()
             }
+            else if (parentFragment is MyPageParticipateStudy) {
+                onBackPressed()
+            }
         }
 
         // 가져온 recruitment 정보를 사용해서 레이아웃에 표시하는 코드 작성

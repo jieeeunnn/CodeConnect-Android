@@ -23,6 +23,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 class StudyGuestFragment : Fragment(R.layout.study_guest) {
     private lateinit var binding: StudyGuestBinding
 
+    fun onBackPressed() {
+        if (parentFragmentManager.backStackEntryCount > 0) {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,12 +54,15 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
-            val parentFragmentManager = requireActivity().supportFragmentManager
-            parentFragmentManager.popBackStack()
-
             val parentFragment = parentFragment
             if (parentFragment is StudyFragment) {
+                val parentFragmentManager = requireActivity().supportFragmentManager
+                parentFragmentManager.popBackStack()
+
                 parentFragment.showFloatingButton()
+            }
+            else if (parentFragment is MyPageParticipateStudy) {
+                onBackPressed()
             }
         }
 

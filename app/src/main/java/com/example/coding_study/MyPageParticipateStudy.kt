@@ -120,7 +120,7 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
                                     hostFragment.arguments = bundle
 
                                     childFragmentManager.beginTransaction()
-                                        .replace(R.id.study_fragment_layout, hostFragment)
+                                        .replace(R.id.myPageMyStudy, hostFragment)
                                         .addToBackStack(null)
                                         .commit()
 
@@ -139,7 +139,7 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
                                     guestFragment.arguments = bundle
 
                                     childFragmentManager.beginTransaction()
-                                        .replace(R.id.study_fragment_layout, guestFragment)
+                                        .replace(R.id.myPageMyStudy, guestFragment)
                                         .addToBackStack(null)
                                         .commit()
                                 }
