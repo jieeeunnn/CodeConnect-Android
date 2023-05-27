@@ -14,6 +14,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.example.coding_study.databinding.ChatMemberListBinding
 import com.example.coding_study.databinding.ChattingFragmentBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +38,16 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
     private lateinit var binding: ChattingFragmentBinding
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var stompClient: StompClient? = null
-    
+
+    fun saveMyImagePath(context: Context, myImagePath: String?) {
+        val sharedPreferences = context.getSharedPreferences("MyImagePath", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("imagePath", myImagePath)
+        if (!editor.commit()) {
+            Log.e("saveMyImagePath", "Failed to save image Path")
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,11 +68,12 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
             }
         }
 
+
         val sharedPreferencesRoomId = requireActivity().getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
         val roomId = sharedPreferencesRoomId?.getLong("roomId", 0) // 저장해둔 roomId 가져오기
 
         val sharedPreferences2 = requireActivity().getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
-        val nickname = sharedPreferences2?.getString("nickname", "") // 저장해둔 닉네임 가져오기
+        val myNickname = sharedPreferences2?.getString("nickname", "") // 저장해둔 닉네임 가져오기
 
         // 채팅방 나가기
         binding.roomDeleteTextView.setOnClickListener {
@@ -136,7 +148,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
 
                     // 채팅 내용 어댑터에 띄우기
                     convertedChatList?.forEach { chat ->
-                        val sender = if (chat.nickname == nickname) "me" else ""
+                        val sender = if (chat.nickname == myNickname) "me" else ""
                         val chatMessage = ChatMessage(
                             chat.message,
                             sender,
@@ -147,6 +159,52 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                         chattingAdapter.addMessage(chatMessage)
                     }
                     Log.e("ChattingFrgment chatList", convertedChatList.toString())
+
+
+                    val nicknameImageMap = chatMap?.get("NICKNAME_IMAGE") as? Map<String, String>
+                    val memberInfoMap = HashMap<String, String>()
+                    Log.e("chattingFragment memberInfoMap", "$memberInfoMap")
+
+                    if (nicknameImageMap != null) {
+                        for ((nickname, imageUrl) in nicknameImageMap) {
+                            memberInfoMap[nickname] = imageUrl
+                        }
+                    }
+
+                    val memberListLayout = binding.membersLinearLayout
+
+                    if (memberInfoMap.isNotEmpty()) {
+                        for ((nickname, imageUrl) in memberInfoMap) {
+
+                            if (nickname == myNickname) {
+                                context?.let { saveMyImagePath(it, imageUrl) }
+                            }
+                            val memberView = LayoutInflater.from(context).inflate(R.layout.chat_member_list, null)
+                            val binding = ChatMemberListBinding.bind(memberView)
+
+                            val memberNicknameTextView = binding.memberNickname
+
+                            val imageUrl: String? = "http://112.154.249.74:8080/"+ imageUrl
+                            val imageView: ImageView = binding.memberProfileImage
+                            val loadImageTask = LoadImageTask(imageView)
+                            loadImageTask.execute(imageUrl)
+
+                            // 프로필 사진 로딩 및 설정 (예시: Glide 라이브러리 사용)
+                            context?.let {
+                                Glide.with(it)
+                                    .load(imageUrl)
+                                    .circleCrop()
+                                    .into(imageView)
+                            }
+
+                            // 닉네임 설정
+                            memberNicknameTextView.text = nickname
+
+                            // 멤버 뷰를 LinearLayout에 추가
+                            memberListLayout.addView(memberView)
+                        }
+                    }
+
 
                 }
 
@@ -163,8 +221,8 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         binding.chatButton.setOnClickListener {
             val message = binding.chatEditText.text.toString()
             if (roomId != null) {
-                if (nickname != null) {
-                    sendMessage(message, roomId, nickname)
+                if (myNickname != null) {
+                    sendMessage(message, roomId, myNickname)
                 }
             }
             binding.chatEditText.setText("")
@@ -237,17 +295,22 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         data.put("message", message)
         val currentDateTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
 
-        //val myProfileImagePath =
-        //data.put("profileImagePath", myProfileImagePath)
+        val sharedPreferences = requireActivity().getSharedPreferences("MyImagePath", Context.MODE_PRIVATE)
+        val myImagePath = sharedPreferences?.getString("imagePath", "") // 저장해둔 토큰값 가져오기
 
-        val chatMessage = ChatMessage(message, "me", nickname, currentDateTime, "")
+        data.put("profileImagePath", myImagePath)
+
+        val chatMessage =
+            myImagePath?.let { ChatMessage(message, "me", nickname, currentDateTime, it) }
 
         stompClient?.send("/pub/chat/message", data.toString())?.subscribe()
 
-        Log.e("ChattingFragment sendMessage", "$message, $roomId, $nickname")
+        Log.e("ChattingFragment sendMessage", "$message, $roomId, $nickname, $myImagePath")
 
         coroutineScope.launch {
-            chattingAdapter.addMessage(chatMessage) // 객체를 채팅 어댑터에 추가
+            if (chatMessage != null) {
+                chattingAdapter.addMessage(chatMessage)
+            } // 객체를 채팅 어댑터에 추가
             binding.chattingRecyclerView.smoothScrollToPosition(chattingAdapter.itemCount - 1) // 채팅메시지가 표시되는 위치로 스크롤 이동
         }
     }
