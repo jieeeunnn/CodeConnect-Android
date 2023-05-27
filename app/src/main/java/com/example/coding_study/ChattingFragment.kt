@@ -298,9 +298,9 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         val sharedPreferences = requireActivity().getSharedPreferences("MyImagePath", Context.MODE_PRIVATE)
         val myImagePath = sharedPreferences?.getString("imagePath", "") // 저장해둔 토큰값 가져오기
 
-        //data.put("profileImagePath", myImagePath)
+        data.put("profileImagePath", myImagePath)
 
-        val chatMessage = myImagePath?.let { ChatMessage(message, "me", nickname, currentDateTime, "") }
+        val chatMessage = myImagePath?.let { ChatMessage(message, "me", nickname, currentDateTime, myImagePath) }
 
         stompClient?.send("/pub/chat/message", data.toString())?.subscribe()
 
@@ -308,11 +308,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
 
         coroutineScope.launch {
             if (chatMessage != null) {
-                val myChatMessage = myImagePath?.let { ChatMessage(message, "me", nickname, currentDateTime, myImagePath) }
-
-                if (myChatMessage != null) {
-                    chattingAdapter.addMessage(myChatMessage)
-                }
+                    chattingAdapter.addMessage(chatMessage)
             } // 객체를 채팅 어댑터에 추가
             binding.chattingRecyclerView.smoothScrollToPosition(chattingAdapter.itemCount - 1) // 채팅메시지가 표시되는 위치로 스크롤 이동
         }
