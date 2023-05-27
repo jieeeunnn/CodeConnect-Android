@@ -94,6 +94,7 @@ android:layout_height="match_parent">
         android:layout_marginStart="16dp"
         android:textColor="@color/grey_dark"
         android:text="채팅방 서랍"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -101,6 +102,24 @@ android:layout_height="match_parent">
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/checkListTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/grey_dark"
+        android:text="공유 체크리스트" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/darker_gray" />
+
     <TextView
         android:id="@+id/chattingMemberTextView"
         android:layout_width="wrap_content"

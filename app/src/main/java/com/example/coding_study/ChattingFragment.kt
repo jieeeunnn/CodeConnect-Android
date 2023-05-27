@@ -55,7 +55,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
     ): View? {
         binding = ChattingFragmentBinding.inflate(inflater, container, false)
         val chattingRecyclerView = binding.chattingRecyclerView
-
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val chatMenuButton: ImageView = binding.chatMenuButton
 
@@ -68,6 +67,14 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
             }
         }
 
+        binding.checkListTextView.setOnClickListener {
+            drawerLayout.closeDrawers() // drawerLayout 자동 닫기
+
+            childFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.drawerLayout, ChattingTodoList()) // TodoList 보여주기
+                .commit()
+        }
 
         val sharedPreferencesRoomId = requireActivity().getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
         val roomId = sharedPreferencesRoomId?.getLong("roomId", 0) // 저장해둔 roomId 가져오기
@@ -118,7 +125,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                 ) {
 
                     val responseChatRoom = response.body()
-                    Log.e("ChattingFragment chattingList+++", "$responseChatRoom")
+                    Log.e("ChattingFragment chattingList", "$responseChatRoom")
 
                     val roomInfoData = (responseChatRoom?.data as Map<*, *>)?.get("ROOM_INFO") as? Map<String, Any>
                     val title = roomInfoData?.get("title") as? String
