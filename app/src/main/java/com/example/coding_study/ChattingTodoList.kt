@@ -167,23 +167,6 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                             }
                         }
                     }
-
-                    /*
-                    val message = parseTodoList(response) // 전송된 stomp 메시지를 ChatMessage 객체로 파싱
-
-                    val todoId = message.todoId
-                    // 현재 어댑터에 해당 todoId가 있는지 확인
-                    val existingItem = adapter.getItemById(todoId)
-
-                    if (existingItem == null) {
-                        coroutineScope.launch {
-                            adapter.addTodoItem(message)
-                        }
-                    }
-
-                     */
-
-
                 },
                     { error ->
                         // 예외 처리
