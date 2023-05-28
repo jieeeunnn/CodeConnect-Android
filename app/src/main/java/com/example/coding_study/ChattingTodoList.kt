@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -9,14 +10,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.ChattingTodolistFragmentBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ua.naiksoftware.stomp.dto.StompMessage
 
 data class TodoListItem(val todoId: Double, val content: String, var completed: Boolean)
 
@@ -24,6 +31,9 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
     private val checklistItems = mutableListOf<TodoListItem>()
     private lateinit var binding: ChattingTodolistFragmentBinding
     private lateinit var adapter: ChecklistAdapter
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+
 
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
@@ -46,8 +56,11 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
         val layoutManager = LinearLayoutManager(requireContext())
         binding.todoListRecyclerView.layoutManager = layoutManager
 
+        // 채팅 프래그먼트에서 StompViewModel 인스턴스 가져오기
+        val stompViewModel: StompViewModel by activityViewModels()
+
         // 어댑터 생성 및 RecyclerView에 설정
-        adapter = roomId?.let { ChecklistAdapter(it,checklistItems) }!!
+        adapter = roomId?.let { ChecklistAdapter(stompViewModel, it,checklistItems) }!!
         binding.todoListRecyclerView.adapter = adapter
 
 
@@ -116,7 +129,63 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                 .commit()
         }
 
+        subscribeTodoList(roomId)
+
         return view
+    }
+
+    @SuppressLint("CheckResult")
+    private fun subscribeTodoList(roomId: Long) {
+
+        val stompViewModel: StompViewModel by activityViewModels()
+
+        // Stomp 클라이언트를 StompViewModel에서 가져옴
+        val stompClient = stompViewModel.getStompClient()
+
+        if (stompClient != null) {
+            if (stompClient.isConnected) {
+                stompClient?.topic("/sub/todo/room/$roomId")?.subscribe ({ // 메시지 구독
+                        response ->
+                    val message = parseTodoList(response) // 전송된 stomp 메시지를 ChatMessage 객체로 파싱
+                    val todoId = message.todoId
+
+                    // 현재 어댑터에 해당 todoId가 있는지 확인
+                    val existingItem = adapter.getItemById(todoId)
+
+                    if (existingItem == null) {
+                        coroutineScope.launch {
+                            adapter.addTodoItem(message)
+                        }
+                    }
+                },
+                    { error ->
+                        // 예외 처리
+                        error.printStackTrace()
+                    }
+                )
+            }
+        } else
+        {
+            Log.e("chattingTodoListUpload stomp is","null")
+        }
+
+    }
+
+    private fun parseTodoList(todoListItem: StompMessage): TodoListItem {
+        // 파싱 로직 구현
+        val body = todoListItem.payload // payload를 이용하여 메시지 내용 추출
+
+        val todoIdJson = JSONObject(body)
+        val contentJson = JSONObject(body)
+        val completedJson = JSONObject(body)
+
+        val todoId = todoIdJson.getDouble("todoId")
+        val content = contentJson.getString("content")
+        val completed = completedJson.getBoolean("completed")
+
+        Log.e("Chatting todoListUpload parse todoListItem", "$todoId, $content, $completed")
+
+        return TodoListItem(todoId, content, completed)
     }
 
 }

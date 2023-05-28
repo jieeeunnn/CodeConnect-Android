@@ -24,11 +24,6 @@ class AddressAdapter(private var addressList: List<Feature>, private var itemCli
         notifyDataSetChanged()
     }
 
-    // ItemClickListener 설정 함수
-    fun setItemClickListener(listener: ItemClickListener) {
-        this.itemClickListener = listener
-    }
-
     //주소 아이템 사이에 공백, 선 추가해주는 MyItemDecoration 클래스
     class MyItemDecoration(private val dividerHeight: Int, private val margin: Int) : RecyclerView.ItemDecoration() {
 

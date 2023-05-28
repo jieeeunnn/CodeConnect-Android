@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.coding_study.databinding.ChatMemberListBinding
@@ -167,7 +169,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                     }
                     Log.e("ChattingFrgment chatList", convertedChatList.toString())
 
-
                     val nicknameImageMap = chatMap?.get("NICKNAME_IMAGE") as? Map<String, String>
                     val memberInfoMap = HashMap<String, String>()
                     Log.e("chattingFragment memberInfoMap", "$memberInfoMap")
@@ -237,7 +238,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         return binding.root
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         coroutineScope.cancel()
@@ -254,6 +254,12 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
 
             stompClient?.connect()
             Log.e("ChattingFragment connectToChatServer", " ")
+
+// 채팅 프래그먼트에서 StompViewModel 인스턴스 가져오기
+            val stompViewModel: StompViewModel by activityViewModels()
+
+            // Stomp 클라이언트를 StompViewModel에 저장
+            stompViewModel.setStompClient(stompClient)
 
             val sharedPreferences = requireActivity().getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
             val roomId = sharedPreferences?.getLong("roomId", 0) // 저장해둔 토큰값 가져오기
