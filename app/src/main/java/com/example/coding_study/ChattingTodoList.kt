@@ -143,14 +143,13 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                     val body = response.payload
                     val resultJson = JSONObject(body)
 
-                    Log.e("ChattingTodoList delete result1", body)
-
                     if (resultJson.has("result")) { // "result" 값이 있는지 확인
                         Log.e("ChattingTodoList delete result2", body)
+
                         val id = resultJson.get("todoId")?.toString()?.toDoubleOrNull() ?: 0.0
 
                         coroutineScope.launch {
-                            adapter.removeTodoItem(id)
+                            adapter.removeTodoItem(id) // todoList item 삭제
                         }
 
                     } else {
@@ -162,12 +161,13 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
 
                         if (existingItem == null) {
                             coroutineScope.launch {
-                                adapter.addTodoItem(message)
+                                adapter.addTodoItem(message) // todoList item 추가
                             }
                         } else {
                             val isCompleted = message.completed
+                            val todoId = message.todoId
                             coroutineScope.launch {
-                                adapter.updateTodoItem(message, isCompleted)
+                                adapter.updateTodoItem(message, todoId, isCompleted) // todoList item 업데이트 (체크박스)
                                 Log.e("Chatting checkBox update********", existingItem.toString())
                             }
                         }

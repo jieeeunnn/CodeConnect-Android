@@ -24,9 +24,10 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
         }
     }
 
-    fun updateTodoItem(todoItem: TodoListItem, isCompleted: Boolean) {
+    fun updateTodoItem(todoItem: TodoListItem, todoId:Double, isCompleted: Boolean) {
+        val position = items.indexOfFirst { it.todoId == todoId }
         todoItem.completed = isCompleted
-        notifyItemChanged(items.indexOf(todoItem))
+        notifyItemChanged(position)
     }
 
     // 아이템 ID를 기반으로 어댑터에서 아이템 찾아 반환하는 메서드
@@ -61,7 +62,6 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
 
                 sendCheckBox(item.todoId.toLong(), roomId, item.content, item.completed)
 
-                subscribeTodoList(roomId)
             }
 
             binding.todoListDeleteButton.setOnClickListener {
@@ -104,7 +104,7 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
                 Log.e("CheckListAdater", data.toString())
             }
         }
-
+        /*
         @SuppressLint("CheckResult")
         private fun subscribeTodoList(roomId: Long) {
             val stompClient = stompViewModel.getStompClient()
@@ -138,5 +138,8 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
 
             return TodoListItem(todoId, content, completed)
         }
+         */
+
+
     }
 }
