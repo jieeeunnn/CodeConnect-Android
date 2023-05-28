@@ -15,11 +15,27 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
         items.add(todoItem)
         notifyItemInserted(items.size - 1)
     }
+
+    fun removeTodoItem(todoId: Double) {
+        val position = items.indexOfFirst { it.todoId == todoId }
+        if (position != -1) {
+            items.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
+    fun updateTodoItem(todoItem: TodoListItem) {
+        val index = items.indexOf(todoItem)
+        if (index != -1) {
+            items[index] = todoItem
+            notifyItemChanged(index)
+        }
+    }
+
     // 아이템 ID를 기반으로 어댑터에서 아이템 찾아 반환하는 메서드
     fun getItemById(todoId: Double): TodoListItem? {
         return items.find { it.todoId == todoId }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ChattingTodolistItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -164,12 +164,14 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
 
                             Log.e("Join", "is : ${response.body()}")
 
-                            if (joinResponse?.result == true && joinResponse.data != null) {
+                            if (joinResponse?.result == true) {
                                 val nextIntent = Intent(requireActivity(), MainActivity::class.java)
                                 startActivity(nextIntent)
-
-                                //val nextIntent = Intent(this@JoinFragment, SecondActivity::class.java)
-                                //startActivity(nextIntent) // SecondActivity (스터디 게시글 화면) 창으로 이동
+                            } else if (joinResponse?.result == false) {
+                                val joinResult = joinResponse.message
+                                val confirmDialog = ConfirmDialog("$joinResult")
+                                confirmDialog.isCancelable = false
+                                confirmDialog.show(childFragmentManager, "joinFragment_joinButton2")
                             }
                         } else {
                             //서버로부터 응답이 실패한 경우

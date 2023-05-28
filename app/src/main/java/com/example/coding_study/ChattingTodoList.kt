@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -26,15 +27,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ua.naiksoftware.stomp.dto.StompMessage
 
 data class TodoListItem(val todoId: Double, val content: String, var completed: Boolean)
-data class TodoDelete(val result: Boolean)
 
 class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
     private val checklistItems = mutableListOf<TodoListItem>()
     private lateinit var binding: ChattingTodolistFragmentBinding
     private lateinit var adapter: ChecklistAdapter
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
-
 
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
@@ -63,7 +61,6 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
         // 어댑터 생성 및 RecyclerView에 설정
         adapter = roomId?.let { ChecklistAdapter(stompViewModel, it,checklistItems) }!!
         binding.todoListRecyclerView.adapter = adapter
-
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
@@ -117,10 +114,8 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                 override fun onFailure(call: Call<ChatRoomOnlyResponse>, t: Throwable) {
                     Log.e("ChattingFragment todoList", "Failed", t)
                     Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()                }
-
             })
         }
-
 
         // 추가 버튼 클릭 이벤트 처리
         binding.todoListAddButton.setOnClickListener {
@@ -146,13 +141,17 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                         response ->
 
                     val body = response.payload
-                    // response를 JSON 객체로 파싱
+                    val resultJson = JSONObject(body)
 
                     Log.e("ChattingTodoList delete result1", body)
-                    // "result" 값이 있는지 확인
-                    if (body == "true") {
 
+                    if (resultJson.has("result")) { // "result" 값이 있는지 확인
                         Log.e("ChattingTodoList delete result2", body)
+                        val id = resultJson.get("todoId")?.toString()?.toDoubleOrNull() ?: 0.0
+
+                        coroutineScope.launch {
+                            adapter.removeTodoItem(id)
+                        }
 
                     } else {
                         // "result" 값이 없는 경우 일반적인 데이터를 파싱
@@ -164,6 +163,10 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                         if (existingItem == null) {
                             coroutineScope.launch {
                                 adapter.addTodoItem(message)
+                            }
+                        } else {
+                            coroutineScope.launch {
+                                adapter.updateTodoItem(message)
                             }
                         }
                     }

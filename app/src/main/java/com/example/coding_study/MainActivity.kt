@@ -100,13 +100,13 @@ class MainActivity : AppCompatActivity() {
                             val receivedToken = loginResponse.data!!.token// 토큰 저장
                             saveToken(applicationContext, receivedToken) // receivedToken이 null이 아닌 경우 'let'블록 내부에서 savedToken 함수를 호출해 token 저장
 
-                            val receivedAddress = loginResponse.data!!.member.address
+                            val receivedAddress = loginResponse.data!!.address
                             saveAddress(applicationContext, receivedAddress)
 
-                            val receivedFields = loginResponse.data!!.member.fieldList
+                            val receivedFields = loginResponse.data!!.fieldList
                             saveFields(applicationContext, receivedFields)
 
-                            val receivedNickname = loginResponse.data!!.member.nickname
+                            val receivedNickname = loginResponse.data!!.nickname
                             saveNickname(applicationContext, receivedNickname)
 
                             val nextIntent = Intent(this@MainActivity, SecondActivity::class.java) // 스터디 게시글 화면으로 이동
@@ -141,7 +141,6 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.mainLayout, joinFragment)
                 .addToBackStack(null)
                 .commit()
-
         }
     }
     fun showButton() {

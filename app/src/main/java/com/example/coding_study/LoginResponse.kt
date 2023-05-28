@@ -17,7 +17,9 @@ data class LoginResponse (
 data class SignInResponseDto (
     val token: String,
     val exprTime: Int,
-    val member: Member
+    var address: String,
+    var nickname: String,
+    var fieldList: List<String>
 )
 
 data class Member (

@@ -136,7 +136,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                                 val completeCurrentCount = chatRoom.currentCount
                                 loadStudyGuest(completeCurrentCount)
 
-
                                 val chatTitle = chatRoom.title
                                 val confirmDialog = ConfirmDialog("$chatTitle 채팅방이 생성되었습니다!")
                                 confirmDialog.isCancelable = false
