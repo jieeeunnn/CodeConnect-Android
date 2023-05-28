@@ -51,6 +51,11 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
                 subscribeTodoList(roomId)
             }
 
+            binding.todoListDeleteButton.setOnClickListener {
+                sendDelete(item.todoId.toLong(), roomId)
+
+            }
+
         }
 
         private fun sendCheckBox(todoId: Long, roomId: Long, content: String, isCompleted: Boolean) {
@@ -67,6 +72,22 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
 
                 // WebSocket을 통해 체크박스 클릭 시 서버에 정보 전송
                 stompClient?.send("/pub/todo/update", data.toString())?.subscribe()
+                Log.e("CheckListAdater", data.toString())
+            }
+        }
+
+        private fun sendDelete(todoId: Long, roomId: Long) {
+            val data = JSONObject()
+            data.put("todoId", todoId)
+            data.put("roomId", roomId.toString())
+
+            val stompClient = stompViewModel.getStompClient()
+
+            if (stompClient != null) {
+                Log.e("checkListAdapter checkbox stomp", "${stompClient.isConnected}")
+
+                // WebSocket을 통해 체크박스 클릭 시 서버에 정보 전송
+                stompClient?.send("/pub/todo/delete", data.toString())?.subscribe()
                 Log.e("CheckListAdater", data.toString())
             }
         }

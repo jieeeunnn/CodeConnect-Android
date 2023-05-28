@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ua.naiksoftware.stomp.dto.StompMessage
 
 data class TodoListItem(val todoId: Double, val content: String, var completed: Boolean)
+data class TodoDelete(val result: Boolean)
 
 class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
     private val checklistItems = mutableListOf<TodoListItem>()
@@ -136,19 +137,41 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
 
     @SuppressLint("CheckResult")
     private fun subscribeTodoList(roomId: Long) {
-
         val stompViewModel: StompViewModel by activityViewModels()
-
-        // Stomp 클라이언트를 StompViewModel에서 가져옴
-        val stompClient = stompViewModel.getStompClient()
+        val stompClient = stompViewModel.getStompClient() // Stomp 클라이언트를 StompViewModel에서 가져옴
 
         if (stompClient != null) {
             if (stompClient.isConnected) {
-                stompClient?.topic("/sub/todo/room/$roomId")?.subscribe ({ // 메시지 구독
+                stompClient.topic("/sub/todo/room/$roomId")?.subscribe ({ // 메시지 구독
                         response ->
-                    val message = parseTodoList(response) // 전송된 stomp 메시지를 ChatMessage 객체로 파싱
-                    val todoId = message.todoId
 
+                    val body = response.payload
+                    // response를 JSON 객체로 파싱
+
+                    Log.e("ChattingTodoList delete result1", body)
+                    // "result" 값이 있는지 확인
+                    if (body == "true") {
+
+                        Log.e("ChattingTodoList delete result2", body)
+
+                    } else {
+                        // "result" 값이 없는 경우 일반적인 데이터를 파싱
+                        val message = parseTodoList(response)
+                        val todoId = message.todoId
+
+                        val existingItem = adapter.getItemById(todoId)
+
+                        if (existingItem == null) {
+                            coroutineScope.launch {
+                                adapter.addTodoItem(message)
+                            }
+                        }
+                    }
+
+                    /*
+                    val message = parseTodoList(response) // 전송된 stomp 메시지를 ChatMessage 객체로 파싱
+
+                    val todoId = message.todoId
                     // 현재 어댑터에 해당 todoId가 있는지 확인
                     val existingItem = adapter.getItemById(todoId)
 
@@ -157,6 +180,10 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                             adapter.addTodoItem(message)
                         }
                     }
+
+                     */
+
+
                 },
                     { error ->
                         // 예외 처리
