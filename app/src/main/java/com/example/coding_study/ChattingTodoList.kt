@@ -97,7 +97,7 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                             todoId = todo["todoId"] as Double,
                             content = todo["content"] as String,
                             completed = todo["completed"] as Boolean
-                                )
+                        )
                     }
 
                     convertedTodoList?.forEach { todo ->
@@ -167,6 +167,7 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                         } else {
                             coroutineScope.launch {
                                 adapter.updateTodoItem(message)
+                                Log.e("Chatting checkBox update********", existingItem.toString())
                             }
                         }
                     }

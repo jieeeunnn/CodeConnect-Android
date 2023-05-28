@@ -27,10 +27,12 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
     fun updateTodoItem(todoItem: TodoListItem) {
         val index = items.indexOf(todoItem)
         if (index != -1) {
-            items[index] = todoItem
+            val updatedTodoItem = todoItem.copy(completed = !todoItem.completed) // isCompleted 정보를 반전시킴
+            items[index] = updatedTodoItem
             notifyItemChanged(index)
         }
     }
+
 
     // 아이템 ID를 기반으로 어댑터에서 아이템 찾아 반환하는 메서드
     fun getItemById(todoId: Double): TodoListItem? {
