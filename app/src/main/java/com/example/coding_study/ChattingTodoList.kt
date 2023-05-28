@@ -165,8 +165,9 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                                 adapter.addTodoItem(message)
                             }
                         } else {
+                            val isCompleted = message.completed
                             coroutineScope.launch {
-                                adapter.updateTodoItem(message)
+                                adapter.updateTodoItem(message, isCompleted)
                                 Log.e("Chatting checkBox update********", existingItem.toString())
                             }
                         }

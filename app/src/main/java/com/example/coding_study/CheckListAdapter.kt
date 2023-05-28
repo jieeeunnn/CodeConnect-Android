@@ -24,11 +24,10 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
         }
     }
 
-    fun updateTodoItem(todoItem: TodoListItem) {
+    fun updateTodoItem(todoItem: TodoListItem, isCompleted: Boolean) {
         val index = items.indexOf(todoItem)
         if (index != -1) {
-            val updatedTodoItem = todoItem.copy(completed = !todoItem.completed) // isCompleted 정보를 반전시킴
-            items[index] = updatedTodoItem
+            todoItem.completed = isCompleted
             notifyItemChanged(index)
         }
     }
