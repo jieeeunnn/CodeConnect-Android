@@ -5,6 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -164,6 +166,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                                     val hostFragment = StudyHostFragment()
                                     hostFragment.arguments = bundle
 
+                                    val slideAnimation = TranslateAnimation(Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 0f, 0, 0f, 0, 0f)
+                                    slideAnimation.duration = 200
+                                    view.startAnimation(slideAnimation)
+
                                     childFragmentManager.beginTransaction()
                                         .replace(R.id.study_fragment_layout, hostFragment)
                                         .addToBackStack(null)
@@ -182,6 +188,10 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
                                     val guestFragment = StudyGuestFragment()
                                     guestFragment.arguments = bundle
+
+                                    val slideAnimation = TranslateAnimation(Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 0f, 0, 0f, 0, 0f)
+                                    slideAnimation.duration = 200
+                                    view.startAnimation(slideAnimation)
 
                                     childFragmentManager.beginTransaction()
                                         .replace(R.id.study_fragment_layout, guestFragment)

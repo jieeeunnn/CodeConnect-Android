@@ -16,11 +16,35 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/studyUploadToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/blue_sky"
+            app:menu="@menu/toolbar_menu_study">
+
+            <TextView
+                android:id="@+id/studyUploadToolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="스터디 게시글 작성"
+                android:textColor="@color/blue_main"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.Toolbar>
+
         <EditText
             android:id="@+id/editTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="80dp"
             android:ems="15"
             android:hint="제목"
             android:inputType="textPersonName"
@@ -83,8 +107,8 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="*최대 10명까지 가능합니다"
+            android:layout_marginTop="4dp"
+            android:text="*모집인원은 최대 10명까지 가능합니다"
             app:layout_constraintStart_toStartOf="@+id/editNumber"
             app:layout_constraintTop_toBottomOf="@+id/editNumber" />
 

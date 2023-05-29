@@ -18,7 +18,7 @@ class MyPageAdapter(private val textList: List<String>, private var onItemClickL
 
     inner class MyPageListViewHolder(private val binding: MypageListBinding) : RecyclerView.ViewHolder(binding.root){
         init {
-            binding.textView.setOnClickListener {
+            binding.root.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClickListener.onItemClick(position)

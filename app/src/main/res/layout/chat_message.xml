@@ -12,9 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@drawable/round_rect_mainblue"
-        android:maxWidth="260dp"
+        android:maxWidth="250dp"
         android:padding="7dp"
         android:text="chatMessage"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/myMessageNickname"
         app:layout_constraintTop_toBottomOf="@+id/myMessageNickname" />
 
@@ -25,6 +26,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="nickname"
+        android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/chatMyImage"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -33,9 +35,10 @@
         android:id="@+id/myMessageCurrentTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
         android:text="currentTime"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/chatMessageTextView"
         app:layout_constraintEnd_toStartOf="@+id/chatMessageTextView" />
 

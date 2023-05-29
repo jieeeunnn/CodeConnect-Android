@@ -55,6 +55,7 @@ class AddressAdapter(private var addressList: List<Feature>, private var itemCli
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             super.getItemOffsets(outRect, view, parent, state)
             outRect.bottom = dividerHeight + margin // dividerHeight 외에도 margin 값을 더해줍니다.
+            outRect.left = dividerHeight + margin
         }
     }
 

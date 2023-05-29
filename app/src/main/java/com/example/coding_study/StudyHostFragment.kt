@@ -18,8 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.DELETE
-import retrofit2.http.Path
+
 
 class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
     private lateinit var binding: StudyHostBinding
@@ -83,6 +82,7 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
         val imageView: ImageView = binding.studyHostImageView
         val loadImageTask = LoadImageTask(imageView)
         loadImageTask.execute(imageUrl)
+
 
         binding.hostEditButton.setOnClickListener { // 수정 버튼을 눌렀을 때
             val editFragment = StudyEditFragment()

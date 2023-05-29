@@ -1,117 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:clickable="true"
         android:id="@+id/study_host_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
 
-    <TextView
-        android:id="@+id/hostNicknameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="150dp"
-        android:text="nickname"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/studyHostImageView"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/studyHostToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/blue_sky"
+        app:menu="@menu/toolbar_menu_study">
+
+        <TextView
+            android:id="@+id/studyHostToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="스터디 모집"
+            android:textColor="@color/blue_main"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/hostNicknameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="63dp"
+            android:text="nickname"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/studyHostImageView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <View
+        android:id="@+id/viewLine1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="24dp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/studyHostImageView"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/viewLine2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="24dp"
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hostContentText"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/hostTitleText"
         android:layout_width="270dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="title"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/studyHostImageView"
-        app:layout_constraintTop_toBottomOf="@+id/studyHostImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/viewLine1" />
+
 
     <TextView
         android:id="@+id/hostContentText"
         android:layout_width="270dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:text="content"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/hostTitleText"
-        app:layout_constraintTop_toBottomOf="@+id/hostTitleText" />
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
         android:id="@+id/hostFieldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
         android:text="field"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/hostContentText"
-        app:layout_constraintTop_toBottomOf="@+id/hostContentText" />
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/textView4" />
 
-    <TextView
-        android:id="@+id/hostPersonText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="참여인원"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/hostFieldText"
-        app:layout_constraintTop_toBottomOf="@+id/hostFieldText" />
+        <TextView
+            android:id="@+id/hostPersonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="250dp"
+            android:text="참여인원"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <TextView
-        android:id="@+id/hostCountText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:text="TextView"
-        android:textSize="16sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/hostPersonText"
-        app:layout_constraintStart_toEndOf="@+id/hostPersonText" />
+        <TextView
+            android:id="@+id/hostCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="14sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/hostPersonText"
+            app:layout_constraintStart_toStartOf="@+id/hostFieldText" />
 
     <Button
         android:id="@+id/hostEditButton"
-        android:layout_width="70dp"
+        android:layout_width="55dp"
         android:layout_height="45dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="#CFDCFF"
+        android:layout_marginEnd="4dp"
+        android:background="@color/white"
         android:stateListAnimator="@null"
         android:text="수정"
         android:textColor="#515151"
         app:layout_constraintBaseline_toBaselineOf="@+id/hostDeleteButton"
         app:layout_constraintEnd_toStartOf="@+id/hostDeleteButton" />
 
-    <Button
-        android:id="@+id/hostDeleteButton"
-        android:layout_width="70dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="50dp"
-        android:backgroundTint="#CFDCFF"
-        android:stateListAnimator="@null"
-        android:text="삭제"
-        android:textColor="#E45050"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/hostDeleteButton"
+            android:layout_width="55dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="50dp"
+            android:background="@color/white"
+            android:stateListAnimator="@null"
+            android:text="삭제"
+            android:textColor="#E45050"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
         android:id="@+id/hostCurrentText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="70dp"
+        android:layout_marginEnd="50dp"
         android:text="currentTime"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/hostNicknameText"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
-        android:id="@+id/studyHostImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="140dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_person_24" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/studyHostImageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="55dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            app:srcCompat="@drawable/ic_baseline_person_24" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="관심 분야"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/hostContentText"
+        app:layout_constraintTop_toBottomOf="@+id/viewLine2" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="스터디 소개"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/hostTitleText"
+        app:layout_constraintTop_toBottomOf="@+id/hostTitleText" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="234dp"
+            android:layout_height="135dp"
+            android:layout_marginTop="36dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/studyHostToolbar"
+            app:srcCompat="@drawable/codeconnect_logo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

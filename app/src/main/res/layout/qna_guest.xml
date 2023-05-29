@@ -8,14 +8,38 @@
     android:background="@color/white"
     android:clickable="true">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/qnaGuestToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/blue_sky"
+        app:menu="@menu/toolbar_menu_study">
+
+        <TextView
+            android:id="@+id/qnaGuestToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Q&amp;A"
+            android:textColor="@color/blue_main"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/qnaGuestSwifeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/qnaGuestToolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/qnaGuestConstraintInSwife"
@@ -30,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="38dp"
                 android:text="nickname"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/qnaGuestProfileImage"
@@ -53,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="content"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@+id/qnaGuestTitle"
                 app:layout_constraintTop_toBottomOf="@+id/qnaGuestTitle" />
 
@@ -61,9 +85,9 @@
                 android:id="@+id/qnaGuestCurrentTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="60dp"
+                android:layout_marginEnd="50dp"
                 android:text="currentTime"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/qnaGuestNickname"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -83,12 +107,12 @@
             <Button
                 android:id="@+id/guestCommentButton"
                 android:layout_width="65dp"
-                android:layout_height="45dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="24dp"
-                android:backgroundTint="#CFDCFF"
+                android:background="@drawable/round_rect_skyblue"
                 android:stateListAnimator="@null"
                 android:text="댓글"
-                android:textColor="#515151"
+                android:textColor="@color/blue_main"
                 app:layout_constraintBaseline_toBaselineOf="@+id/guestCommentEdit"
                 app:layout_constraintStart_toEndOf="@+id/guestCommentEdit" />
 
@@ -116,8 +140,8 @@
                 android:id="@+id/qnaGuestProfileImage"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="32dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_person_24" />

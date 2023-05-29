@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -43,8 +44,12 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.qnaToolBar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         setHasOptionsMenu(true) // 옵션 메뉴 사용을 알림
+
+        toolbar.title = ""
+        toolbar.subtitle = ""
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,6 +65,8 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
             loadQnaList()
         }
 
+        var qnaTitle = binding.toolbarQnaTextView
+        qnaTitle.text = "QnA"
 
         var onQnaClickListener: QnaAdapter.OnQnaClickListener = object : QnaAdapter.OnQnaClickListener {
             override fun onQnaClick(position: Int) {

@@ -28,7 +28,7 @@ android:layout_height="match_parent">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chat Title"
-            android:textColor="#515151"
+            android:textColor="@color/blue_main"
             android:textSize="16dp"
             tools:ignore="MissingConstraints">
         </TextView>
@@ -64,6 +64,7 @@ android:layout_height="match_parent">
         android:layout_marginEnd="24dp"
         android:background="@drawable/round_rect_skyblue"
         android:text="전송"
+        android:textColor="@color/blue_main"
         app:layout_constraintBaseline_toBaselineOf="@+id/chatEditText"
         app:layout_constraintEnd_toEndOf="parent" />
 

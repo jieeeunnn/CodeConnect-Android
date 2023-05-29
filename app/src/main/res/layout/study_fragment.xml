@@ -29,11 +29,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/round_rect_mainblue"
+                android:background="@drawable/round_rect_skyblue"
                 android:elevation="3dp"
                 android:padding="7dp"
                 android:text="주소"
-                android:textColor="#515151" />
+                android:textColor="@color/blue_main" />
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/toolbar_study_search"
@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        app:backgroundTint="#CFDCFF"
+        app:backgroundTint="@color/blue_sky"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.895"
