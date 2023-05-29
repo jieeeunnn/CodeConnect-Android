@@ -53,7 +53,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         studyAdapter.setData(data) // 어댑터의 데이터를 업데이트합니다.
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
