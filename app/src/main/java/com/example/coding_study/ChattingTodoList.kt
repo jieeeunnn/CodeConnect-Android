@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -39,6 +38,7 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
             parentFragmentManager.popBackStack()
         }
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = ChattingTodolistFragmentBinding.inflate(inflater, container, false)
@@ -157,6 +157,7 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                         val message = parseTodoList(response)
                         val todoId = message.todoId
 
+                        Log.e("ChattingTodoList message--------------", "$message")
                         val existingItem = adapter.getItemById(todoId)
 
                         if (existingItem == null) {
@@ -167,8 +168,8 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                             val isCompleted = message.completed
                             val todoId = message.todoId
                             coroutineScope.launch {
-                                adapter.updateTodoItem(message, todoId, isCompleted) // todoList item 업데이트 (체크박스)
-                                Log.e("Chatting checkBox update********", existingItem.toString())
+                                adapter.updateCheckBox(todoId, isCompleted)
+                                Log.e("Chatting checkBox update********", "$isCompleted")
                             }
                         }
                     }
@@ -183,7 +184,6 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
         {
             Log.e("chattingTodoListUpload stomp is","null")
         }
-
     }
 
     private fun parseTodoList(todoListItem: StompMessage): TodoListItem {

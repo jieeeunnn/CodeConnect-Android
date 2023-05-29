@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.ChattingTodolistItemBinding
 import org.json.JSONObject
-import ua.naiksoftware.stomp.dto.StompMessage
 
 class ChecklistAdapter(private val stompViewModel: StompViewModel, private val roomId: Long, private val items: MutableList<TodoListItem>) : RecyclerView.Adapter<ChecklistAdapter.ViewHolder>() {
 
@@ -24,10 +23,11 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
         }
     }
 
-    fun updateTodoItem(todoItem: TodoListItem, todoId:Double, isCompleted: Boolean) {
-        val position = items.indexOfFirst { it.todoId == todoId }
-        todoItem.completed = isCompleted
-        notifyItemChanged(position)
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateCheckBox(itemId: Double, isChecked: Boolean) {
+        val item = getItemById(itemId)
+        item?.completed = isChecked
+        notifyDataSetChanged()
     }
 
     // 아이템 ID를 기반으로 어댑터에서 아이템 찾아 반환하는 메서드
@@ -49,7 +49,7 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
         return items.size
     }
 
-    inner class ViewHolder(private val binding: ChattingTodolistItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: ChattingTodolistItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: TodoListItem) {
             binding.todoListItemTextView.text = item.content
@@ -61,12 +61,10 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
                 item.completed = isChecked
 
                 sendCheckBox(item.todoId.toLong(), roomId, item.content, item.completed)
-
             }
 
             binding.todoListDeleteButton.setOnClickListener {
                 sendDelete(item.todoId.toLong(), roomId)
-
             }
 
         }
