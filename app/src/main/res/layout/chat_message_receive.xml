@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@drawable/round_rect_skyblue"
+        android:maxWidth="260dp"
         android:padding="7dp"
         android:text="chatMessage"
         app:layout_constraintStart_toStartOf="@+id/otherMessageNickname"
@@ -32,8 +33,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
         android:text="currentTime"
-        app:layout_constraintBaseline_toBaselineOf="@+id/chatReceiveMessage"
+        app:layout_constraintBottom_toBottomOf="@+id/chatReceiveMessage"
         app:layout_constraintStart_toEndOf="@+id/chatReceiveMessage" />
 
     <ImageView

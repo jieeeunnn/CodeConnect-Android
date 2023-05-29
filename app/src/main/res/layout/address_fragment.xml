@@ -21,13 +21,13 @@
         android:id="@+id/searchView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:queryHint="읍/면/동을 입력하세요"
+        app:iconifiedByDefault="false"
+        app:queryHint=" 읍/면/동을 입력하세요 "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:queryBackground="@null" />
+         />
 
     <Button
         android:id="@+id/OkButton"

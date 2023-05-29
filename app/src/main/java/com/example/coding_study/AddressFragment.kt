@@ -35,7 +35,6 @@ interface AddressApiService {
 
 class AddressFragment: Fragment(R.layout.address_fragment){
     private lateinit var binding: AddressFragmentBinding
-    private lateinit var addressAdapter: AddressAdapter
     private lateinit var viewModel: AddressViewModel
     private var mAddress: String = ""
 

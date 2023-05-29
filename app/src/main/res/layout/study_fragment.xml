@@ -2,6 +2,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/study_fragment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,15 +18,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/toolbar_menu_study">
 
-        <TextView
-            android:id="@+id/toolbarAddressTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_rect_mainblue"
-            android:elevation="3dp"
-            android:padding="7dp"
-            android:text="주소"
-            android:textColor="#515151" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="16dp">
+
+            <TextView
+                android:id="@+id/toolbarAddressTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_mainblue"
+                android:elevation="3dp"
+                android:padding="7dp"
+                android:text="주소"
+                android:textColor="#515151" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/toolbar_study_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_weight="1"
+                android:elevation="3dp"
+                app:queryHint="게시글 검색"
+                app:iconifiedByDefault="false" />
+        </LinearLayout>
+
 
     </androidx.appcompat.widget.Toolbar>
 

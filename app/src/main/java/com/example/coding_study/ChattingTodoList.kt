@@ -39,7 +39,6 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = ChattingTodolistFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -168,7 +167,7 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                             val isCompleted = message.completed
                             val todoId = message.todoId
                             coroutineScope.launch {
-                                adapter.updateCheckBox(todoId, isCompleted)
+                                adapter.updateCheckBox(todoId, isCompleted) // 체크박스 변경 업데이트
                                 Log.e("Chatting checkBox update********", "$isCompleted")
                             }
                         }

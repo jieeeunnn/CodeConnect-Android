@@ -323,10 +323,13 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
         val searchPostAddress = viewModel.getSelectedAddress().value
 
+        /*
         val searchItem = menu.findItem(R.id.toolbar_study_search)
         searchItem.isVisible = true // 검색 아이템을 보이도록 설정
         val searchView = searchItem.actionView as SearchView
+         */
 
+        val newSearch = binding.toolbarStudySearch
         val retrofit = Retrofit.Builder()
             .baseUrl("http://112.154.249.74:8080/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -334,7 +337,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
         val studySearchService = retrofit.create(StudySearchService::class.java)
 
-        searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener {
+        newSearch.setOnQueryTextListener(object :SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean { // 검색 버튼을 누를 때 호출
                 studySearchService.studySearch(keyword = "$query", address = searchPostAddress).enqueue(object :Callback<StudyListResponse>{
                     override fun onResponse( call: Call<StudyListResponse>, response: Response<StudyListResponse>
