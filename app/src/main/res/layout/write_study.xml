@@ -2,9 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:clickable="true"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent" >
+    android:clickable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/write_study_layout"
@@ -20,7 +20,7 @@
             android:id="@+id/editTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="60dp"
             android:ems="15"
             android:hint="제목"
             android:inputType="textPersonName"
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="110dp"
             android:backgroundTint="#CFDCFF"
             android:text="완료"
             android:textColor="#515151"
@@ -69,14 +69,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editContent"
-            app:layout_constraintVertical_bias="0.184" />
+            app:layout_constraintTop_toBottomOf="@+id/editContent" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="*최대 10명까지 가능합니다"
             app:layout_constraintStart_toStartOf="@+id/editNumber"
             app:layout_constraintTop_toBottomOf="@+id/editNumber" />
 

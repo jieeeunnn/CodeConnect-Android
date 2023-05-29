@@ -19,6 +19,13 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
         this.onItemClickListener = listener
     }
 
+    fun setData(data: List<Post>) {
+        postList = data // 데이터를 설정합니다.
+        notifyDataSetChanged() // RecyclerView를 다시 그립니다.
+    }
+
+
+
     inner class StudyUploadViewHolder(private val binding: StudyUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) { // 각 게시글 뷰의 textView를 참조
         @SuppressLint("SetTextI18n") // 다국어 지원 기능 (currentCount와 num을 함께 문자열에 담기 위해 사용)
         fun bind(post: Post) { // bind 메서드를 통해 해당 뷰의 텍스트를 게시글 데이터로 설정
@@ -53,7 +60,6 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
         holder.bind(postList[position])
         holder.itemView.setOnClickListener { // 게시글 클릭 시
             //게시글 상세화면으로 이동하는 코드
-            //StudyFragment.onClick(postList[position]) //StudyFragment의 onClick 함수 호출
             onItemClickListener?.onItemClick(position)
         }
     }

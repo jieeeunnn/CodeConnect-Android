@@ -42,6 +42,18 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         }
     }
 
+    private fun updateRecyclerViewData(data: List<Post>) {
+        if (data.isEmpty()) {
+            binding.studyRecyclerView.visibility = View.GONE // RecyclerView를 숨깁니다.
+            binding.emptyView.visibility = View.VISIBLE // 빈 리스트를 표시하는 뷰를 보여줍니다.
+        } else {
+            binding.studyRecyclerView.visibility = View.VISIBLE // RecyclerView를 보여줍니다.
+            binding.emptyView.visibility = View.GONE // 빈 리스트를 표시하는 뷰를 숨깁니다.
+        }
+        studyAdapter.setData(data) // 어댑터의 데이터를 업데이트합니다.
+    }
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -270,18 +282,29 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                     //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
 
                     if (studyListResponse?.result == true) {
-                        val recruitmentIds = studyListResponse.data?.map { it.recruitmentId } // 게시물 아이디 리스트 추출
 
-                        if (recruitmentIds != null) {
-                            context?.let { savePostIds(it, recruitmentIds) } // 게시물 아이디 리스트 저장
-                        }
-                        Log.e("StudyFragment", "recruitmentIds: $recruitmentIds")
+                        if (studyList != null) {
+                            if (studyList.isEmpty()) {
+                                // 데이터가 없을 경우
+                                Log.e("StudyFragment studyList is empty", studyList.toString())
+                                updateRecyclerViewData(emptyList()) // 빈 리스트를 전달하여 데이터를 업데이트합니다.
+                            } else {
+                                updateRecyclerViewData(postListResponse) // 데이터가 있는 경우
+                                val recruitmentIds =
+                                    studyListResponse.data?.map { it.recruitmentId } // 게시물 아이디 리스트 추출
 
-                        studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
-                        studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
+                                if (recruitmentIds != null) {
+                                    context?.let { savePostIds(it, recruitmentIds) } // 게시물 아이디 리스트 저장
+                                }
+                                Log.e("StudyFragment", "recruitmentIds: $recruitmentIds")
 
-                        if (binding != null) {
-                            binding.swipeRefreshLayout.isRefreshing = false // 새로고침 상태를 false로 변경해서 새로고침 완료
+                                studyAdapter.postList = postListResponse //.reversed() // 어댑터의 postList 변수 업데이트 (reversed()를 이용해서 리스트를 역순으로 정렬하여 최신글이 가장 위에 뜨게 됨)
+                                studyAdapter.notifyDataSetChanged() // notifyDataSetChanged() 메서드를 호출하여 변경 내용을 화면에 반영
+
+                                if (binding != null) {
+                                    binding.swipeRefreshLayout.isRefreshing = false // 새로고침 상태를 false로 변경해서 새로고침 완료
+                                }
+                            }
                         }
                     }
                 }

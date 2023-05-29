@@ -104,27 +104,34 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
 
             val studyRequest = StudyRequest(title, content, count, field) // 서버에 보낼 요청값
 
-            studyService.requestStudy(studyRequest).enqueue(object : Callback<StudyResponse> {
-                override fun onResponse(
-                    call: Call<StudyResponse>, response: Response<StudyResponse> // 통신에 성공했을 때
-                ) {
-                    if (response.isSuccessful) {
-                        Log.e("StudyUploadFragment", "is: ${response.body()}")
-                        Log.e("StudyUploadFragment", "is : ${response.code()}")
+            if (count > 11) {
+                val confirmDialog = ConfirmDialog("참여인원은 최대 10명까지 가능합니다")
+                confirmDialog.isCancelable = false
+                confirmDialog.show(childFragmentManager, "StudyUploadFragment count error")
+            } else {
+                studyService.requestStudy(studyRequest).enqueue(object : Callback<StudyResponse> {
+                    override fun onResponse(
+                        call: Call<StudyResponse>, response: Response<StudyResponse> // 통신에 성공했을 때
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.e("StudyUploadFragment", "is: ${response.body()}")
+                            Log.e("StudyUploadFragment", "is : ${response.code()}")
+                        }
                     }
+
+                    override fun onFailure(call: Call<StudyResponse>, t: Throwable) { // 통신에 실패했을 때
+                        Toast.makeText(context, "통신에 실패했습니다", Toast.LENGTH_LONG).show()
+                    }
+                })
+                val parentFragment = parentFragment
+                if (parentFragment is StudyFragment) {
+                    parentFragment.showFloatingButton()
+                    parentFragment.onResume()
                 }
-                override fun onFailure(call: Call<StudyResponse>, t: Throwable) { // 통신에 실패했을 때
-                    Toast.makeText(context, "통신에 실패했습니다", Toast.LENGTH_LONG).show()
-                }
-            })
-            val parentFragment = parentFragment
-            if (parentFragment is StudyFragment) {
-                parentFragment.showFloatingButton()
-                parentFragment.onResume()
+                //업로드 후 리스트로 돌아감
+                val parentFragmentManager = requireActivity().supportFragmentManager
+                parentFragmentManager.popBackStackImmediate()
             }
-            //업로드 후 리스트로 돌아감
-            val parentFragmentManager = requireActivity().supportFragmentManager
-            parentFragmentManager.popBackStackImmediate()
         }
     }
         return binding.root
