@@ -77,6 +77,7 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
         binding.hostFieldText.text = recruitment.field
         binding.hostCountText.text = "${recruitment.currentCount} / ${recruitment.count}"
         binding.hostCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
+        binding.hostAddress2.text = recruitment.address
 
         val imageUrl: String? = "http://112.154.249.74:8080/"+ "${recruitment.profileImagePath}"
         val imageView: ImageView = binding.studyHostImageView

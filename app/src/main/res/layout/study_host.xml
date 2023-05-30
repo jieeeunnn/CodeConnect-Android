@@ -22,7 +22,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/blue_sky"
+        android:background="@drawable/round_rect_two"
         app:menu="@menu/toolbar_menu_study">
 
         <TextView
@@ -32,7 +32,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="스터디 모집"
-            android:textColor="@color/blue_main"
+            android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -111,11 +111,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="250dp"
             android:text="참여인원"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -199,12 +197,33 @@
             android:id="@+id/imageView2"
             android:layout_width="234dp"
             android:layout_height="135dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/studyHostToolbar"
             app:srcCompat="@drawable/codeconnect_logo" />
+
+        <TextView
+            android:id="@+id/hostAddress1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="200dp"
+            android:text="지역"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/hostPersonText"
+            app:layout_constraintTop_toBottomOf="@+id/hostPersonText" />
+
+        <TextView
+            android:id="@+id/hostAddress2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBaseline_toBaselineOf="@+id/hostAddress1"
+            app:layout_constraintStart_toStartOf="@+id/hostCountText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -8,14 +8,25 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="304dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/studyToolBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/codeconnect1" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/studyToolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
         app:menu="@menu/toolbar_menu_study">
 
         <LinearLayout
@@ -33,7 +44,7 @@
                 android:elevation="3dp"
                 android:padding="7dp"
                 android:text="주소"
-                android:textColor="@color/blue_main" />
+                android:textColor="@color/grey_dark" />
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/toolbar_study_search"
@@ -42,8 +53,10 @@
                 android:layout_marginTop="3dp"
                 android:layout_weight="1"
                 android:elevation="3dp"
-                app:queryHint="게시글 검색"
-                app:iconifiedByDefault="false" />
+                app:iconifiedByDefault="false"
+                app:queryHint="게시글 검색">
+
+            </androidx.appcompat.widget.SearchView>
         </LinearLayout>
 
 
@@ -52,13 +65,13 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="50dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/studyToolBar">
 
 
         <androidx.recyclerview.widget.RecyclerView

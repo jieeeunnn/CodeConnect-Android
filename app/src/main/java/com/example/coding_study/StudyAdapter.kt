@@ -34,11 +34,14 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
             binding.contentTextView.text = post.content
             if (post.num > post.currentCount) {
                 binding.numberTextView.text = "${post.currentCount} / ${post.num}"
+                binding.numberTextView.setBackgroundResource(R.drawable.round_rect_darkblue)
             } else {
                 binding.numberTextView.text = "모집 완료"
+                binding.numberTextView.setBackgroundResource(R.drawable.round_rect_grey_clear)
             }
             binding.fieldTextView.text = "# ${post.field}"
             binding.currentTextView.text = post.currentTime
+
 
             val imageUrl: String? = "http://112.154.249.74:8080/"+ "${post.profileImagePath}"
             val imageView: ImageView = binding.studyImageView

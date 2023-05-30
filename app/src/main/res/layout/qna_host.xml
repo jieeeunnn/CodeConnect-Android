@@ -16,7 +16,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/blue_sky"
+        android:background="@drawable/round_rect_two"
         app:menu="@menu/toolbar_menu_study">
 
         <TextView

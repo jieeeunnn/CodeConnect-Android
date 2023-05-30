@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- toolbar_background.xml -->
+<!-- toolbar_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 둥근 사각형 배경 -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:bottomLeftRadius="20dp"
+                android:bottomRightRadius="20dp"/>
+            <solid android:color="@color/blue_sky" />
+            
+        </shape>
+    </item>
+
+</layer-list>
