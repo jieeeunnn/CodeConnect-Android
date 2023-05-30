@@ -124,7 +124,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/guestCommentEdit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView"
+                app:layout_constraintTop_toBottomOf="@+id/guestLikeCountView"
                 tools:ignore="MissingConstraints" />
 
             <ImageView
@@ -145,6 +145,34 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_person_24" />
+
+            <ImageView
+                android:id="@+id/noHeartImage"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
+                app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView"
+                app:srcCompat="@drawable/icon_heart" />
+
+            <TextView
+                android:id="@+id/guestLikeCountView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView" />
+
+            <ImageView
+                android:id="@+id/onHeartImage"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
+                app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView"
+                app:srcCompat="@drawable/icon_heart_red" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

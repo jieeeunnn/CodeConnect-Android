@@ -15,7 +15,7 @@
         android:id="@+id/numberTextView"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/round_rect_skyblue"
@@ -26,16 +26,16 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/fieldTextView"
-        app:layout_constraintTop_toBottomOf="@+id/fieldTextView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/contentTextView" />
 
     <TextView
         android:id="@+id/idTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="52dp"
         android:text="id"
         android:textColor="#515151"
         android:textSize="14sp"
@@ -50,6 +50,8 @@
         android:text="content"
         android:textColor="#515151"
         android:textSize="12sp"
+        android:maxLines="3"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="@+id/titleTextView"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
@@ -69,7 +71,8 @@
         android:id="@+id/fieldTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/round_rect_grey_clear"
         android:paddingStart="7dp"
         android:paddingTop="2dp"
@@ -78,8 +81,8 @@
         android:text="field"
         android:textColor="#515151"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/contentTextView"
-        app:layout_constraintTop_toBottomOf="@+id/contentTextView" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/currentTextView"
@@ -89,18 +92,17 @@
         android:text="TextView"
         android:textColor="#515151"
         android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/idTextView"
+        app:layout_constraintBaseline_toBaselineOf="@+id/fieldTextView"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/studyImageView"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/profile_circle_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/fieldTextView"
+        app:layout_constraintTop_toBottomOf="@+id/fieldTextView"
         app:srcCompat="@drawable/ic_baseline_person_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

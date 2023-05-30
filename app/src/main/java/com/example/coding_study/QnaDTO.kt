@@ -15,11 +15,11 @@ data class QnaUploadDto(
     var content: String,
     var nickname: String,
     var currentDateTime: String,
-    var modifiedDateTime: String,
     var qnaId: Long,
     var commentCount: Int,
     var imagePath: String?, // 게시글 업로드 사진
-    var profileImagePath: String // 프로필 사진
+    var profileImagePath: String, // 프로필 사진
+    var likeCount:Int
 )
 
 interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사용
@@ -95,6 +95,20 @@ interface QnaDeleteService { // qna 게시글 삭제
 
 
 
+interface QnaHeartService { // qna 게시글 좋아요 누를 때
+    @PUT("qna/like/{qnaId}")
+    fun qnaHeartPut(@Path("qnaId") id:Long): Call<QnaHeart>
+}
+
+data class QnaHeart(
+    val result: Boolean,
+    var message: String,
+    var data: Int // likeCount값
+)
+
+
+
+
 //comment api
 interface QnaCommentCreateService { // 댓글 작성
     @POST("comment/create/{qnaId}")
@@ -116,7 +130,6 @@ data class Comment ( // 댓글
     val comment: String,
     val nickname: String,
     val currentDateTime: String,
-    val modifiedDateTime: Any?,
     val cocommentCount: Long,
     val role: String,
     var profileImagePath: String

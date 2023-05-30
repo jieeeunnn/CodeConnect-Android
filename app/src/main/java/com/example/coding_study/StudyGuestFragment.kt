@@ -213,7 +213,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         binding.guestContentText.text = recruitment.content
         binding.guestFieldText.text = recruitment.field
         binding.guestCountText.text = "$currentCount / ${recruitment.count}"
-        binding.guestCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
+        binding.guestCurrentText.text = recruitment.currentDateTime ?: ""
         binding.guestAddress2.text = recruitment.address
 
         val imageUrl: String? = "http://112.154.249.74:8080/"+ "${recruitment.profileImagePath}"

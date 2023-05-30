@@ -1,13 +1,20 @@
 package com.example.coding_study
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
-
 
 class StudyAdapter(var postList: List<Post>, private var onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<StudyAdapter.StudyUploadViewHolder>() {
 
@@ -24,24 +31,37 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
         notifyDataSetChanged() // RecyclerView를 다시 그립니다.
     }
 
-
-
     inner class StudyUploadViewHolder(private val binding: StudyUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) { // 각 게시글 뷰의 textView를 참조
         @SuppressLint("SetTextI18n") // 다국어 지원 기능 (currentCount와 num을 함께 문자열에 담기 위해 사용)
         fun bind(post: Post) { // bind 메서드를 통해 해당 뷰의 텍스트를 게시글 데이터로 설정
             binding.idTextView.text = post.nickname
             binding.titleTextView.text = post.title
             binding.contentTextView.text = post.content
+
             if (post.num > post.currentCount) {
-                binding.numberTextView.text = "${post.currentCount} / ${post.num}"
+                binding.numberTextView.text = "모집 중 [ ${post.currentCount} / ${post.num} ]"
                 binding.numberTextView.setBackgroundResource(R.drawable.round_rect_darkblue)
             } else {
                 binding.numberTextView.text = "모집 완료"
                 binding.numberTextView.setBackgroundResource(R.drawable.round_rect_grey_clear)
             }
-            binding.fieldTextView.text = "# ${post.field}"
-            binding.currentTextView.text = post.currentTime
 
+
+            binding.fieldTextView.text = "# ${post.field}"
+            val fieldText = binding.fieldTextView
+            when (post.field) {
+                "안드로이드" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.android)) // Android 필드일 경우 초록색으로 설정
+                "IOS" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.IOS)) // iOS 필드일 경우 회색으로 설정
+                "알고리즘" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.algorithm)) // iOS 필드일 경우 회색으로 설정
+                "데이터베이스" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.database)) // iOS 필드일 경우 회색으로 설정
+                "운영체제" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.os)) // iOS 필드일 경우 회색으로 설정
+                "서버" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.server)) // iOS 필드일 경우 회색으로 설정
+                "웹" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.web)) // iOS 필드일 경우 회색으로 설정
+                "머신러닝" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.machine_learning)) // iOS 필드일 경우 회색으로 설정
+                "기타" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.other)) // iOS 필드일 경우 회색으로 설정
+                }
+
+            binding.currentTextView.text = post.currentTime
 
             val imageUrl: String? = "http://112.154.249.74:8080/"+ "${post.profileImagePath}"
             val imageView: ImageView = binding.studyImageView
@@ -68,6 +88,4 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
     }
 
     override fun getItemCount(): Int = postList.size
-
-
 }

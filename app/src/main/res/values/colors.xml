@@ -13,4 +13,15 @@
     <color name="grey">#DADADA</color>
     <color name="grey_dark">#515151</color>
 
+    <color name="android">#3F51B5</color>
+    <color name="IOS">#607D8B</color>
+    <color name="algorithm">#4CAF50</color>
+    <color name="database">#FF9800</color>
+    <color name="os">#FF5722</color>
+    <color name="server">#9C27B0</color>
+    <color name="web">#2196F3</color>
+    <color name="machine_learning">#FFC107</color>
+    <color name="other">#9E9E9E</color>
+
+
 </resources>

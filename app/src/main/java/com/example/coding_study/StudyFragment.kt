@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -91,6 +92,55 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                 .add(R.id.study_fragment_layout, studyAddressFragment, "STUDY_FRAGMENT")
                 .addToBackStack("STUDY_FRAGMENT")
                 .commit()
+        }
+
+        val sharedPreferencesFields = requireActivity().getSharedPreferences("MyFields", Context.MODE_PRIVATE)
+        val fieldsString = sharedPreferencesFields?.getString("fields", "")
+        val fields = fieldsString?.split(",") ?: emptyList()
+
+        var field1 = binding.myField1
+        var field2 = binding.myField2
+        field1.text = fields[0]
+        field2.text = fields[1]
+
+        /*
+        when (field1.text.toString()) {
+            "안드로이드" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.android))
+            "IOS" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.IOS)) // iOS 필드일 경우 회색으로 설정
+            "알고리즘" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.algorithm)) // iOS 필드일 경우 회색으로 설정
+            "데이터베이스" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.database)) // iOS 필드일 경우 회색으로 설정
+            "운영체제" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.os)) // iOS 필드일 경우 회색으로 설정
+            "서버" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.server)) // iOS 필드일 경우 회색으로 설정
+            "웹" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.web)) // iOS 필드일 경우 회색으로 설정
+            "머신러닝" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.machine_learning)) // iOS 필드일 경우 회색으로 설정
+            "기타" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.other)) // iOS 필드일 경우 회색으로 설정
+        }
+
+         */
+
+        val fieldColorsMap = mapOf(
+            "안드로이드" to R.color.android,
+            "IOS" to R.color.IOS,
+            "알고리즘" to R.color.algorithm,
+            "데이터베이스" to R.color.database,
+            "운영체제" to R.color.os,
+            "서버" to R.color.server,
+            "웹" to R.color.web,
+            "머신러닝" to R.color.machine_learning,
+            "기타" to R.color.other
+        )
+
+        for (i in 0 until fields.size) {
+            val fieldTextView = when (i) {
+                0 -> field1
+                1 -> field2
+                else -> null
+            }
+            val field = fields.getOrNull(i)
+            if (fieldTextView != null && field != null) {
+                fieldTextView.text = field
+                fieldTextView.setTextColor(ContextCompat.getColor(requireContext(), fieldColorsMap[field] ?: R.color.other))
+            }
         }
 
         // ViewModel 초기화
@@ -242,9 +292,14 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
 
     fun showFloatingButton() {
         fab.show()
+        binding.myField1.visibility = View.VISIBLE
+        binding.myField2.visibility = View.VISIBLE
     }
     fun hideFloatingButton() {
         fab.hide()
+        binding.myField1.visibility = View.GONE
+        binding.myField2.visibility = View.GONE
+
     }
 
     private fun loadStudyList() { // 서버에서 게시글 전체를 가져와서 로드하는 함수
@@ -364,6 +419,11 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                                 Post( it.nickname, it.title, it.content, it.currentCount, it.count, it.field, it.currentDateTime, it.profileImagePath)
                             } ?: emptyList()
                             //studyList의 형식은 List<RecruitmentDto>이므로 서버에서 받은 게시글을 postList에 넣어주기 위해 List<Post>로 변환
+
+                            val searchListId = studyList?.map { it.recruitmentId }
+                            if (searchListId != null) {
+                                context?.let { savePostIds(it, searchListId) }
+                            }
 
                             if (studyListResponse?.result == true) {
                                 studyAdapter.postList = postListResponse // 어댑터의 postList 변수 업데이트

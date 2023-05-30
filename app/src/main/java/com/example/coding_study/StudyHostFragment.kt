@@ -46,6 +46,7 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
         val parentFragment = parentFragment
         if (parentFragment is StudyFragment) {
             parentFragment.hideFloatingButton()
+
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
@@ -76,7 +77,7 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
         binding.hostContentText.text = recruitment.content
         binding.hostFieldText.text = recruitment.field
         binding.hostCountText.text = "${recruitment.currentCount} / ${recruitment.count}"
-        binding.hostCurrentText.text = recruitment.modifiedDateTime ?: recruitment.currentDateTime ?: ""
+        binding.hostCurrentText.text = recruitment.currentDateTime ?: ""
         binding.hostAddress2.text = recruitment.address
 
         val imageUrl: String? = "http://112.154.249.74:8080/"+ "${recruitment.profileImagePath}"

@@ -15,7 +15,8 @@ data class QnaPost (
     var content: String,
     var currentTime: String,
     var commentCount: Int,
-    var profileImagePath: String
+    var profileImagePath: String,
+    var likeCount: Int
 )
 
 
@@ -36,6 +37,7 @@ class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener:
             binding.qnaUploadContent.text = qnapost.content
             binding.qnaUploadTime.text = qnapost.currentTime
             binding.qnaCommentCountTextView.text = qnapost.commentCount.toString()
+            binding.qnaLikeCount.text = qnapost.likeCount.toString()
 
             val imageUrl: String? = "http://112.154.249.74:8080/"+ qnapost.profileImagePath
             val imageView: ImageView = binding.qnaProfileImage

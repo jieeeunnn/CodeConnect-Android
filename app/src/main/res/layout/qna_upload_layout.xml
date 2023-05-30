@@ -42,6 +42,8 @@
         android:text="content"
         android:textColor="#515151"
         android:textSize="12sp"
+        android:maxLines="3"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="@+id/qnaUploadTitle"
         app:layout_constraintTop_toBottomOf="@+id/qnaUploadTitle" />
 
@@ -70,12 +72,13 @@
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/qnaUploadContent"
+        app:layout_constraintStart_toEndOf="@+id/qnaLikeCount"
         app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.086"
         app:srcCompat="@drawable/baseline_comment_24" />
 
     <TextView
@@ -87,6 +90,26 @@
         android:text="commentCount"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/qnaUploadContent"
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent"
+        app:srcCompat="@drawable/icon_heart" />
+
+    <TextView
+        android:id="@+id/qnaLikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="18dp"
+        android:text="likeCount"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView14"
         app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

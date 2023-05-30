@@ -2,10 +2,6 @@ package com.example.coding_study
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.databinding.QnaHostBinding
@@ -26,9 +21,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 
 open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
     private lateinit var binding: QnaHostBinding
@@ -83,6 +75,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         binding.qnaHostTitle.text = qnaRecruitment.title
         binding.qnaHostContent.text = qnaRecruitment.content
         binding.qnaHostCurrentTime.text = qnaRecruitment.currentDateTime
+        binding.likeCountTextView.text = qnaRecruitment.likeCount.toString()
 
         val profileImageUrl: String = "http://112.154.249.74:8080/"+ qnaRecruitment.profileImagePath // 프로필 사진 띄우기
         val profileImageView: ImageView = binding.qnaHostProfileImage
@@ -119,6 +112,86 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
             .build()
 
 
+        val sharedPreferencesHeartLike = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferencesHeartLike.edit()
+
+        // 저장된 isLiked 값 불러오기
+        val isLiked = sharedPreferencesHeartLike.getBoolean("isLiked", false)
+        Log.e("QnaHostFragment isLiked", isLiked.toString())
+
+        if (isLiked) { // 좋아요가 눌린 상태
+            binding.heartImageView.visibility = View.GONE
+            binding.heartOnImage.visibility = View.VISIBLE
+        } else { // 좋아요 취소 상태
+            binding.heartImageView.visibility = View.VISIBLE
+            binding.heartOnImage.visibility = View.GONE
+        }
+
+        val qnaId = qnaRecruitment.qnaId
+
+        val qnaHeartService = retrofitBearer.create(QnaHeartService::class.java)
+
+        binding.heartImageView.setOnClickListener {// 좋아요 누를 때
+            if (!isLiked) {
+                qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart> {
+                    override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
+                        if (response.isSuccessful) {
+                            Log.e("QnaHost heart Count response code", "${response.code()}")
+                            Log.e("QnaHost heart Count response body", "${response.body()}")
+
+                            val heartResponse = response.body()
+                            val heartCount = heartResponse?.data
+
+                            binding.heartImageView.visibility = View.GONE
+                            binding.heartOnImage.visibility = View.VISIBLE
+
+                            // isLiked 값을 SharedPreferences에 저장
+                            editor.putBoolean("isLiked", true)
+                            editor.apply()
+
+                            binding.likeCountTextView.text = heartCount.toString()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<QnaHeart>, t: Throwable) {
+                        Toast.makeText(context, "qna heart put 서버 연결 실패", Toast.LENGTH_LONG).show()
+                    }
+
+                })
+            }
+        }
+
+        binding.heartOnImage.setOnClickListener { // 좋아요 취소
+            if (isLiked) {
+                qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart> {
+                    override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
+                        if (response.isSuccessful) {
+                            Log.e("QnaHost heart Count response code", "${response.code()}")
+                            Log.e("QnaHost heart Count response body", "${response.body()}")
+
+                            val heartResponse = response.body()
+                            val heartCount = heartResponse?.data
+
+                            binding.heartImageView.visibility = View.VISIBLE
+                            binding.heartOnImage.visibility = View.GONE
+
+                            // isLiked 값을 SharedPreferences에 저장
+                            editor.putBoolean("isLiked", false)
+                            editor.apply()
+                            Log.e("host no heart ", editor.toString())
+
+                            binding.likeCountTextView.text = heartCount.toString()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<QnaHeart>, t: Throwable) {
+                        Toast.makeText(context, "qna heart put 서버 연결 실패", Toast.LENGTH_LONG).show()
+                    }
+
+                })
+            }
+        }
+
         //qna 삭제 버튼
         binding.qnaHostDeleteButton.setOnClickListener {
             val deleteDialog = DeleteDialog(this, qnaRecruitment.qnaId, "게시글을 삭제하시겠습니까?")
@@ -143,7 +216,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         // 댓글 버튼 (댓글 전송)
         binding.hostCommentButton.setOnClickListener {
             val comment = binding.hostComment.text.toString()
-            val qnaId = qnaRecruitment.qnaId
             val qnaCommentRequest = QnaCommentRequest(comment)
 
             qnaCommentCreateService.qnaCommentCreate(qnaId, qnaCommentRequest).enqueue(object : Callback<QnaCommentResponse>{
@@ -288,6 +360,8 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                         binding.qnaHostTitle.text = qnaUploadDto.title
                         binding.qnaHostContent.text = qnaUploadDto.content
                         binding.qnaHostCurrentTime.text = qnaUploadDto.currentDateTime
+                        binding.likeCountTextView.text = qnaUploadDto.likeCount.toString()
+
 
                         val imageUrl: String? = "http://112.154.249.74:8080/"+ qnaUploadDto.profileImagePath // 프로필 사진 띄우기
                         val imageView: ImageView = binding.qnaHostProfileImage

@@ -68,6 +68,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         binding.qnaGuestTitle.text = qnaRecruitment.title
         binding.qnaGuestContent.text = qnaRecruitment.content
         binding.qnaGuestCurrentTime.text = qnaRecruitment.currentDateTime
+        binding.guestLikeCountView.text = qnaRecruitment.likeCount.toString()
 
         val profileImageUrl: String = "http://112.154.249.74:8080/"+ qnaRecruitment.profileImagePath // 프로필 이미지
         val profileImageView: ImageView = binding.qnaGuestProfileImage
@@ -102,11 +103,85 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
             )
             .build()
 
+        val sharedPreferencesHeartLike = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferencesHeartLike.edit()
+
+        // 저장된 isLiked 값 불러오기
+        val isLiked = sharedPreferencesHeartLike.getBoolean("isLiked", false)
+        Log.e("QnaHostFragment isLiked", isLiked.toString())
+        if (isLiked) { // 좋아요가 눌린 상태
+            binding.noHeartImage.visibility = View.GONE
+            binding.onHeartImage.visibility = View.VISIBLE
+        } else { // 좋아요 취소 상태
+            binding.noHeartImage.visibility = View.VISIBLE
+            binding.onHeartImage.visibility = View.GONE
+        }
+
+        val qnaId = qnaRecruitment.qnaId
+
+        val qnaHeartService = retrofitBearer.create(QnaHeartService::class.java)
+
+        binding.noHeartImage.setOnClickListener {// 좋아요 누를 때
+            qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart>{
+                override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
+                    if (response.isSuccessful) {
+                        Log.e("QnaHost heart Count response code", "${response.code()}")
+                        Log.e("QnaHost heart Count response body", "${response.body()}")
+
+                        val heartResponse = response.body()
+                        val heartCount = heartResponse?.data
+
+                        binding.noHeartImage.visibility = View.GONE
+                        binding.onHeartImage.visibility = View.VISIBLE
+
+                        // isLiked 값을 SharedPreferences에 저장
+                        editor.putBoolean("isLiked", true)
+                        editor.apply()
+
+                        binding.guestLikeCountView.text = heartCount.toString()
+                    }
+                }
+
+                override fun onFailure(call: Call<QnaHeart>, t: Throwable) {
+                    Toast.makeText(context, "qna heart put 서버 연결 실패", Toast.LENGTH_LONG).show()
+                }
+
+            })
+        }
+
+        binding.onHeartImage.setOnClickListener { // 좋아요 취소 시
+            qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart>{
+                override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
+                    if (response.isSuccessful) {
+                        Log.e("QnaHost heart Count response code", "${response.code()}")
+                        Log.e("QnaHost heart Count response body", "${response.body()}")
+
+                        val heartResponse = response.body()
+                        val heartCount = heartResponse?.data
+
+                        binding.noHeartImage.visibility = View.VISIBLE
+                        binding.onHeartImage.visibility = View.GONE
+
+                        // isLiked 값을 SharedPreferences에 저장
+                        editor.putBoolean("isLiked", false)
+                        editor.apply()
+
+                        binding.guestLikeCountView.text = heartCount.toString()
+                    }
+                }
+
+                override fun onFailure(call: Call<QnaHeart>, t: Throwable) {
+                    Toast.makeText(context, "qna heart put 서버 연결 실패", Toast.LENGTH_LONG).show()
+                }
+
+            })
+        }
+
+
         val qnaCommentCreateService = retrofitBearer.create(QnaCommentCreateService::class.java)
 
         binding.guestCommentButton.setOnClickListener { // 댓글 작성 버튼
             val comment = binding.guestCommentEdit.text.toString()
-            val qnaId = qnaRecruitment.qnaId
             val qnaCommentRequest = QnaCommentRequest(comment)
 
             qnaCommentCreateService.qnaCommentCreate(qnaId, qnaCommentRequest).enqueue(object : Callback<QnaCommentResponse>{
@@ -191,6 +266,8 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                     binding.qnaGuestTitle.text = qnaUploadDto.title
                     binding.qnaGuestContent.text = qnaUploadDto.content
                     binding.qnaGuestCurrentTime.text = qnaUploadDto.currentDateTime
+                    binding.guestLikeCountView.text = qnaRecruitment.likeCount.toString()
+
 
                     val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaUploadDto.profileImagePath}"
                     val imageView: ImageView = binding.qnaGuestProfileImage
