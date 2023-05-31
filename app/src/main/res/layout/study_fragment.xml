@@ -92,7 +92,7 @@
                 android:layout_weight="1"
                 android:elevation="3dp"
                 app:iconifiedByDefault="false"
-                app:queryHint="게시글 검색">
+                app:queryHint="스터디 찾기">
 
             </androidx.appcompat.widget.SearchView>
         </LinearLayout>

@@ -19,6 +19,8 @@ class ChatRoomAdapter(var chatList: List<ChatRoom>, private var onItemClickListe
     inner class ChatRoomViewHolder(private val binding: ChatRoomBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatRoomEntity: ChatRoom) {
             binding.chatRoomTitleTextView.text = chatRoomEntity.title
+            binding.chatRoomHostText.text = chatRoomEntity.hostNickname
+            binding.chatRoomCountText.text = chatRoomEntity.currentCount.toString()
         }
     }
 

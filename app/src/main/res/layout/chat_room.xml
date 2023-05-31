@@ -9,21 +9,69 @@
         android:id="@+id/chatRoomTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:text="chatRoomTitle"
         android:textColor="@color/grey_dark"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/chatRoomHostImage"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
+        android:tint="@color/grey_medium"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/chatRoomTitleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/chatRoomTitleTextView"
+        app:srcCompat="@drawable/icon_crown"
+        tools:ignore="UseAppTint" />
+
+    <TextView
+        android:id="@+id/chatRoomHostText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="Host"
+        android:textColor="@color/grey_medium"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/chatRoomHostImage"
+        app:layout_constraintTop_toBottomOf="@+id/chatRoomTitleTextView" />
+
+    <ImageView
+        android:id="@+id/chatRoomCountImage"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:tint="@color/grey_medium"
+        app:layout_constraintStart_toEndOf="@+id/chatRoomHostText"
+        app:layout_constraintTop_toBottomOf="@+id/chatRoomTitleTextView"
+        app:srcCompat="@drawable/icon_person"
+        tools:ignore="UseAppTint" />
+
+    <TextView
+        android:id="@+id/chatRoomCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="Count"
+        android:textColor="@color/grey_medium"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/chatRoomCountImage"
+        app:layout_constraintTop_toBottomOf="@+id/chatRoomTitleTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
