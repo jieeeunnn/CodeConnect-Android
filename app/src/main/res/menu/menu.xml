@@ -4,19 +4,19 @@
 
     <item
         android:id="@+id/studyFragment"
-        android:icon="@drawable/ic_baseline_book_24"
+        android:icon="@drawable/icon_study"
         android:title="Study"
         />
     <item
         android:id="@+id/qnAFragment"
-        android:icon="@drawable/ic_baseline_question_answer_24"
+        android:icon="@drawable/icon_qna"
         android:title="QnA" />
     <item
         android:id="@+id/chatFragment"
-        android:icon="@drawable/ic_baseline_chat_24"
+        android:icon="@drawable/icon_chat"
         android:title="Chat" />
     <item
         android:id="@+id/mypageFragment"
-        android:icon="@drawable/ic_baseline_person_24"
+        android:icon="@drawable/icon_person"
         android:title="MyPage" />
 </menu>

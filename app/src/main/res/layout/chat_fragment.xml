@@ -23,7 +23,7 @@
             android:id="@+id/toolbarChatTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chat"
+            android:text="내 채팅방"
             android:textColor="@color/blue_main" />
 
     </androidx.appcompat.widget.Toolbar>

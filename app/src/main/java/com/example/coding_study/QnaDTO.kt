@@ -50,6 +50,13 @@ data class QnaListResponse ( // 게시글 응답값 (qna 게시판에서 게시�
 
 
 
+interface TopQnaGetService { // qna 인기 게시글 조회
+    @GET("qna/popular")
+    fun topQnaGetList (
+    ): Call<QnaListResponse>
+}
+
+
 
 
 interface QnaOnlyService { // 게시글 하나만 조회 인터페이스

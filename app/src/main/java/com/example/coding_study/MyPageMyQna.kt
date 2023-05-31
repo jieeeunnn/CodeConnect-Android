@@ -179,7 +179,14 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
             }
         }
 
-        qnaAdapter = QnaAdapter(listOf(), onQnaClickListener)
+        val onPopularClickListener : QnaAdapter.OnPopularClickListener = object :QnaAdapter.OnPopularClickListener {
+            override fun onPopularClick(position: Int) {
+                TODO("Not yet implemented")
+            }
+        }
+
+
+        qnaAdapter = QnaAdapter(listOf(), onQnaClickListener, onPopularClickListener)
         myPageRecyclerView.adapter = qnaAdapter
         binding.myPageMyStudyRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -201,7 +208,7 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
                         Log.e("QnaList_response.code", "is: ${response.code()}")
 
                         val qnaList = qnaListResponse?.data
-                        val qnapostListResponse = qnaList?.map { QnaPost(it.nickname, it.title, it.content, it.currentDateTime, it.commentCount, it.profileImagePath, it.likeCount) }
+                        val qnapostListResponse = qnaList?.map { QnaPost(it.nickname, it.title, it.content, it.currentDateTime, it.commentCount, it.profileImagePath, it.likeCount, false) }
                         //qnaList의 형식은 List<QnaUploadDto>이므로 서버에서 받은 게시글을 qnaPostList에 넣어주기 위해 List<qnaPost>로 변환
 
                         if (qnaListResponse?.result == true) {
