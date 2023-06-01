@@ -141,7 +141,11 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
                                     CoroutineScope(Dispatchers.IO).launch {
                                         val fileUrl = "http://112.154.249.74:8080/chat/file/download?filePath=$filePath&fileContentType=$contentType"
                                         val savePath = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/" // 저장할 파일 경로
-                                        val fileName = UUID.randomUUID().toString() + ".jpg"
+
+                                        val connection = URL(fileUrl).openConnection() as HttpURLConnection
+
+                                        val contentDispositionHeader = connection.getHeaderField("Content-Disposition")
+                                        val fileName = extractFileNameFromContentDisposition(contentDispositionHeader)
 
                                         try {
                                             val url = URL(fileUrl)
@@ -242,7 +246,11 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
                                     CoroutineScope(Dispatchers.IO).launch {
                                         val fileUrl = "http://112.154.249.74:8080/chat/file/download?filePath=$filePath&fileContentType=$contentType" // 다운받을 파일 url
                                         val savePath = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/" // 저장할 파일 경로
-                                        val fileName = UUID.randomUUID().toString() + ".jpg" // 파일 이름
+
+                                        val connection = URL(fileUrl).openConnection() as HttpURLConnection
+
+                                        val contentDispositionHeader = connection.getHeaderField("Content-Disposition")
+                                        val fileName = extractFileNameFromContentDisposition(contentDispositionHeader)
 
                                         try {
                                             val url = URL(fileUrl)
@@ -347,5 +355,22 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
     }
 
     override fun getItemCount(): Int = chatMessages.size
+
+
+    fun extractFileNameFromContentDisposition(contentDisposition: String?): String {
+        contentDisposition?.let {
+            val fileNameStartIndex = it.indexOf("filename=")
+            if (fileNameStartIndex != -1) {
+                val fileNameEndIndex = it.indexOf(";", fileNameStartIndex)
+                val extractedFileName = if (fileNameEndIndex != -1) {
+                    it.substring(fileNameStartIndex + 9, fileNameEndIndex)
+                } else {
+                    it.substring(fileNameStartIndex + 9)
+                }
+                return extractedFileName.trim('"')
+            }
+        }
+        return "" // 파일 이름을 추출할 수 없는 경우 빈 문자열("")을 반환합니다.
+    }
 
 }
