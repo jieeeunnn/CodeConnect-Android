@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             android:text="스터디 모집"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -241,9 +241,10 @@
             android:id="@+id/imageView7"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="43dp"
             android:tint="@color/blue_sky"
-            app:layout_constraintStart_toStartOf="@+id/studyHostImageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/viewLine1"
             app:srcCompat="@drawable/icon_study" />
 

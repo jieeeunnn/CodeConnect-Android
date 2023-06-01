@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:text="Q&amp;A"
             android:textColor="@color/blue_main"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>

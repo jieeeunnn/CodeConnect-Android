@@ -13,6 +13,7 @@
         android:layout_marginTop="16dp"
         android:text="chatRoomTitle"
         android:textColor="@color/grey_dark"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

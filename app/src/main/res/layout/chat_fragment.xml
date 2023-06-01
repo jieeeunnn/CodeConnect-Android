@@ -24,6 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="내 채팅방"
+            android:textSize="16dp"
+            android:textStyle="bold"
             android:textColor="@color/blue_main" />
 
     </androidx.appcompat.widget.Toolbar>
