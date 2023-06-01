@@ -7,34 +7,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/myPageTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="40dp"
-        android:text="내 프로필"
-        android:textSize="18sp"
-        android:textStyle="bold"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/myPageToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/round_rect_two"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/toolbar_menu_study">
+
+        <TextView
+            android:id="@+id/myPageToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="내 프로필"
+            android:textColor="@color/blue_main"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/myPageNickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginTop="8dp"
         android:text="nickname"
-        android:textSize="14sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/myPageIdTextView"
-        app:layout_constraintStart_toEndOf="@+id/myPageIdTextView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myPageImage" />
+
 
     <TextView
         android:id="@+id/myPageField2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="100dp"
         android:background="@drawable/round_rect_grey_clear"
         android:paddingHorizontal="10dp"
         android:paddingVertical="3dp"
@@ -42,20 +57,24 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/myPageField1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/myPageField1" />
 
     <TextView
         android:id="@+id/myPageField1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/round_rect_grey_clear"
         android:paddingHorizontal="10dp"
         android:paddingVertical="3dp"
         android:text="myField1"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/myPageField"
-        app:layout_constraintStart_toStartOf="@+id/myPageAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myPageField"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -63,63 +82,63 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="관심 분야"
+        android:text="현재 나의 관심 분야는"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myPageAddress" />
 
     <TextView
         android:id="@+id/myPageAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_rect_grey_clear"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
         android:text="address"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView3"
-        app:layout_constraintStart_toStartOf="@+id/myPageNickname" />
-
-    <TextView
-        android:id="@+id/myPageIdTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="아이디"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/myPageImage"
-        app:layout_constraintTop_toBottomOf="@+id/myPageImage" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="주소"
+        android:layout_marginTop="24dp"
+        android:text="우리 동네는"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/myPageIdTextView"
-        app:layout_constraintTop_toBottomOf="@+id/myPageIdTextView" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myPageNickname" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myPageRecyclerView"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/round_rect_grey_clear"
         android:clickable="true"
-        android:paddingStart="30dp"
+        android:paddingStart="10dp"
         android:paddingTop="10dp"
-        android:paddingEnd="30dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myPageField" />
+        app:layout_constraintTop_toBottomOf="@+id/myPageField1" />
 
     <ImageView
         android:id="@+id/myPageImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/myPageTextView"
-        app:layout_constraintTop_toBottomOf="@+id/myPageTextView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myPageToolbar"
         app:srcCompat="@drawable/ic_baseline_person_24" />
 
 

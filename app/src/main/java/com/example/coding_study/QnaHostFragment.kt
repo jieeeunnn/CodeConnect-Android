@@ -111,15 +111,12 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
             )
             .build()
 
+        binding.heartImageView.visibility = View.GONE
+        binding.heartOnImage.visibility = View.GONE
 
-        val sharedPreferencesHeartLike = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
-        val editor = sharedPreferencesHeartLike.edit()
-
-        // 저장된 isLiked 값 불러오기
-        val isLiked = sharedPreferencesHeartLike.getBoolean("isLiked", false)
-        Log.e("QnaHostFragment isLiked", isLiked.toString())
-
-        if (isLiked) { // 좋아요가 눌린 상태
+        val isLiked = qnaRecruitment.liked
+        Log.e("QnaHost isLiked", isLiked.toString())
+        if (isLiked == true) { // 좋아요가 눌린 상태
             binding.heartImageView.visibility = View.GONE
             binding.heartOnImage.visibility = View.VISIBLE
         } else { // 좋아요 취소 상태
@@ -132,7 +129,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         val qnaHeartService = retrofitBearer.create(QnaHeartService::class.java)
 
         binding.heartImageView.setOnClickListener {// 좋아요 누를 때
-            if (!isLiked) {
                 qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart> {
                     override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
                         if (response.isSuccessful) {
@@ -140,14 +136,13 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                             Log.e("QnaHost heart Count response body", "${response.body()}")
 
                             val heartResponse = response.body()
-                            val heartCount = heartResponse?.data
+                            val heartCount = heartResponse?.data?.likeCount
+                            val isLiked = heartResponse?.data?.liked
 
-                            binding.heartImageView.visibility = View.GONE
-                            binding.heartOnImage.visibility = View.VISIBLE
-
-                            // isLiked 값을 SharedPreferences에 저장
-                            editor.putBoolean("isLiked", true)
-                            editor.apply()
+                            if (isLiked == true) {
+                                binding.heartImageView.visibility = View.GONE
+                                binding.heartOnImage.visibility = View.VISIBLE
+                            }
 
                             binding.likeCountTextView.text = heartCount.toString()
                         }
@@ -158,11 +153,9 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                     }
 
                 })
-            }
         }
 
         binding.heartOnImage.setOnClickListener { // 좋아요 취소
-            if (isLiked) {
                 qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart> {
                     override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
                         if (response.isSuccessful) {
@@ -170,15 +163,13 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                             Log.e("QnaHost heart Count response body", "${response.body()}")
 
                             val heartResponse = response.body()
-                            val heartCount = heartResponse?.data
+                            val heartCount = heartResponse?.data?.likeCount
+                            val isLiked = heartResponse?.data?.liked
 
-                            binding.heartImageView.visibility = View.VISIBLE
-                            binding.heartOnImage.visibility = View.GONE
-
-                            // isLiked 값을 SharedPreferences에 저장
-                            editor.putBoolean("isLiked", false)
-                            editor.apply()
-                            Log.e("host no heart ", editor.toString())
+                            if (isLiked == false) {
+                                binding.heartImageView.visibility = View.VISIBLE
+                                binding.heartOnImage.visibility = View.GONE
+                            }
 
                             binding.likeCountTextView.text = heartCount.toString()
                         }
@@ -189,7 +180,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                     }
 
                 })
-            }
         }
 
         //qna 삭제 버튼
@@ -249,7 +239,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
 
-
             val parentFragment = parentFragment
             if (parentFragment is QnAFragment) {
                 val parentFragmentManager = requireActivity().supportFragmentManager
@@ -308,9 +297,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 Toast.makeText(context, "게시글 삭제 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
-
         })
-
     }
 
     fun loadQnaHost() {

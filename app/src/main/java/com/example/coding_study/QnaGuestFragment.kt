@@ -103,12 +103,8 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
             )
             .build()
 
-        val sharedPreferencesHeartLike = requireContext().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
-        val editor = sharedPreferencesHeartLike.edit()
+        val isLiked = qnaRecruitment.liked
 
-        // 저장된 isLiked 값 불러오기
-        val isLiked = sharedPreferencesHeartLike.getBoolean("isLiked", false)
-        Log.e("QnaHostFragment isLiked", isLiked.toString())
         if (isLiked) { // 좋아요가 눌린 상태
             binding.noHeartImage.visibility = View.GONE
             binding.onHeartImage.visibility = View.VISIBLE
@@ -129,14 +125,13 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                         Log.e("QnaHost heart Count response body", "${response.body()}")
 
                         val heartResponse = response.body()
-                        val heartCount = heartResponse?.data
+                        val heartCount = heartResponse?.data?.likeCount
+                        val isLiked = heartResponse?.data?.liked
 
-                        binding.noHeartImage.visibility = View.GONE
-                        binding.onHeartImage.visibility = View.VISIBLE
-
-                        // isLiked 값을 SharedPreferences에 저장
-                        editor.putBoolean("isLiked", true)
-                        editor.apply()
+                        if(isLiked == true) {
+                            binding.noHeartImage.visibility = View.GONE
+                            binding.onHeartImage.visibility = View.VISIBLE
+                        }
 
                         binding.guestLikeCountView.text = heartCount.toString()
                     }
@@ -157,14 +152,13 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                         Log.e("QnaHost heart Count response body", "${response.body()}")
 
                         val heartResponse = response.body()
-                        val heartCount = heartResponse?.data
+                        val heartCount = heartResponse?.data?.likeCount
+                        val isLiked = heartResponse?.data?.liked
 
-                        binding.noHeartImage.visibility = View.VISIBLE
-                        binding.onHeartImage.visibility = View.GONE
-
-                        // isLiked 값을 SharedPreferences에 저장
-                        editor.putBoolean("isLiked", false)
-                        editor.apply()
+                        if (isLiked == false) {
+                            binding.noHeartImage.visibility = View.VISIBLE
+                            binding.onHeartImage.visibility = View.GONE
+                        }
 
                         binding.guestLikeCountView.text = heartCount.toString()
                     }

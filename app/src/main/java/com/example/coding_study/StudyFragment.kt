@@ -103,21 +103,6 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         field1.text = fields[0]
         field2.text = fields[1]
 
-        /*
-        when (field1.text.toString()) {
-            "안드로이드" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.android))
-            "IOS" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.IOS)) // iOS 필드일 경우 회색으로 설정
-            "알고리즘" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.algorithm)) // iOS 필드일 경우 회색으로 설정
-            "데이터베이스" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.database)) // iOS 필드일 경우 회색으로 설정
-            "운영체제" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.os)) // iOS 필드일 경우 회색으로 설정
-            "서버" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.server)) // iOS 필드일 경우 회색으로 설정
-            "웹" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.web)) // iOS 필드일 경우 회색으로 설정
-            "머신러닝" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.machine_learning)) // iOS 필드일 경우 회색으로 설정
-            "기타" -> field1.setTextColor(ContextCompat.getColor(requireContext(), R.color.other)) // iOS 필드일 경우 회색으로 설정
-        }
-
-         */
-
         val fieldColorsMap = mapOf(
             "안드로이드" to R.color.android,
             "IOS" to R.color.IOS,
@@ -130,6 +115,19 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             "기타" to R.color.other
         )
 
+        val fieldBackgroundColorsMap = mapOf(
+            "안드로이드" to R.drawable.android_background,
+            "IOS" to R.drawable.ios_background,
+            "알고리즘" to R.drawable.algorithm_background,
+            "데이터베이스" to R.drawable.database_background,
+            "운영체제" to R.drawable.os_background,
+            "서버" to R.drawable.server_background,
+            "웹" to R.drawable.web_background,
+            "머신러닝" to R.drawable.machine_learning_background,
+            "기타" to R.drawable.other_background
+        )
+
+
         for (i in 0 until fields.size) {
             val fieldTextView = when (i) {
                 0 -> field1
@@ -140,6 +138,14 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             if (fieldTextView != null && field != null) {
                 fieldTextView.text = field
                 fieldTextView.setTextColor(ContextCompat.getColor(requireContext(), fieldColorsMap[field] ?: R.color.other))
+            }
+
+            val fieldBackgroundDrawableRes = fieldBackgroundColorsMap[field]
+            if (fieldBackgroundDrawableRes != null) {
+                val fieldBackgroundDrawable = ContextCompat.getDrawable(requireContext(), fieldBackgroundDrawableRes)
+                if (fieldTextView != null) {
+                    fieldTextView.background = fieldBackgroundDrawable
+                }
             }
         }
 

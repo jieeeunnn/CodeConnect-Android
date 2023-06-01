@@ -19,7 +19,8 @@ data class QnaUploadDto(
     var commentCount: Int,
     var imagePath: String?, // 게시글 업로드 사진
     var profileImagePath: String, // 프로필 사진
-    var likeCount:Int
+    var likeCount:Int,
+    var liked: Boolean
 )
 
 interface QnaService { // qna 글 업로드 인터페이스, qnaUpload에서 사용
@@ -110,8 +111,13 @@ interface QnaHeartService { // qna 게시글 좋아요 누를 때
 data class QnaHeart(
     val result: Boolean,
     var message: String,
-    var data: Int // likeCount값
+    var data: QnaLiked // likeCount값
 )
+
+data class QnaLiked (
+    var liked: Boolean,
+    var likeCount: Int
+        )
 
 
 

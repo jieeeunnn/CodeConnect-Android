@@ -1,9 +1,13 @@
 package com.example.coding_study
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +18,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.coding_study.databinding.ChatMemberListBinding
@@ -23,7 +26,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import org.json.JSONObject
 import retrofit2.*
 import retrofit2.Response
@@ -47,6 +53,132 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         editor.putString("imagePath", myImagePath)
         if (!editor.commit()) {
             Log.e("saveMyImagePath", "Failed to save image Path")
+        }
+    }
+
+    fun saveFilePath(context: Context, myImagePath: String?) {
+        val sharedPreferences = context.getSharedPreferences("MyFilePath", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("myFilePath", myImagePath)
+        if (!editor.commit()) {
+            Log.e("saveFilePath", "Failed to save image Path")
+        }
+    }
+    fun saveFileContentType(context: Context, myImagePath: String?) {
+        val sharedPreferences = context.getSharedPreferences("MyFileContentType", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("myFileContentType", myImagePath)
+        if (!editor.commit()) {
+            Log.e("saveFileContentType", "Failed to save image Path")
+        }
+    }
+
+
+    companion object {
+        private const val FILE_PICKER_REQUEST_CODE = 123
+    }
+
+    // + 버튼 클릭 시 파일 선택기(Dialog)를 열기
+    private fun openFilePicker() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*" // 모든 파일 타입
+        startActivityForResult(intent, FILE_PICKER_REQUEST_CODE)
+    }
+
+    @SuppressLint("Range")
+    private fun getFileName(uri: Uri): String? {
+        var fileName: String? = null
+        val cursor = requireActivity().contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val displayName = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                fileName = displayName
+            }
+        }
+        return fileName
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { fileUri ->
+                // 파일을 선택한 후에 여기에서 파일을 전송하는 로직을 구현합니다.
+                // 선택한 파일을 서버에 업로드하는 등의 작업을 수행할 수 있습니다.
+
+                val inputStream = requireContext().contentResolver.openInputStream(fileUri)
+                val fileName = getFileName(fileUri) // 파일 이름을 얻는 유틸리티 함수 호출
+
+                val requestBody = inputStream?.let { RequestBody.create("multipart/form-data".toMediaTypeOrNull(), it.readBytes()) }
+                val filePart = requestBody?.let {
+                    MultipartBody.Part.createFormData("file", fileName, it)
+                }
+                if (fileName != null) {
+                    Log.e("chat file upload fileName", fileName)
+                }
+
+                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
+                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+
+                val retrofitBearer = Retrofit.Builder()
+                    .baseUrl("http://112.154.249.74:8080/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(
+                        OkHttpClient.Builder()
+                            .addInterceptor { chain ->
+                                val request = chain.request().newBuilder()
+                                    .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                    .build()
+                                Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                                chain.proceed(request)
+                            }
+                            .build()
+                    )
+                    .build()
+
+                val sharedPreferencesRoomId = requireActivity().getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
+                val roomId = sharedPreferencesRoomId?.getLong("roomId", 0) // 저장해둔 roomId 가져오기
+
+                val sharedPreferences2 = requireActivity().getSharedPreferences("MyNickname", Context.MODE_PRIVATE)
+                val myNickname = sharedPreferences2?.getString("nickname", "") // 저장해둔 닉네임 가져오기
+
+                val fileUploadService = retrofitBearer.create(ChatFileUploadService::class.java)
+
+                if (filePart != null) {
+                    fileUploadService.uploadFile(filePart).enqueue(object : Callback<FileUploadResponse>{
+                        override fun onResponse(
+                            call: Call<FileUploadResponse>,
+                            response: Response<FileUploadResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                Log.e("Chat file upload response code", "${response.code()}")
+                                Log.e("Chat file upload response body", "${response.body()}")
+
+                                val fileResponse = response.body()
+                                val filePath = fileResponse?.data?.filePath
+                                val fileSize = fileResponse?.data?.fileSize
+                                val fileType = fileResponse?.data?.fileContentType
+
+                                context?.let { saveFilePath(it, filePath) }
+                                context?.let { saveFileContentType(it, fileType) }
+
+                                val message = "파일 경로: $filePath\n파일 크기: $fileSize\n파일 타입: $fileType"
+                                if (roomId != null) {
+                                    if (myNickname != null) {
+                                        sendMessage(message, roomId, myNickname, MessageType.FILE)
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun onFailure(call: Call<FileUploadResponse>, t: Throwable) {
+                            Log.e("ChattingFragment file upload", "Failed", t)
+                            Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()                        }
+
+                    })
+                }
+
+            }
         }
     }
 
@@ -96,7 +228,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         }
 
 
-        chattingAdapter = ChattingAdapter(mutableListOf())
+        chattingAdapter = requireActivity()?.let { ChattingAdapter(it, mutableListOf()) }!!
         binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
         chattingRecyclerView.adapter = chattingAdapter
 
@@ -149,29 +281,36 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                                     nickname = nickname,
                                     message = chat["message"] as? String ?: "",
                                     currentDateTime = chat["currentDateTime"] as? String ?: "",
-                                    profileImagePath = chat["profileImagePath"] as String
+                                    profileImagePath = chat["profileImagePath"] as String,
+                                    messageType = chat["messageType"] as String
                                 )
                             }
                         }
                     }
 
+
                     // 채팅 내용 어댑터에 띄우기
                     convertedChatList?.forEach { chat ->
+                        val isMessage = if (chat.messageType == "FILE") MessageType.FILE else MessageType.CHAT
                         val sender = if (chat.nickname == myNickname) "me" else ""
                         val chatMessage = ChatMessage(
                             chat.message,
                             sender,
                             chat.nickname,
                             chat.currentDateTime,
-                            chat.profileImagePath
+                            chat.profileImagePath,
+                            isMessage
                         )
-                        chattingAdapter.addMessage(chatMessage)
+                        if (isMessage == MessageType.CHAT) {
+                            chattingAdapter.addMessage(chatMessage)
+                        } else {
+                            chattingAdapter.addFileMessage(chatMessage)
+                        }
                     }
                     Log.e("ChattingFrgment chatList", convertedChatList.toString())
 
                     val nicknameImageMap = chatMap?.get("NICKNAME_IMAGE") as? Map<String, String>
                     val memberInfoMap = HashMap<String, String>()
-                    Log.e("chattingFragment memberInfoMap", "$memberInfoMap")
 
                     if (nicknameImageMap != null) {
                         for ((nickname, imageUrl) in nicknameImageMap) {
@@ -230,11 +369,17 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
             val message = binding.chatEditText.text.toString()
             if (roomId != null) {
                 if (myNickname != null) {
-                    sendMessage(message, roomId, myNickname)
+                    sendMessage(message, roomId, myNickname, MessageType.CHAT)
                 }
             }
             binding.chatEditText.setText("")
         }
+
+        binding.fileButton.setOnClickListener {
+            openFilePicker()
+        }
+
+
         return binding.root
     }
 
@@ -288,7 +433,11 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
             if (nickname != null && message.nickname != nickname) {
                 Log.e("chatting message ", "nickname: $nickname")
                 coroutineScope.launch {
-                    chattingAdapter.addMessage(message) // 객체를 채팅 어댑터에 추가
+                    if (message.messageType == MessageType.CHAT) {
+                        chattingAdapter.addMessage(message) // 객체를 채팅 어댑터에 추가
+                    } else if (message.messageType == MessageType.FILE) {
+                        chattingAdapter.addFileMessage(message)
+                    }
                     binding.chattingRecyclerView.smoothScrollToPosition(chattingAdapter.itemCount - 1) // 채팅메시지가 표시되는 위치로 스크롤 이동
                 }
             }
@@ -300,12 +449,13 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         )
     }
 
-    private fun sendMessage(message: String, roomId: Long, nickname: String) {
+    private fun sendMessage(message: String, roomId: Long, nickname: String, messageType: MessageType) {
 
         val data = JSONObject()
         data.put("roomId", roomId.toString())
         data.put("nickname", nickname)
         data.put("message", message)
+        data.put("messageType", messageType)
         val currentDateTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
 
         val sharedPreferences = requireActivity().getSharedPreferences("MyImagePath", Context.MODE_PRIVATE)
@@ -313,16 +463,24 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
 
         data.put("profileImagePath", myImagePath)
 
-        val chatMessage = myImagePath?.let { ChatMessage(message, "me", nickname, currentDateTime, myImagePath) }
+        val chatMessage = myImagePath?.let { ChatMessage(message, "me", nickname, currentDateTime, myImagePath, messageType) }
 
         stompClient?.send("/pub/chat/message", data.toString())?.subscribe()
 
-        Log.e("ChattingFragment sendMessage", "$message, $roomId, $nickname, $myImagePath")
+        Log.e("ChattingFragment sendMessage", "$message, $roomId, $nickname, $myImagePath, $messageType")
 
         coroutineScope.launch {
-            if (chatMessage != null) {
-                    chattingAdapter.addMessage(chatMessage)
-            } // 객체를 채팅 어댑터에 추가
+
+                if (messageType == MessageType.CHAT) {
+                    if (chatMessage != null) {
+                        chattingAdapter.addMessage(chatMessage)
+                    }
+                } else if(messageType == MessageType.FILE){
+                        if (chatMessage != null) {
+                            chattingAdapter.addFileMessage(chatMessage)
+                        }
+                }
+             // 객체를 채팅 어댑터에 추가
             binding.chattingRecyclerView.smoothScrollToPosition(chattingAdapter.itemCount - 1) // 채팅메시지가 표시되는 위치로 스크롤 이동
         }
     }
@@ -335,15 +493,23 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         val nicknameJson = JSONObject(body)
         val currentDateTimeJson = JSONObject(body)
         val profileImagePathJson = JSONObject(body)
+        val messageTypeJson = JSONObject(body)
 
         val message = messageJson.getString("message")
         val nickname = nicknameJson.getString("nickname")
         val currentDateTime = currentDateTimeJson.getString("currentDateTime")
         val profileImagePath = profileImagePathJson.getString("profileImagePath")
+        val messageType = messageTypeJson.getString("messageType")
 
-        Log.e("ChattingFragment parseMessage", "$message, $nickname, $currentDateTime, $profileImagePath")
+        val isMessageType = if (messageType == "FILE") {
+            MessageType.FILE
+        } else {
+            MessageType.CHAT
+        }
 
-        return ChatMessage(message, "", nickname, currentDateTime, profileImagePath)
+        Log.e("ChattingFragment parseMessage", "$message, $nickname, $currentDateTime, $profileImagePath, $messageType")
+
+        return ChatMessage(message, "", nickname, currentDateTime, profileImagePath, isMessageType)
     }
 
     override fun onYesButtonClick(id: Long) {

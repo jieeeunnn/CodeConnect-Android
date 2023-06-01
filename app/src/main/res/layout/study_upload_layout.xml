@@ -22,7 +22,7 @@
         android:elevation="5dp"
         android:gravity="center"
         android:text="num"
-        android:textColor="@color/grey_dark"
+        android:textColor="@color/blue_main"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

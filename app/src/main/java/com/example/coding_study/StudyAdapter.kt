@@ -40,7 +40,7 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
 
             if (post.num > post.currentCount) {
                 binding.numberTextView.text = "모집 중 [ ${post.currentCount} / ${post.num} ]"
-                binding.numberTextView.setBackgroundResource(R.drawable.round_rect_darkblue)
+                binding.numberTextView.setBackgroundResource(R.drawable.round_rect_skyblue)
             } else {
                 binding.numberTextView.text = "모집 완료"
                 binding.numberTextView.setBackgroundResource(R.drawable.round_rect_grey_clear)
@@ -50,16 +50,39 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
             binding.fieldTextView.text = "# ${post.field}"
             val fieldText = binding.fieldTextView
             when (post.field) {
-                "안드로이드" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.android)) // Android 필드일 경우 초록색으로 설정
-                "IOS" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.IOS)) // iOS 필드일 경우 회색으로 설정
-                "알고리즘" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.algorithm)) // iOS 필드일 경우 회색으로 설정
-                "데이터베이스" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.database)) // iOS 필드일 경우 회색으로 설정
-                "운영체제" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.os)) // iOS 필드일 경우 회색으로 설정
-                "서버" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.server)) // iOS 필드일 경우 회색으로 설정
-                "웹" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.web)) // iOS 필드일 경우 회색으로 설정
-                "머신러닝" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.machine_learning)) // iOS 필드일 경우 회색으로 설정
-                "기타" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.other)) // iOS 필드일 경우 회색으로 설정
+                "안드로이드" -> {
+                    fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.android)) // Android 필드일 경우 글자색 변경
+                    fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.android_background) // Android 필드일 경우 배경 변경
+                }                "IOS" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.IOS)) // iOS 필드일 경우 회색으로 설정
+                "알고리즘" -> {
+                    fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.algorithm)) // Android 필드일 경우 글자색 변경
+                    fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.algorithm_background) // Android 필드일 경우 배경 변경
                 }
+                "데이터베이스" -> {
+                fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.database)) // Android 필드일 경우 글자색 변경
+                fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.database_background) // Android 필드일 경우 배경 변경
+                }
+                "운영체제" -> {
+                    fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.os)) // Android 필드일 경우 글자색 변경
+                    fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.os_background) // Android 필드일 경우 배경 변경
+                }
+                "서버" -> {
+                fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.server)) // Android 필드일 경우 글자색 변경
+                fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.server_background) // Android 필드일 경우 배경 변경
+                }
+                "웹" -> {
+                    fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.web)) // Android 필드일 경우 글자색 변경
+                    fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.web_background) // Android 필드일 경우 배경 변경
+                }
+                "머신러닝" -> {
+                    fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.machine_learning)) // Android 필드일 경우 글자색 변경
+                    fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.machine_learning_background) // Android 필드일 경우 배경 변경
+                }
+                "기타" -> {
+                    fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.other)) // Android 필드일 경우 글자색 변경
+                    fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.other_background) // Android 필드일 경우 배경 변경
+                }
+            }
 
             binding.currentTextView.text = post.currentTime
 

@@ -102,42 +102,6 @@ class ChecklistAdapter(private val stompViewModel: StompViewModel, private val r
                 Log.e("CheckListAdater", data.toString())
             }
         }
-        /*
-        @SuppressLint("CheckResult")
-        private fun subscribeTodoList(roomId: Long) {
-            val stompClient = stompViewModel.getStompClient()
-            if (stompClient != null) {
-                if (stompClient.isConnected) {
-                    stompClient?.topic("/sub/todo/room/$roomId")?.subscribe ({ // 메시지 구독
-                            response ->
-                        val message = parseTodoList(response) // 전송된 stomp 메시지를 ChatMessage 객체로 파싱
-                    },
-                        { error ->
-                            // 예외 처리
-                            error.printStackTrace()
-                        }
-                    )
-                }
-            }
-
-        }
-
-        private fun parseTodoList(todoListItem: StompMessage): TodoListItem {
-            // 파싱 로직 구현
-            val body = todoListItem.payload // payload를 이용하여 메시지 내용 추출
-
-            val todoIdJson = JSONObject(body)
-            val contentJson = JSONObject(body)
-            val completedJson = JSONObject(body)
-
-            val todoId = todoIdJson.getDouble("todoId")
-            val content = contentJson.getString("content")
-            val completed = completedJson.getBoolean("completed")
-
-            return TodoListItem(todoId, content, completed)
-        }
-         */
-
 
     }
 }
