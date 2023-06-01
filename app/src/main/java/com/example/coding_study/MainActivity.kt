@@ -14,6 +14,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+
 class MainActivity : AppCompatActivity() {
     val binding by lazy {ActivityMainBinding.inflate(layoutInflater)}
     private lateinit var logButton: Button

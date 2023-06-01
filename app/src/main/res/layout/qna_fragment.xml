@@ -48,6 +48,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <LinearLayout
             android:id="@+id/qnaLinearLayout"
             android:layout_width="match_parent"
@@ -58,9 +62,11 @@
                 android:id="@+id/qnaTopText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
+                android:paddingVertical="10dp"
                 android:paddingHorizontal="20dp"
                 android:text="❤️ 좋아요가 많은 질문"
+                android:background="@drawable/round_rect_clear_stroke"
+                android:layout_margin="10dp"
                 android:textColor="@color/grey_dark"
                 android:textStyle="bold" />
 
@@ -73,9 +79,11 @@
                 android:id="@+id/qnaListText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
+                android:paddingVertical="10dp"
                 android:paddingHorizontal="20dp"
+                android:layout_margin="10dp"
                 android:text="모든 Q&amp;A"
+                android:background="@drawable/round_rect_clear_stroke"
                 android:textColor="@color/grey_dark"
                 android:textStyle="bold" />
 
@@ -89,6 +97,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
+        </ScrollView>
+
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

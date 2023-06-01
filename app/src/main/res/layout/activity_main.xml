@@ -5,6 +5,7 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login_back"
     tools:context=".MainActivity">
 
 
@@ -59,23 +60,23 @@
         android:layout_width="250dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/round_rect_clear"
+        android:background="@drawable/round_rect_clear_stroke"
         android:elevation="3dp"
         android:stateListAnimator="@null"
         android:text="회원가입"
-        android:textColor="#515151"
+        android:textColor="@color/blue_sky"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logButton" />
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="175dp"
-        android:layout_height="264dp"
+        android:id="@+id/imageView30"
+        android:layout_width="255dp"
+        android:layout_height="238dp"
         android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/codeconnect_logo" />
+        app:srcCompat="@drawable/cc_logo_shadow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

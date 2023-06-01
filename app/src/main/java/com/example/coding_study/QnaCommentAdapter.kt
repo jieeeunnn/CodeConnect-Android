@@ -115,10 +115,6 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
 
                         popupMenu.setOnMenuItemClickListener { menuItem ->
                             when (menuItem.itemId) {
-                                R.id.commentEditMenu -> {
-                                    // 수정 기능 구현
-                                    true
-                                }
                                 R.id.commentDeleteMenu -> {
                                     // 삭제 기능 구현
                                     val deleteDialog = CommentDeleteDialog(comment.commentId)

@@ -34,7 +34,7 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/qnaGuestSwifeRefreshLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,143 +45,143 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/qnaGuestConstraintInSwife"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:clickable="true">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/qnaGuestConstraintInSwife"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:clickable="true">
 
 
-            <TextView
-                android:id="@+id/qnaGuestNickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="28dp"
-                android:text="nickname"
-                android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/qnaGuestProfileImage"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/qnaGuestNickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="28dp"
+                    android:text="nickname"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toEndOf="@+id/qnaGuestProfileImage"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/qnaGuestTitle"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="title"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/qnaGuestProfileImage"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestProfileImage" />
+                <TextView
+                    android:id="@+id/qnaGuestTitle"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="title"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/qnaGuestProfileImage"
+                    app:layout_constraintTop_toBottomOf="@+id/qnaGuestProfileImage" />
 
-            <TextView
-                android:id="@+id/qnaGuestContent"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="content"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/qnaGuestTitle"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestTitle" />
+                <TextView
+                    android:id="@+id/qnaGuestContent"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="content"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@+id/qnaGuestTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/qnaGuestTitle" />
 
-            <TextView
-                android:id="@+id/qnaGuestCurrentTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="50dp"
-                android:text="currentTime"
-                android:textSize="10sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/qnaGuestNickname"
-                app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:id="@+id/qnaGuestCurrentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="50dp"
+                    android:text="currentTime"
+                    android:textSize="10sp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/qnaGuestNickname"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-            <EditText
-                android:id="@+id/guestCommentEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="60dp"
-                android:ems="15"
-                android:hint="댓글을 입력하세요"
-                android:inputType="textPersonName"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                <EditText
+                    android:id="@+id/guestCommentEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="60dp"
+                    android:ems="15"
+                    android:hint="댓글을 입력하세요"
+                    android:inputType="textPersonName"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
-                android:id="@+id/guestCommentButton"
-                android:layout_width="60dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/round_rect_skyblue"
-                android:stateListAnimator="@null"
-                android:text="댓글"
-                android:textColor="@color/blue_main"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/guestCommentEdit"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestRecyclerView" />
+                <Button
+                    android:id="@+id/guestCommentButton"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/round_rect_skyblue"
+                    android:stateListAnimator="@null"
+                    android:text="댓글"
+                    android:textColor="@color/blue_main"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/guestCommentEdit"
+                    app:layout_constraintTop_toBottomOf="@+id/qnaGuestRecyclerView" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/qnaGuestRecyclerView"
-                android:layout_width="0dp"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/guestCommentEdit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/guestLikeCountView"
-                tools:ignore="MissingConstraints" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/qnaGuestRecyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="410dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintBottom_toTopOf="@+id/guestCommentEdit"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/guestLikeCountView"
+                    tools:ignore="MissingConstraints" />
 
-            <ImageView
-                android:id="@+id/qnaGuestImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestContent"
-                tools:srcCompat="@tools:sample/avatars" />
+                <ImageView
+                    android:id="@+id/qnaGuestImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
+                    app:layout_constraintTop_toBottomOf="@+id/qnaGuestContent"
+                    tools:srcCompat="@tools:sample/avatars" />
 
-            <ImageView
-                android:id="@+id/qnaGuestProfileImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="24dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_baseline_person_24" />
+                <ImageView
+                    android:id="@+id/qnaGuestProfileImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_person_24" />
 
-            <ImageView
-                android:id="@+id/noHeartImage"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView"
-                app:srcCompat="@drawable/icon_heart" />
+                <ImageView
+                    android:id="@+id/noHeartImage"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
+                    app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView"
+                    app:srcCompat="@drawable/icon_heart" />
 
-            <TextView
-                android:id="@+id/guestLikeCountView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="12dp"
-                android:text="TextView"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView" />
+                <TextView
+                    android:id="@+id/guestLikeCountView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="12dp"
+                    android:text="TextView"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView" />
 
-            <ImageView
-                android:id="@+id/onHeartImage"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
-                app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView"
-                app:srcCompat="@drawable/icon_heart_red" />
+                <ImageView
+                    android:id="@+id/onHeartImage"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="@+id/qnaGuestContent"
+                    app:layout_constraintTop_toBottomOf="@+id/qnaGuestImageView"
+                    app:srcCompat="@drawable/icon_heart_red" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 

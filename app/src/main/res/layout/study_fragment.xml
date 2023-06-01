@@ -10,13 +10,13 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="304dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="275dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/studyToolBar"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/codeconnect1" />
+        app:srcCompat="@drawable/code_connect_logo_navy" />
 
     <TextView
         android:id="@+id/myFieldTextView"
