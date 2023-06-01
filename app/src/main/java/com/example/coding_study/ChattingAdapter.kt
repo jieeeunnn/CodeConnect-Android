@@ -21,13 +21,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
 
 
 data class ChatMessage (
@@ -325,19 +323,19 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
         val message = chatMessages[position]
         when (holder) {
             is ChatMessageViewHolder -> {
-                val chatMessage = message as ChatMessage
+                val chatMessage = message
                 holder.bind(chatMessage)
             }
             is OtherChatMessageViewHolder -> {
-                val chatMessage = message as ChatMessage
+                val chatMessage = message
                 holder.bind(chatMessage)
             }
             is MyFileViewHolder -> {
-                val fileMessage = message as ChatMessage
+                val fileMessage = message
                 holder.bind(fileMessage)
             }
             is OtherFileViewHolder -> {
-                val fileMessage = message as ChatMessage
+                val fileMessage = message
                 holder.bind(fileMessage)
             }
 
@@ -357,7 +355,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
     override fun getItemCount(): Int = chatMessages.size
 
 
-    fun extractFileNameFromContentDisposition(contentDisposition: String?): String {
+    fun extractFileNameFromContentDisposition(contentDisposition: String?): String { // 서버에서 다운받은 파일 이름 추출
         contentDisposition?.let {
             val fileNameStartIndex = it.indexOf("filename=")
             if (fileNameStartIndex != -1) {

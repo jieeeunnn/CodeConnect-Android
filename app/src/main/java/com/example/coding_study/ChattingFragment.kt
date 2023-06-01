@@ -162,7 +162,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                                 context?.let { saveFilePath(it, filePath) }
                                 context?.let { saveFileContentType(it, fileType) }
 
-                                val message = "파일 경로: $filePath\n파일 크기: $fileSize\n파일 타입: $fileType"
+                                val message = "파일 경로: $filePath\n파일 타입: $fileType\n파일 크기: $fileSize"
                                 if (roomId != null) {
                                     if (myNickname != null) {
                                         sendMessage(message, roomId, myNickname, MessageType.FILE)

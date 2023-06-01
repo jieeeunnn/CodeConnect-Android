@@ -25,9 +25,9 @@
         android:layout_height="45dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:backgroundTint="#CFDCFF"
+        android:background="@drawable/round_rect_skyblue"
         android:text="취소"
-        android:textColor="#515151"
+        android:textColor="@color/blue_main"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialogTextView" />
 
@@ -36,9 +36,9 @@
         android:layout_width="100dp"
         android:layout_height="45dp"
         android:layout_marginEnd="24dp"
-        android:backgroundTint="#CFDCFF"
+        android:background="@drawable/round_rect_skyblue"
         android:text="확인"
-        android:textColor="#515151"
+        android:textColor="@color/blue_main"
         app:layout_constraintBaseline_toBaselineOf="@+id/dialogNoButton"
         app:layout_constraintEnd_toEndOf="parent" />
 

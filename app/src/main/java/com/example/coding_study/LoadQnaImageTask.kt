@@ -45,8 +45,8 @@ class LoadQnaImageTask(private val imageView: ImageView) : AsyncTask<String, Voi
     }
 
     private fun calculateTargetSize(originalWidth: Int, originalHeight: Int): Size {
-        val maxWidth = 300 // 원하는 가로 크기
-        val maxHeight = 300 // 원하는 세로 크기
+        val maxWidth = 500 // 원하는 가로 크기
+        val maxHeight = 500 // 원하는 세로 크기
 
         val widthRatio = maxWidth.toFloat() / originalWidth.toFloat()
         val heightRatio = maxHeight.toFloat() / originalHeight.toFloat()

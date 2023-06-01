@@ -13,8 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="3dp"
         android:text="nickname"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/commentGuestProfileImage"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,9 +23,10 @@
         android:id="@+id/guestCommentCurrentDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
         android:text="currentDateTime"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guestCommentTextView" />
@@ -33,8 +35,9 @@
         android:id="@+id/guestCommentTextView"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:text="comment"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/commentGuestProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/commentGuestProfileImage" />
 
@@ -42,7 +45,7 @@
         android:id="@+id/commentGuestProfileImage"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_person_24" />

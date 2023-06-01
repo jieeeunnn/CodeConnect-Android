@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="blue_sky">#313F6E</color>
+    <color name="blue_sky">#44527C</color>
     <color name="blue_main">#F3F6FF</color>
     <color name="grey">#DADADA</color>
     <color name="grey_medium">#959595</color>
@@ -23,6 +23,5 @@
     <color name="web">#2783CC</color>
     <color name="machine_learning">#E6B41D</color>
     <color name="other">#7E7E7E</color>
-
 
 </resources>

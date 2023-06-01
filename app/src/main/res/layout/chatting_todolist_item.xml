@@ -33,9 +33,9 @@
         android:layout_width="60dp"
         android:layout_height="30dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/round_rect_skyblue"
+        android:background="@drawable/round_rect_clear"
         android:text="삭제"
-        android:textColor="@color/blue_main"
+        android:textColor="@color/blue_sky"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

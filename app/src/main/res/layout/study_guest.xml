@@ -156,10 +156,10 @@
 
         <Button
             android:id="@+id/guestButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
             android:layout_marginTop="80dp"
-            android:layout_marginBottom="180dp"
+            android:layout_marginBottom="130dp"
             android:background="@drawable/round_rect_skyblue"
             android:text="참여하기"
             android:textColor="@color/blue_main"
@@ -171,13 +171,13 @@
 
         <Button
             android:id="@+id/guestCancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
             android:layout_marginTop="80dp"
-            android:layout_marginBottom="180dp"
-            android:background="@drawable/round_rect_skyblue"
+            android:layout_marginBottom="130dp"
+            android:background="@drawable/round_rect_clear_stroke"
             android:text="취소하기"
-            android:textColor="@color/grey_dark"
+            android:textColor="@color/blue_sky"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -58,9 +58,9 @@
                 android:id="@+id/qnaTopText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="10dp"
+                android:paddingBottom="10dp"
                 android:paddingHorizontal="20dp"
-                android:text="유용한 질문 Top 10"
+                android:text="❤️ 좋아요가 많은 질문"
                 android:textColor="@color/grey_dark"
                 android:textStyle="bold" />
 
@@ -73,7 +73,7 @@
                 android:id="@+id/qnaListText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="20dp"
+                android:paddingBottom="10dp"
                 android:paddingHorizontal="20dp"
                 android:text="모든 Q&amp;A"
                 android:textColor="@color/grey_dark"

@@ -41,6 +41,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qnaHostToolbar">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/qnaHostConstraintInSwife"
             android:layout_width="match_parent"
@@ -54,30 +58,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="51dp"
                 android:text="nickname"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/qnaHostProfileImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/qnaHostTitle"
-                android:layout_width="270dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="title"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/qnaHostProfileImage"
                 app:layout_constraintTop_toBottomOf="@+id/qnaHostProfileImage" />
 
             <TextView
                 android:id="@+id/qnaHostContent"
-                android:layout_width="270dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:text="content"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/qnaHostTitle"
                 app:layout_constraintTop_toBottomOf="@+id/qnaHostTitle" />
 
@@ -85,9 +89,9 @@
                 android:id="@+id/qnaHostCurrentTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="50dp"
+                android:layout_marginEnd="40dp"
                 android:text="currentTime"
-                android:textSize="14sp"
+                android:textSize="10sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/qnaHostNickname"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -107,7 +111,7 @@
                 android:id="@+id/qnaHostDeleteButton"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="50dp"
                 android:background="@drawable/round_rect_clear"
                 android:stateListAnimator="@null"
@@ -120,31 +124,33 @@
                 android:id="@+id/hostComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginBottom="70dp"
-                android:ems="14"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="60dp"
+                android:ems="15"
                 android:hint="댓글을 입력하세요"
                 android:inputType="textPersonName"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/hostCommentButton"
-                android:layout_width="65dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="32dp"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/round_rect_skyblue"
                 android:stateListAnimator="@null"
                 android:text="댓글"
                 android:textColor="@color/blue_main"
-                app:layout_constraintBaseline_toBaselineOf="@+id/hostComment"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/hostComment"
+                app:layout_constraintTop_toBottomOf="@+id/qnaHostRecyclerView" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/qnaHostRecyclerView"
-                android:layout_width="418dp"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/hostComment"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -155,7 +161,7 @@
                 android:id="@+id/qnaHostImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="6dp"
                 app:layout_constraintStart_toStartOf="@+id/qnaHostContent"
                 app:layout_constraintTop_toBottomOf="@+id/qnaHostContent"
                 tools:srcCompat="@tools:sample/avatars" />
@@ -164,8 +170,8 @@
                 android:id="@+id/qnaHostProfileImage"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="45dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_person_24" />
@@ -174,7 +180,7 @@
                 android:id="@+id/heartImageView"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@+id/qnaHostContent"
                 app:layout_constraintTop_toBottomOf="@+id/qnaHostImageView"
                 app:srcCompat="@drawable/icon_heart" />
@@ -184,8 +190,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="80dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:text="TextView"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/qnaHostImageView" />
 
@@ -193,11 +200,13 @@
                 android:id="@+id/heartOnImage"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@+id/qnaHostContent"
                 app:layout_constraintTop_toBottomOf="@+id/qnaHostImageView"
                 app:srcCompat="@drawable/icon_heart_red" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

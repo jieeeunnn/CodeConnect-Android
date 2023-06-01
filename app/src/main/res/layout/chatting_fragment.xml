@@ -50,18 +50,21 @@ android:layout_height="match_parent">
         android:id="@+id/chatEditText"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="60dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/chatButton" />
+        app:layout_constraintEnd_toStartOf="@+id/chatButton"
+        app:layout_constraintTop_toBottomOf="@+id/chattingRecyclerView" />
 
     <Button
         android:id="@+id/chatButton"
-        android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="24dp"
+        android:layout_width="60dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/round_rect_skyblue"
         android:text="전송"
         android:textColor="@color/blue_main"
@@ -79,10 +82,10 @@ android:layout_height="match_parent">
 
     <ImageButton
         android:id="@+id/fileButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/round_rect_skyblue"
         app:layout_constraintEnd_toStartOf="@+id/chatEditText"
         app:layout_constraintTop_toBottomOf="@+id/chattingRecyclerView"
