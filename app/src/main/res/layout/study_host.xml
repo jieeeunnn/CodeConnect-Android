@@ -8,35 +8,35 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:clickable="true"
         android:id="@+id/study_host_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:clickable="true">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/studyHostToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/round_rect_two"
-        app:menu="@menu/toolbar_menu_study">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/studyHostToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/round_rect_two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_menu_study">
 
-        <TextView
-            android:id="@+id/studyHostToolbarTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="스터디 모집"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/studyHostToolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="스터디 모집"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-    </androidx.appcompat.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:id="@+id/hostNicknameText"
@@ -133,17 +133,17 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/hostPersonText"
             app:layout_constraintStart_toStartOf="@+id/hostFieldText" />
 
-    <Button
-        android:id="@+id/hostEditButton"
-        android:layout_width="55dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:stateListAnimator="@null"
-        android:text="수정"
-        android:textColor="#515151"
-        app:layout_constraintBaseline_toBaselineOf="@+id/hostDeleteButton"
-        app:layout_constraintEnd_toStartOf="@+id/hostDeleteButton" />
+        <Button
+            android:id="@+id/hostEditButton"
+            android:layout_width="55dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/white"
+            android:stateListAnimator="@null"
+            android:text="수정"
+            android:textColor="#515151"
+            app:layout_constraintBaseline_toBaselineOf="@+id/hostDeleteButton"
+            app:layout_constraintEnd_toStartOf="@+id/hostDeleteButton" />
 
         <Button
             android:id="@+id/hostDeleteButton"
