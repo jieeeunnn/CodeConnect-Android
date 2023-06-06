@@ -11,7 +11,6 @@ import com.example.coding_study.databinding.QnaHostBinding
 import com.google.gson.Gson
 
 class ReplyCommentFragment : Fragment() {
-    private lateinit var replyRecyclerView: RecyclerView
     private lateinit var binding: QnaHostBinding
 
     override fun onCreateView(
@@ -26,7 +25,6 @@ class ReplyCommentFragment : Fragment() {
         val commentHost = commentGson.fromJson(commentJson, Comment::class.java)
 
         Log.e("ReplyCommentFragment commentHost", "$commentHost")
-        //val commentRecyclerView = binding.replyCommentRecyclerView
 
 
         return binding.root

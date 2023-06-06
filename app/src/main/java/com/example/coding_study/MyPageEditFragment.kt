@@ -320,59 +320,6 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
             pickImageLauncher.launch(galleryIntent)
         }
 
-
-        /*
-        binding.myPageUploadButton.setOnClickListener {
-            if (selectedFields.size < 2) { // 필드를 2개 선택하지 않았을 경우 Toast 메세지 띄우기
-                val confirmDialog = ConfirmDialog("관심 언어 2개를 선택해 주세요")
-                confirmDialog.isCancelable = false
-                confirmDialog.show(childFragmentManager, "joinFragment joinButton2_관심사 선택")
-            }
-            else{
-                val nickname = binding.myPageNewId.text.toString()
-                val address = binding.myPageNewAddress.text.toString()
-                val fieldList = selectedFields.toList()
-
-                var myPageEdit = MyPageEdit(nickname, address, fieldList)
-
-                myPageEditService.myPageEditPost(myPageEdit).enqueue(object : Callback<MyPageEditResponse> {
-                    override fun onResponse(
-                        call: Call<MyPageEditResponse>,
-                        response: Response<MyPageEditResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            Log.e("MyPageEditFragment response code is", "${response.code()}")
-                            Log.e("MyPageEditFragment response body is", "${response.body()}")
-
-                            context?.let { it1 -> saveNickname(it1, nickname) } // 수정된 nickname 저장
-                            context?.let { it1 -> saveAddress(it1, address) }
-                            context?.let { it1 -> saveFields(it1, fieldList) }
-
-                            val parentFragment = parentFragment
-                            if (parentFragment is MyPageFragment) {
-                                parentFragment.onResume()
-                            }
-
-                            val parentFragmentManager = requireActivity().supportFragmentManager
-                            parentFragmentManager.popBackStack()
-                        }
-                        else {
-                            Log.e("MyPageEditFragment_onResponse","But not success")
-
-                        }
-                    }
-
-                    override fun onFailure(call: Call<MyPageEditResponse>, t: Throwable) {
-                        Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
-                    }
-
-                })
-            }
-        }
-
-         */
-
-
         return binding.root
     }
 

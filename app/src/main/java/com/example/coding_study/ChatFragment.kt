@@ -100,7 +100,6 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(context)
         chatRecyclerView.adapter = chatAdapter
 
-
         return binding.root
     }
 

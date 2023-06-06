@@ -172,10 +172,8 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
                         override fun onFailure(call: Call<QnaOnlyResponse>, t: Throwable) {
                             Log.e("QnaFragment_QnaOnlyResponse", "Failed to get qna list", t)
                         }
-
                     })
                 }
-
             }
         }
 
@@ -184,7 +182,6 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
                 TODO("Not yet implemented")
             }
         }
-
 
         qnaAdapter = QnaAdapter(listOf(), onQnaClickListener, onPopularClickListener)
         myPageRecyclerView.adapter = qnaAdapter
@@ -221,7 +218,6 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
                             Log.e("StudyFragment", "recruitmentIds: $qnaRecruitmentIds")
 
 
-
                             if (qnapostListResponse != null) {
                                 qnaAdapter.qnaPostList = qnapostListResponse
                                 qnaAdapter.notifyDataSetChanged()
@@ -234,7 +230,6 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
                     Log.e("MyPageMyQna Fragment", "Failed to get qna list", t)
                     Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                 }
-
             })
         }
 

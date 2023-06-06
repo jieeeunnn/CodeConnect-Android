@@ -105,7 +105,6 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
 
                     uploadQna(qnaRequest)
                 }
-
             }
         }
 
@@ -125,8 +124,8 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
                 .load(selectedImageUri)
 
             // 이미지를 원하는 크기로 제한
-            val targetWidth = 300 // 원하는 가로 크기
-            val targetHeight = 300 // 원하는 세로 크기
+            val targetWidth = 300 // 가로 크기
+            val targetHeight = 300 // 세로 크기
             glideRequest.override(targetWidth, targetHeight)
 
             glideRequest.into(imageView)

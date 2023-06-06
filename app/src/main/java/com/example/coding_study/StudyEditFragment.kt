@@ -23,11 +23,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 
-interface StudyEditService{
-    @PUT("recruitments/update/{id}")
-    fun editPost(@Path("id") id: Long, @Body studyEdit: StudyRequest): Call<StudyResponse>
-}
-
 
 class StudyEditFragment : Fragment(R.layout.write_study) {
     private lateinit var binding: WriteStudyBinding

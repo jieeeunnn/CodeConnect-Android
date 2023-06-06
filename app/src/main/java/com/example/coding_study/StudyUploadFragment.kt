@@ -25,12 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { // study 게시판 글쓰기 fragment
     private lateinit var binding: WriteStudyBinding
 
-    /*
-    companion object { // 스피너 목록
-        val filters = arrayListOf("안드로이드", "ios", "알고리즘", "데이터베이스", "운영체제", "서버", "웹", "머신러닝", "기타")
-    }
-     */
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -144,7 +138,5 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         if (parentFragment is StudyFragment) {
             parentFragment.hideFloatingButton()
         }
-
-
     }
 }

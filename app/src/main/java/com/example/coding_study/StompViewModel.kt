@@ -16,5 +16,4 @@ class StompViewModel: ViewModel() {
         Log.e("StompViewModel getStrompCllient return stomp", "$stompClient")
         return stompClient
     }
-
 }

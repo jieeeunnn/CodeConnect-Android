@@ -333,7 +333,6 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
     override fun onResume() {
         super.onResume()
-        Log.e("QnaFragment", "onResume-----------------------")
         loadQnaList()
         loadTopQnaList()
     }
@@ -523,7 +522,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                     }
 
                     override fun onFailure(call: Call<QnaListResponse>, t: Throwable) {
-                        TODO("Not yet implemented")
+                        Log.e("QnaFragment", "Failed to searchView")
                     }
                 })
                 return false

@@ -137,14 +137,10 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
                     if (parentFragment is StudyFragment) {
                         parentFragment.showFloatingButton()
                         parentFragment.onResume()
-
                     }
-
                     //글 삭제 후 스터디 게시판으로 돌아감
                     requireActivity().supportFragmentManager.popBackStack()
-
                     Toast.makeText(context, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-
                 }
             }
             override fun onFailure(call: Call<Void>, t: Throwable) {

@@ -1,5 +1,6 @@
 package com.example.coding_study
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -130,6 +131,7 @@ class MyPageMyStudy: Fragment(R.layout.mypage_my_study) { // 내가 작성한 �
 
         if (nickname != null) {
             myStudyService.myStudyGetList(nickname).enqueue(object : Callback<StudyListResponse> {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<StudyListResponse>,
                     response: Response<StudyListResponse>

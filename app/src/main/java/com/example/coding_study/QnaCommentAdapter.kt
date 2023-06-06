@@ -1,7 +1,5 @@
 package com.example.coding_study
 
-import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.widget.PopupMenu
@@ -9,19 +7,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.databinding.QnaCommentGuestBinding
 import com.example.coding_study.databinding.QnaCommentHostBinding
-import com.google.gson.Gson
 
-
-data class QnaComment (
-    var nickname: String,
-    var comment: String,
-    var currentDateTime: String,
-    var commentId: Long
-        )
 
 class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commentList: List<Comment>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    //private var commentList = commentHostList?.plus(commentGuestList)
 
     companion object {
         private const val VIEW_TYPE_COMMENT_GUEST = 0
@@ -34,14 +23,6 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
             "COMMENT_HOST" -> VIEW_TYPE_COMMENT_HOST
             else -> throw IllegalArgumentException("Invalid role")
         }
-        /*
-        return if (commentHostList?.get(position)?.role == "COMMENT_HOST"){
-            VIEW_TYPE_COMMENT_HOST
-        } else if (commentGuestList?.get(position)?.role == "COMMENT_GUEST") {
-            VIEW_TYPE_COMMENT_GUEST
-        } else throw IllegalArgumentException("Invalid view type")
-
-         */
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -74,7 +55,6 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
 
     inner class CommentGuestViewHolder(private val binding: QnaCommentGuestBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(comment: Comment) {
-                    // commentHostList가 null이 아니고, 현재 아이템이 리스트 범위 내에 있을 경우에만 바인딩을 진행합니다.
             binding.guestCommentNickname.text = comment.nickname
             binding.guestCommentTextView.text = comment.comment
             binding.guestCommentCurrentDateTime.text = comment.currentDateTime
@@ -83,16 +63,6 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
             val imageView: ImageView = binding.commentGuestProfileImage
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)
-
-            /*
-                    binding.cgReplyButton.setOnClickListener { // 대댓글 버튼
-                        val replyFragment = ReplyCommentFragment()
-                        fragmentManager.beginTransaction()
-                            .replace(R.id.study_fragment_layout, replyFragment)
-                            .addToBackStack(null)
-                            .commit()
-                    }
-             */
         }
     }
 
@@ -127,26 +97,6 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
                         }
                         popupMenu.show()
                     }
-
-            /*
-                    binding.chReplyButton.setOnClickListener { // 대댓글 버튼
-                        val commentHost = comment
-                        val commentGson = Gson()
-                        val commentBundle = Bundle()
-
-                        val commentHostJson = commentGson.toJson(commentHost)
-                        commentBundle.putString("commentHostJson", commentHostJson)
-                        Log.e("QnaCommentAdapter commentHostJson", "$commentHostJson")
-
-                        val replyFragment = ReplyCommentFragment()
-                        fragmentManager.beginTransaction()
-                            .replace(R.id.qna_host_fragment, replyFragment)
-                            .addToBackStack(null)
-                            .commit()
-                    }
-
-             */
-
                 }
             }
     }

@@ -22,23 +22,11 @@ data class SignInResponseDto (
     var fieldList: List<String>
 )
 
-data class Member (
-    var email: String = "",
-    var password: String = "",
-    var nickname: String = "",
-    var createMemberTime : String = "",
-    var address : String = "",
-    var fieldList: List<String>
-)
-
-
-//input
 
 interface LoginService {
     @POST("members/login")
     fun requestLogin(@Body loginrequest: LoginRequest): Call<LoginResponse>
 }
-
 
 // 요청 데이터
 data class LoginRequest(

@@ -171,7 +171,6 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
             })
         }
 
-
         val qnaCommentCreateService = retrofitBearer.create(QnaCommentCreateService::class.java)
 
         binding.guestCommentButton.setOnClickListener { // 댓글 작성 버튼

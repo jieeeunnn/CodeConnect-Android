@@ -3,7 +3,6 @@ package com.example.coding_study
 import retrofit2.Call
 import retrofit2.http.*
 
-
 //게시글 작성 시 응답 값
 data class StudyResponse (
     //변수명이 JSON에 있는 키값과 같아야함
@@ -43,7 +42,6 @@ data class StudyRequest(
 
 
 interface StudyGetService { // 게시글 조회 인터페이스
-    //@GET("recruitments/list") // 전체 게시글
     @GET("recruitments/main") // 주소, 필드가 같은 게시글
     fun studyGetList(
         @Query("address") address: String? // 처음 로그인 시 null 전달을 위해 address에 null 허용
@@ -96,6 +94,10 @@ interface StudyDeleteService { // 스터디 게시글 삭제
     fun deletePost(@Path("id") id: Long): Call<Void>
 }
 
+interface StudyEditService{ // 스터디 게시글 수정
+    @PUT("recruitments/update/{id}")
+    fun editPost(@Path("id") id: Long, @Body studyEdit: StudyRequest): Call<StudyResponse>
+}
 
 
 

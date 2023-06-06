@@ -7,8 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -68,8 +66,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
             }
         }
 
-        Log.e("StudyGuest participantExist", "$participantExist")
-
         if (participantExist == true) {
             binding.guestButton.visibility = View.GONE
             binding.guestCancelButton.visibility = View.VISIBLE
@@ -77,8 +73,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
             binding.guestButton.visibility = View.VISIBLE
             binding.guestCancelButton.visibility = View.GONE
         }
-
-        Log.e("StudyGuestFragment","$recruitment")
 
         //저장된 토큰값 가져오기
         val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
@@ -102,7 +96,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
         val postId = recruitment.recruitmentId
         val studyParticipateService = retrofitBearer.create(StudyParticipateService::class.java)
-
 
         binding.guestButton.setOnClickListener { // 참여하기 버튼을 누를 시
             studyParticipateService.participateStudy(postId, isParticipating = true).enqueue(object : Callback<StudyGuestCurrentCount>{
@@ -220,20 +213,6 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val imageView: ImageView = binding.studyGuestImage
         val loadImageTask = LoadImageTask(imageView)
         loadImageTask.execute(imageUrl)
-    }
-
-    suspend fun saveChatRoom(chatRoom: ChatRoom) {
-        val chatRoomEntity = ChatRoomEntity(
-            roomId = chatRoom.roomId,
-            title = chatRoom.title,
-            hostNickname = chatRoom.hostNickname,
-            currentDateTime = chatRoom.currentDateTime,
-            currentCount = chatRoom.currentCount
-        )
-
-        val chatRoomDatabase = context?.let { ChatRoomDatabase.getInstance(it) }
-        val chatRoomDao = chatRoomDatabase?.chatRoomDao()
-        chatRoomDao?.insertChatRoom(chatRoomEntity)
     }
 
 }

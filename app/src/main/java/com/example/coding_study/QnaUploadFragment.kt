@@ -27,7 +27,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.InputStream
 
-
 class QnaUpload : Fragment() {
     private lateinit var binding: WriteQnaBinding
     private var selectedImageUri: Uri? = null
@@ -96,7 +95,6 @@ class QnaUpload : Fragment() {
 
             }
         }
-
 
         binding.qnaImageButton.setOnClickListener {
             val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

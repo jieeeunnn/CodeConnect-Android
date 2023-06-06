@@ -12,15 +12,6 @@ data class JoinResponse (
     var data: Void // 로그인 정보가 틀렸거나 회원 정보가 없는 경우 member 객체는 null이 됨
 )
 
-data class savedMember (
-    var email: String = "",
-    var password: String = "",
-    var nickname: String = "",
-    var createMemberTime : String = "",
-    var address : String = "",
-    var fieldList: List<String>
-)
-
 //input
 interface JoinService {
     @POST("members/signup")

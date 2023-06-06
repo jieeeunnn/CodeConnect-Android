@@ -125,7 +125,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/qnaGuestRecyclerView"
                     android:layout_width="0dp"
-                    android:layout_height="410dp"
+                    android:layout_height="330dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintBottom_toTopOf="@+id/guestCommentEdit"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +146,7 @@
                     android:id="@+id/qnaGuestProfileImage"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginStart="50dp"
+                    android:layout_marginStart="40dp"
                     android:layout_marginTop="24dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

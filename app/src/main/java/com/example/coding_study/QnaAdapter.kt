@@ -1,7 +1,6 @@
 package com.example.coding_study
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -44,10 +43,6 @@ class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener:
 
     interface OnPopularClickListener {
         fun onPopularClick(position: Int)
-    }
-
-    fun setOnQnaClickListener(listener: OnQnaClickListener) {
-        this.onQnaClickListener = listener
     }
 
     inner class QnaUploadViewHolder(private val binding: QnaUploadLayoutBinding) : RecyclerView.ViewHolder(binding.root) { // 각 게시글 뷰의 textView를 참조

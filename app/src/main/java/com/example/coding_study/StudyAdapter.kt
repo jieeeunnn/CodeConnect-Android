@@ -22,10 +22,6 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
         fun onItemClick(position: Int)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) { // 클릭 리스너를 설정하는 메서드
-        this.onItemClickListener = listener
-    }
-
     fun setData(data: List<Post>) {
         postList = data // 데이터를 설정합니다.
         notifyDataSetChanged() // RecyclerView를 다시 그립니다.
@@ -90,10 +86,6 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
             val imageView: ImageView = binding.studyImageView
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)
-        }
-
-        fun onClick(v: View?) {
-            onItemClickListener.onItemClick(adapterPosition) // 클릭된 아이템의 포지션 전달
         }
     }
 

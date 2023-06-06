@@ -1,6 +1,5 @@
 package com.example.coding_study
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -34,12 +33,6 @@ class ChatRoomAdapter(var chatList: List<ChatRoom>, private var onItemClickListe
         holder.itemView.setOnClickListener {
             onItemClickListener.onItemClick(position)
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun submitList(newList: List<ChatRoom>) {
-        chatList = (ArrayList(newList))
-        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = chatList.size

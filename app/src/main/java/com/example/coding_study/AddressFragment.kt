@@ -117,8 +117,6 @@ class AddressFragment: Fragment(R.layout.address_fragment){
                     attrFilter = "emd_kor_nm:like:${newText}"
                 ).enqueue(object : Callback<Welcome7> {
                     override fun onResponse(call: Call<Welcome7>, response: Response<Welcome7>) {
-
-                        //Log.e("Login", "address: ${URLEncoder.encode(query, "UTF-8")}") // 내가 보낸 data Log 출력
                         Log.e("Address", "address: $newText")
 
                         if (response.isSuccessful) {

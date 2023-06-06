@@ -103,8 +103,6 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.data?.let { fileUri ->
-                // 파일을 선택한 후에 여기에서 파일을 전송하는 로직을 구현합니다.
-                // 선택한 파일을 서버에 업로드하는 등의 작업을 수행할 수 있습니다.
 
                 val inputStream = requireContext().contentResolver.openInputStream(fileUri)
                 val fileName = getFileName(fileUri) // 파일 이름을 얻는 유틸리티 함수 호출
@@ -173,8 +171,8 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
 
                         override fun onFailure(call: Call<FileUploadResponse>, t: Throwable) {
                             Log.e("ChattingFragment file upload", "Failed", t)
-                            Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()                        }
-
+                            Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
+                        }
                     })
                 }
 
@@ -351,15 +349,12 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
                             memberListLayout.addView(memberView)
                         }
                     }
-
-
                 }
 
                 override fun onFailure(call: Call<ChatRoomOnlyResponse>, t: Throwable) {
                     Log.e("ChatFragment onClickListener", "Failed", t)
                     Toast.makeText(context, "서버 연결 실패", Toast.LENGTH_LONG).show()
                 }
-
             })
         }
 
@@ -400,7 +395,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment),  DeleteDialogInter
             stompClient?.connect()
             Log.e("ChattingFragment connectToChatServer", " ")
 
-// 채팅 프래그먼트에서 StompViewModel 인스턴스 가져오기
+            // 채팅 프래그먼트에서 StompViewModel 인스턴스 가져오기
             val stompViewModel: StompViewModel by activityViewModels()
 
             // Stomp 클라이언트를 StompViewModel에 저장

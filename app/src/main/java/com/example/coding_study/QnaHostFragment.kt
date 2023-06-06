@@ -52,7 +52,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
         val commentHost = qnaGson.fromJson<List<Comment>>(commentHostJson, object : TypeToken<List<Comment>>() {}.type)
         val commentGuest = qnaGson.fromJson<List<Comment>>(commentGuestJson, object : TypeToken<List<Comment>>() {}.type)
 
-
         var commentList: List<Comment> = ((commentHost ?: emptyList()) + (commentGuest ?: emptyList())).sortedBy { it.currentDateTime }
 
         if (commentHost != null || commentGuest != null) {
@@ -151,7 +150,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                     override fun onFailure(call: Call<QnaHeart>, t: Throwable) {
                         Toast.makeText(context, "qna heart put 서버 연결 실패", Toast.LENGTH_LONG).show()
                     }
-
                 })
         }
 
@@ -170,7 +168,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                                 binding.heartImageView.visibility = View.VISIBLE
                                 binding.heartOnImage.visibility = View.GONE
                             }
-
                             binding.likeCountTextView.text = heartCount.toString()
                         }
                     }
@@ -178,7 +175,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface{
                     override fun onFailure(call: Call<QnaHeart>, t: Throwable) {
                         Toast.makeText(context, "qna heart put 서버 연결 실패", Toast.LENGTH_LONG).show()
                     }
-
                 })
         }
 
