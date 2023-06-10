@@ -4,7 +4,7 @@
     android:id="@+id/nav_join">
     <fragment
         android:id="@+id/joinFragment"
-        android:name="com.example.coding_study.JoinFragment"
+        android:name="com.example.coding_study.common.JoinFragment"
         android:label="JoinFragment" >
         <action
             android:id="@+id/action_joinFragment_to_addressFragment"
@@ -12,7 +12,7 @@
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
-        android:name="com.example.coding_study.AddressFragment"
+        android:name="com.example.coding_study.common.AddressFragment"
         android:label="AddressFragment" >
         <action
             android:id="@+id/action_addressFragment_to_joinFragment"

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/studyFragment"
-        android:name="com.example.coding_study.StudyFragment"
+        android:name="com.example.coding_study.study.StudyFragment"
         android:label="StudyFragment" >
         <action
             android:id="@+id/action_studyFragment_to_studyUpload"
@@ -15,15 +15,15 @@
     </fragment>
     <fragment
         android:id="@+id/qnAFragment"
-        android:name="com.example.coding_study.QnAFragment"
+        android:name="com.example.coding_study.qna.QnAFragment"
         android:label="QnAFragment" />
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.coding_study.ChatFragment"
+        android:name="com.example.coding_study.chat.ChatFragment"
         android:label="ChatFragment" />
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.example.coding_study.MyPageFragment"
+        android:name="com.example.coding_study.mypage.MyPageFragment"
         android:label="MypageFragment" />
     <fragment
         android:id="@+id/writeStudyFragment"
@@ -31,6 +31,6 @@
         android:label="WriteStudyFragment" />
     <fragment
         android:id="@+id/studyUpload"
-        android:name="com.example.coding_study.StudyUpload"
+        android:name="com.example.coding_study.study.StudyUpload"
         android:label="StudyUpload" />
 </navigation>

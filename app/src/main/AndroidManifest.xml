@@ -16,10 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Coding_Study"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SecondActivity"
+        <activity android:name=".common.SecondActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".common.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
