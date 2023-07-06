@@ -72,12 +72,12 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         binding.qnaGuestCurrentTime.text = qnaRecruitment.currentDateTime
         binding.guestLikeCountView.text = qnaRecruitment.likeCount.toString()
 
-        val profileImageUrl: String = "http://112.154.249.74:8080/"+ qnaRecruitment.profileImagePath // 프로필 이미지
+        val profileImageUrl: String = "http://13.124.68.20:8080/"+ qnaRecruitment.profileImagePath // 프로필 이미지
         val profileImageView: ImageView = binding.qnaGuestProfileImage
         val profileLoadImageTask = LoadImageTask(profileImageView)
         profileLoadImageTask.execute(profileImageUrl)
 
-        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaRecruitment.imagePath}" // 게시글에 이미지 첨부 시
+        val imageUrl: String? = "http://13.124.68.20:8080/"+ "${qnaRecruitment.imagePath}" // 게시글에 이미지 첨부 시
         val imageView: ImageView = binding.qnaGuestImageView
         val loadImageTask = LoadQnaImageTask(imageView)
         loadImageTask.execute(imageUrl)
@@ -90,7 +90,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://13.124.68.20:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -222,7 +222,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://13.124.68.20:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -264,7 +264,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                     binding.guestLikeCountView.text = qnaRecruitment.likeCount.toString()
 
 
-                    val imageUrl: String? = "http://112.154.249.74:8080/"+ "${qnaUploadDto.profileImagePath}"
+                    val imageUrl: String? = "http://13.124.68.20:8080/"+ "${qnaUploadDto.profileImagePath}"
                     val imageView: ImageView = binding.qnaGuestProfileImage
                     val loadImageTask = LoadImageTask(imageView)
                     loadImageTask.execute(imageUrl)

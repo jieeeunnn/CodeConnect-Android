@@ -123,7 +123,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
                 val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
                 val retrofitBearer = Retrofit.Builder()
-                    .baseUrl("http://112.154.249.74:8080/")
+                    .baseUrl("http://13.124.68.20:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(
                         OkHttpClient.Builder()
@@ -238,7 +238,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://13.124.68.20:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -333,7 +333,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
 
                             val memberNicknameTextView = binding.memberNickname
 
-                            val imageUrl: String? = "http://112.154.249.74:8080/"+ imageUrl
+                            val imageUrl: String? = "http://13.124.68.20:8080/"+ imageUrl
                             val imageView: ImageView = binding.memberProfileImage
                             val loadImageTask = LoadImageTask(imageView)
                             loadImageTask.execute(imageUrl)
@@ -393,7 +393,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
             // Stomp 클라이언트 생성
             stompClient = Stomp.over(
                 Stomp.ConnectionProvider.OKHTTP,
-                "ws://112.154.249.74:8080/ws"
+                "ws://13.124.68.20:8080/ws"
             )
 
             stompClient?.connect()
@@ -517,7 +517,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://13.124.68.20:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

@@ -98,7 +98,7 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
 
             binding.currentTextView.text = post.currentTime
 
-            val imageUrl: String? = "http://112.154.249.74:8080/"+ "${post.profileImagePath}"
+            val imageUrl: String? = "http://13.124.68.20:8080/"+ "${post.profileImagePath}"
             val imageView: ImageView = binding.studyImageView
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)

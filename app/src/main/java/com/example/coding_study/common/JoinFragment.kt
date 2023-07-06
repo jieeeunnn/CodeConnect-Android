@@ -54,7 +54,7 @@ class JoinFragment : Fragment(R.layout.join_fragment) {
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://13.124.68.20:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

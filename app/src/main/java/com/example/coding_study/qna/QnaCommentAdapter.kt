@@ -62,7 +62,7 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
             binding.guestCommentTextView.text = comment.comment
             binding.guestCommentCurrentDateTime.text = comment.currentDateTime
 
-            val imageUrl: String? = "http://112.154.249.74:8080/"+ comment.profileImagePath
+            val imageUrl: String? = "http://13.124.68.20:8080/"+ comment.profileImagePath
             val imageView: ImageView = binding.commentGuestProfileImage
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)
@@ -77,7 +77,7 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
             binding.hostCommentTextView.text = comment.comment
             binding.hostCommentCurrentDateTime.text = comment.currentDateTime
 
-            val imageUrl: String? = "http://112.154.249.74:8080/"+ comment.profileImagePath
+            val imageUrl: String? = "http://13.124.68.20:8080/"+ comment.profileImagePath
             val imageView: ImageView = binding.commentHostProfileImage
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)

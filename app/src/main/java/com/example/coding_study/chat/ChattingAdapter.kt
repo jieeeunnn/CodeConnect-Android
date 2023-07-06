@@ -68,7 +68,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
             binding.myMessageNickname.text = chatMessage.nickname
             binding.myMessageCurrentTime.text = chatMessage.currentDateTime
 
-            val imageUrl: String? = "http://112.154.249.74:8080/"+ chatMessage.profileImagePath
+            val imageUrl: String? = "http://13.124.68.20:8080/"+ chatMessage.profileImagePath
             val imageView: ImageView = binding.chatMyImage
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)
@@ -81,7 +81,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
             binding.otherMessageNickname.text = chatMessage.nickname
             binding.otherMessageCurrentTime.text = chatMessage.currentDateTime
 
-            val imageUrl: String? = "http://112.154.249.74:8080/"+ "${chatMessage.profileImagePath}"
+            val imageUrl: String? = "http://13.124.68.20:8080/"+ "${chatMessage.profileImagePath}"
             val imageView: ImageView = binding.chatOtherImage
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)
@@ -94,7 +94,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
             binding.fileMessageNickname.text = fileMessage.nickname
             binding.myFileCurrentTimeText.text = fileMessage.currentDateTime
 
-            val imageUrl: String? = "http://112.154.249.74:8080/"+ fileMessage.profileImagePath
+            val imageUrl: String? = "http://13.124.68.20:8080/"+ fileMessage.profileImagePath
             val imageView: ImageView = binding.myFileMessageProfileImage
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)
@@ -103,7 +103,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
             val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
             val retrofitBearer = Retrofit.Builder()
-                .baseUrl("http://112.154.249.74:8080/")
+                .baseUrl("http://13.124.68.20:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(
                     OkHttpClient.Builder()
@@ -138,7 +138,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
 
                                 if (response.isSuccessful) {
                                     CoroutineScope(Dispatchers.IO).launch {
-                                        val fileUrl = "http://112.154.249.74:8080/chat/file/download?filePath=$filePath&fileContentType=$contentType"
+                                        val fileUrl = "http://13.124.68.20:8080/chat/file/download?filePath=$filePath&fileContentType=$contentType"
                                         val savePath = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/" // 저장할 파일 경로
 
                                         val connection = URL(fileUrl).openConnection() as HttpURLConnection
@@ -200,7 +200,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
             binding.otherFileNickname.text = fileMessage.nickname
             binding.otherFileCurrentTime.text = fileMessage.currentDateTime
 
-            val imageUrl: String? = "http://112.154.249.74:8080/"+ fileMessage.profileImagePath
+            val imageUrl: String? = "http://13.124.68.20:8080/"+ fileMessage.profileImagePath
             val imageView: ImageView = binding.otherFileProfileImage
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)
@@ -209,7 +209,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
             val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
             val retrofitBearer = Retrofit.Builder()
-                .baseUrl("http://112.154.249.74:8080/")
+                .baseUrl("http://13.124.68.20:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(
                     OkHttpClient.Builder()
@@ -243,7 +243,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
 
                                 if (response.isSuccessful) {
                                     CoroutineScope(Dispatchers.IO).launch {
-                                        val fileUrl = "http://112.154.249.74:8080/chat/file/download?filePath=$filePath&fileContentType=$contentType" // 다운받을 파일 url
+                                        val fileUrl = "http://13.124.68.20:8080/chat/file/download?filePath=$filePath&fileContentType=$contentType" // 다운받을 파일 url
                                         val savePath = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}/" // 저장할 파일 경로
 
                                         val connection = URL(fileUrl).openConnection() as HttpURLConnection

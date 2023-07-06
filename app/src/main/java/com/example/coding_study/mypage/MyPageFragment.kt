@@ -95,7 +95,7 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://13.124.68.20:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -136,7 +136,7 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                             binding.myPageField1.text = myProfile.fieldList[0]
                             binding.myPageField2.text = myProfile.fieldList[1]
 
-                            val imageUrl: String? = "http://112.154.249.74:8080/"+ "${myProfile.profileImagePath}"
+                            val imageUrl: String? = "http://13.124.68.20:8080/"+ "${myProfile.profileImagePath}"
                             val imageView: ImageView = binding.myPageImage
                             val loadImageTask = LoadImageTask(imageView)
                             loadImageTask.execute(imageUrl)

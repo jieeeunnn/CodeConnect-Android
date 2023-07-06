@@ -83,7 +83,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://112.154.249.74:8080/")
+            .baseUrl("http://13.124.68.20:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -213,7 +213,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         binding.guestCurrentText.text = recruitment.currentDateTime ?: ""
         binding.guestAddress2.text = recruitment.address
 
-        val imageUrl: String? = "http://112.154.249.74:8080/"+ "${recruitment.profileImagePath}"
+        val imageUrl: String? = "http://13.124.68.20:8080/"+ "${recruitment.profileImagePath}"
         val imageView: ImageView = binding.studyGuestImage
         val loadImageTask = LoadImageTask(imageView)
         loadImageTask.execute(imageUrl)
