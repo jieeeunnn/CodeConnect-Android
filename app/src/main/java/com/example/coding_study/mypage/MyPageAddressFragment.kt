@@ -72,7 +72,7 @@ class MyPageAddressFragment: Fragment(R.layout.address_fragment) {
                     service = "data",
                     request = "GetFeature",
                     data = "LT_C_ADEMD_INFO",
-                    key = "D3D9E0D0-062C-35F0-A49D-FC9E863B3AD5",
+                    key = "8E78F586-DBB3-36C9-9FF5-E7B652FBA77D",
                     format = "json",
                     geometry = "false",
                     attrFilter = "emd_kor_nm:like:${newText}"

@@ -15,12 +15,15 @@ data class LoginResponse (
     )
 
 data class SignInResponseDto (
-    val accessToken: String, // 기존 토큰 (액세스 토큰)
-    val refreshToken: String, // 리프레쉬 토큰
-    val exprTime: Int,
+    val token: Token,
     var address: String,
     var nickname: String,
     var fieldList: List<String>
+)
+
+data class Token (
+    val accessToken: String, // 기존 토큰 (액세스 토큰)
+    val refreshToken: String // 리프레쉬 토큰
 )
 
 
