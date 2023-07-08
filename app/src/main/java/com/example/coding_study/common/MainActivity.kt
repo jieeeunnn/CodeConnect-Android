@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var logButton: Button
     private lateinit var joinButton: Button
 
+    /*
     fun saveAccessToken(context: Context, token: String?) { // 액세스 토큰 저장 함수
         if (token == null) {
             Log.e("saveAccessToken", "Token is null, failed to save token")
@@ -48,6 +49,8 @@ class MainActivity : AppCompatActivity() {
             Log.e("saveRefreshToken", "Failed to save refreshToken")
         }
     }
+
+     */
 
     fun saveAddress(context: Context, address: String?) {
         val sharedPreferences = context.getSharedPreferences("MyAddress", Context.MODE_PRIVATE)
@@ -113,11 +116,15 @@ class MainActivity : AppCompatActivity() {
                         Log.e("response code", "is : $code") // 서버 응답 코드 log 출력
 
                         if (loginResponse?.result == true && loginResponse.data != null) {
-                            val receivedAccessToken = loginResponse.data!!.token.accessToken // 액세스 토큰 저장
-                            saveAccessToken(applicationContext, receivedAccessToken) // receivedToken이 null이 아닌 경우 'let'블록 내부에서 savedToken 함수를 호출해 accessToken 저장
+                            val receivedAccessToken = loginResponse.data!!.token.accessToken // 서버에서 받은 액세스 토큰
+                            //saveAccessToken(applicationContext, receivedAccessToken) // receivedToken이 null이 아닌 경우 'let'블록 내부에서 savedToken 함수를 호출해 accessToken 저장
 
-                            val receivedRefreshToken = loginResponse.data!!.token.refreshToken // 리프레쉬 토큰 저장
-                            saveRefreshToken(applicationContext, receivedRefreshToken)
+                            val receivedRefreshToken = loginResponse.data!!.token.refreshToken // 서버에서 받은 리프레쉬 토큰
+                            //saveRefreshToken(applicationContext, receivedRefreshToken)
+
+                            val tokenManager = TokenManager(this@MainActivity)
+                            tokenManager.saveAccessToken(receivedAccessToken) // 액세스 토큰 저장
+                            tokenManager.saveRefreshToken(receivedRefreshToken) // 리프레쉬 토큰 저장
 
                             val receivedAddress = loginResponse.data!!.address
                             saveAddress(applicationContext, receivedAddress)

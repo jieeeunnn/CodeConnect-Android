@@ -20,7 +20,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class JoinFragment : Fragment(R.layout.join_fragment) {
     private lateinit var binding: JoinFragmentBinding
     private lateinit var viewModel: AddressViewModel
