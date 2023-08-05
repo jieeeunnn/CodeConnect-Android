@@ -53,7 +53,7 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
         binding.qnaEditTitle.setText(qnaRecruitment.title)
         binding.qnaEditContent.setText(qnaRecruitment.content)
 
-        val imageUrl: String? = "http://13.124.68.20:8080/"+ "${qnaRecruitment.imagePath}"
+        val imageUrl: String? = "http://52.79.53.62:8080/"+ "${qnaRecruitment.imagePath}"
         val imageView: ImageView = binding.qnaImageView
         val loadImageTask = LoadQnaImageTask(imageView)
         loadImageTask.execute(imageUrl)
@@ -144,7 +144,7 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()

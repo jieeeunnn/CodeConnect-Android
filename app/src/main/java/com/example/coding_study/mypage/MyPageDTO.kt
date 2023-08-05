@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -96,3 +97,22 @@ interface MyPageDeleteMemberService { // 회원 탈퇴
     @DELETE("profile/delete")
     fun memberDelete(): Call<Void>
 }
+
+
+
+
+
+interface MyPageLogoutService { // 로그아웃
+    @POST("members/logout")
+    fun memberLogout(@Body memberLogout: MemberLogout) : Call<LogoutResponse>
+}
+
+data class MemberLogout ( // 로그아웃 시 전송값
+    var accessToken: String
+    )
+
+data class LogoutResponse ( // 로그아웃 시 응답값
+    var result: Boolean,
+    var message: String,
+    var data: String?
+)

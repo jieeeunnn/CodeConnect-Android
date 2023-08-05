@@ -32,15 +32,15 @@ class TokenManager(context: Context) {
         }
     }
 
-    fun getAccessToken(): String {
+    fun getAccessToken(): String { // 액세스 토큰 반환
         return sharedPreferences.getString("token", "") ?: ""
     }
 
-    fun getRefreshToken(): String {
+    fun getRefreshToken(): String { // 리프레쉬 토큰 반환
         return sharedPreferencesRefreshToken.getString("refreshToken", "") ?: ""
     }
 
-    fun checkAccessTokenExpiration() {
+    fun checkAccessTokenExpiration() { // 액세스 토큰 유효기간 확인
         val accessToken = getAccessToken()
         try {
             val decodedJWT: DecodedJWT = JWT.decode(accessToken) // accessToken을 디코딩하여 decodedJWT 객체 생성
@@ -59,11 +59,11 @@ class TokenManager(context: Context) {
     }
 
     private fun sendTokensToServer(accessToken: String, refreshToken: String) {
-        // 서버에 액세스 토큰과 리프레시 토큰을 전송
+        // 서버에 액세스 토큰과 리프레시 토큰을 전송 (액세스 토큰 만료시 호출됨)
         Log.e("sendToknesToSever", accessToken)
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -93,7 +93,7 @@ class TokenManager(context: Context) {
                             if (newAccessToken != null) {
                                 saveAccessToken(newAccessToken) // 새로 발급받은 access token 저장
                             }
-                        } else if (!tokenResponse.result) { // result가 false일 경우 refresh token이 만료됐으므로 로그인 화면으로 이동, 다시 로그인
+                        } else { // result가 false일 경우 refresh token이 만료됐으므로 로그인 화면으로 이동, 다시 로그인
 
                         }
                     }

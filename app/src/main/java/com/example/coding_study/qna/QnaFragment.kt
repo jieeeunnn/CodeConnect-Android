@@ -102,7 +102,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                 val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
                 val retrofitBearer = Retrofit.Builder()
-                    .baseUrl("http://13.124.68.20:8080/")
+                    .baseUrl("http://52.79.53.62:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(
                         OkHttpClient.Builder()
@@ -224,7 +224,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                 val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
                 val retrofitBearer = Retrofit.Builder()
-                    .baseUrl("http://13.124.68.20:8080/")
+                    .baseUrl("http://52.79.53.62:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(
                         OkHttpClient.Builder()
@@ -361,7 +361,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -428,7 +428,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -494,7 +494,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
         val searchView = binding.toolbarQnaNewSearch
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

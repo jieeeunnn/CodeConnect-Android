@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         joinButton = binding.joinButton
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -125,6 +125,7 @@ class MainActivity : AppCompatActivity() {
                             val tokenManager = TokenManager(this@MainActivity)
                             tokenManager.saveAccessToken(receivedAccessToken) // 액세스 토큰 저장
                             tokenManager.saveRefreshToken(receivedRefreshToken) // 리프레쉬 토큰 저장
+                            tokenManager.checkAccessTokenExpiration()
 
                             val receivedAddress = loginResponse.data!!.address
                             saveAddress(applicationContext, receivedAddress)

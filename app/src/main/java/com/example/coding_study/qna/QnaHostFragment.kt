@@ -81,12 +81,12 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
         binding.qnaHostCurrentTime.text = qnaRecruitment.currentDateTime
         binding.likeCountTextView.text = qnaRecruitment.likeCount.toString()
 
-        val profileImageUrl: String = "http://13.124.68.20:8080/"+ qnaRecruitment.profileImagePath // 프로필 사진 띄우기
+        val profileImageUrl: String = "http://52.79.53.62:8080/"+ qnaRecruitment.profileImagePath // 프로필 사진 띄우기
         val profileImageView: ImageView = binding.qnaHostProfileImage
         val profileLoadImageTask = LoadImageTask(profileImageView)
         profileLoadImageTask.execute(profileImageUrl)
 
-        val imageUrl: String? = "http://13.124.68.20:8080/"+ "${qnaRecruitment.imagePath}" // 게시글에 사진 업로드
+        val imageUrl: String? = "http://52.79.53.62:8080/"+ "${qnaRecruitment.imagePath}" // 게시글에 사진 업로드
         val imageView: ImageView = binding.qnaHostImageView
         val loadImageTask = LoadQnaImageTask(imageView)
         loadImageTask.execute(imageUrl)
@@ -100,7 +100,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -259,7 +259,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -306,7 +306,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -351,7 +351,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
                         binding.likeCountTextView.text = qnaUploadDto.likeCount.toString()
 
 
-                        val imageUrl: String? = "http://13.124.68.20:8080/"+ qnaUploadDto.profileImagePath // 프로필 사진 띄우기
+                        val imageUrl: String? = "http://52.79.53.62:8080/"+ qnaUploadDto.profileImagePath // 프로필 사진 띄우기
                         val imageView: ImageView = binding.qnaHostProfileImage
                         val loadImageTask = LoadImageTask(imageView)
                         loadImageTask.execute(imageUrl)

@@ -172,7 +172,7 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
             binding.myPageNewId.setText(myProfile.nickname)
             binding.myPageNewAddress.text = myProfile.address
 
-            val imageUrl: String? = "http://13.124.68.20:8080/"+ "${myProfile.profileImagePath}"
+            val imageUrl: String? = "http://52.79.53.62:8080/"+ "${myProfile.profileImagePath}"
             val imageView: ImageView = binding.myPageProfileImage
             val loadImageTask = LoadImageTask(imageView)
             loadImageTask.execute(imageUrl)
@@ -339,7 +339,7 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
             val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
             val retrofitBearer = Retrofit.Builder()
-                .baseUrl("http://13.124.68.20:8080/")
+                .baseUrl("http://52.79.53.62:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(
                     OkHttpClient.Builder()

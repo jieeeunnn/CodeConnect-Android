@@ -15,6 +15,7 @@ import com.example.coding_study.dialog.DeleteMemberDialog
 import com.example.coding_study.common.LoadImageTask
 import com.example.coding_study.R
 import com.example.coding_study.databinding.MypageFragmentBinding
+import com.example.coding_study.dialog.LogoutDialog
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -22,6 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.log
 
 class MyPageFragment: Fragment(R.layout.mypage_fragment) {
     private lateinit var binding: MypageFragmentBinding
@@ -69,15 +71,20 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                         .addToBackStack(null)
                         .commit()
                 }
-                if (position == 4) { // 회원 탈퇴
+                if (position == 4 ) { // 로그아웃
+                    val logoutDialog = LogoutDialog()
+                    logoutDialog.isCancelable = false
+                    logoutDialog.show(parentFragmentManager, "logoutDialog")
+                }
+                if (position == 5) { // 회원 탈퇴
                     val deleteDialog = DeleteMemberDialog()
                     deleteDialog.isCancelable = false
-                    parentFragmentManager.let { deleteDialog.show(it, "deleteDialog") }
+                    parentFragmentManager.let { deleteDialog.show(it, "deleteMemberDialog") }
                 }
             }
         }
 
-        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 작성한 스터디", "내가 작성한 Q&A", "회원 탈퇴")
+        val textList = listOf("내 프로필 수정","신청한 스터디", "내가 작성한 스터디", "내가 작성한 Q&A", "로그아웃", "회원 탈퇴")
         myPageAdapter = MyPageAdapter(textList, onItemClickListener)
         myPageRecyclerView.adapter = myPageAdapter
         binding.myPageRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -95,7 +102,7 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
         val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
         val retrofitBearer = Retrofit.Builder()
-            .baseUrl("http://13.124.68.20:8080/")
+            .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(
                 OkHttpClient.Builder()
@@ -136,7 +143,7 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                             binding.myPageField1.text = myProfile.fieldList[0]
                             binding.myPageField2.text = myProfile.fieldList[1]
 
-                            val imageUrl: String? = "http://13.124.68.20:8080/"+ "${myProfile.profileImagePath}"
+                            val imageUrl: String? = "http://52.79.53.62:8080/"+ "${myProfile.profileImagePath}"
                             val imageView: ImageView = binding.myPageImage
                             val loadImageTask = LoadImageTask(imageView)
                             loadImageTask.execute(imageUrl)
