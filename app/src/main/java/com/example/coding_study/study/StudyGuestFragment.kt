@@ -1,7 +1,6 @@
 package com.example.coding_study.study
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +14,7 @@ import com.example.coding_study.dialog.ConfirmDialog
 import com.example.coding_study.common.LoadImageTask
 import com.example.coding_study.mypage.MyPageParticipateStudy
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.StudyGuestBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyGuestFragment : Fragment(R.layout.study_guest) {
     private lateinit var binding: StudyGuestBinding
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
@@ -78,9 +79,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
             binding.guestCancelButton.visibility = View.GONE
         }
 
-        //저장된 토큰값 가져오기
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -89,9 +88,9 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyGuestFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyGuestFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -102,6 +101,9 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val studyParticipateService = retrofitBearer.create(StudyParticipateService::class.java)
 
         binding.guestButton.setOnClickListener { // 참여하기 버튼을 누를 시
+
+            tokenManager.checkAccessTokenExpiration()
+
             studyParticipateService.participateStudy(postId, isParticipating = true).enqueue(object : Callback<StudyGuestCurrentCount>{
                 override fun onResponse(call: Call<StudyGuestCurrentCount>, response: Response<StudyGuestCurrentCount>
                 ) {
@@ -154,6 +156,9 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         }
 
         binding.guestCancelButton.setOnClickListener { // 취소하기 버튼 누를 시
+
+            tokenManager.checkAccessTokenExpiration()
+
             studyParticipateService.participateStudy(postId, isParticipating = false).enqueue(object : Callback<StudyGuestCurrentCount>{
                 override fun onResponse(call: Call<StudyGuestCurrentCount>, response: Response<StudyGuestCurrentCount>
                 ) {
@@ -213,7 +218,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         binding.guestCurrentText.text = recruitment.currentDateTime ?: ""
         binding.guestAddress2.text = recruitment.address
 
-        val imageUrl: String? = "http://52.79.53.62:8080/"+ "${recruitment.profileImagePath}"
+        val imageUrl: String? = "http://52.79.53.62:8080/"+ recruitment.profileImagePath
         val imageView: ImageView = binding.studyGuestImage
         val loadImageTask = LoadImageTask(imageView)
         loadImageTask.execute(imageUrl)

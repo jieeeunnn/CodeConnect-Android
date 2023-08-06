@@ -41,11 +41,6 @@ class LogoutDialog: DialogFragment() {
         }
 
         binding.dialogYesButton.setOnClickListener {
-            /*
-            val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-            val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
-             */
-
             val tokenManager = context?.let { it1 -> TokenManager(it1) }
             val token = tokenManager?.getAccessToken()
 

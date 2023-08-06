@@ -1,6 +1,5 @@
 package com.example.coding_study.study
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +25,7 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
     private lateinit var binding: AddressFragmentBinding
     private lateinit var viewModel: AddressViewModel
     private var mAddress: String = ""
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,8 +65,7 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
             }
         })
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -89,6 +88,7 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
         binding.OkButton.setOnClickListener {
             // ViewModel에 데이터 저장
             viewModel.selectAddress(mAddress)
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
             studyAddressService.studyGetList(address = mAddress).enqueue(object : Callback<StudyListResponse>{
                 override fun onResponse(call: Call<StudyListResponse>, response: Response<StudyListResponse>
@@ -139,10 +139,9 @@ class StudyAddressFragment : Fragment(R.layout.address_fragment) {
                         Log.e("Address", "address: $newText")
 
                         if (response.isSuccessful) {
-                            val code = response.code() // 서버 응답 코드
-                            Log.e("AddressApi response code", "is : $code")
+                            Log.e("AddressApi response code", "is : ${response.code()}")
                             Log.e("AddressApi response body", "is : ${response.body()?.response?.result?.featureCollection?.features}") // 서버에서 받아온 응답 데이터 log 출력
-                            var addressList = response.body()?.response?.result?.featureCollection?.features ?: emptyList()
+                            val addressList = response.body()?.response?.result?.featureCollection?.features ?: emptyList()
                             addressAdapter.submitList(addressList)
                         }
                     }

@@ -13,6 +13,7 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import com.example.coding_study.*
 import com.example.coding_study.common.LoadImageTask
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.StudyHostBinding
 import com.example.coding_study.dialog.DeleteDialog
 import com.example.coding_study.dialog.DeleteDialogInterface
@@ -28,6 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
     private lateinit var binding: StudyHostBinding
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
@@ -112,9 +114,8 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
     }
 
     override fun onYesButtonClick(id: Long) {
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -123,9 +124,9 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyDeleteFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyDeleteFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()

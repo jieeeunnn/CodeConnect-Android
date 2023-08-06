@@ -13,6 +13,7 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.dialog.ConfirmDialog
 import com.example.coding_study.databinding.WriteStudyBinding
 import okhttp3.OkHttpClient
@@ -25,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { // study 게시판 글쓰기 fragment
     private lateinit var binding: WriteStudyBinding
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,8 +68,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
             }
         }
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -76,9 +77,9 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -91,6 +92,7 @@ class StudyUpload(val clickedItemPos: Int = -1) : Fragment(),LifecycleOwner { //
         activity?.let {
 
         binding.buttonUpload.setOnClickListener {
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
             val title = binding.editTitle.text.toString()
             val content = binding.editContent.text.toString()

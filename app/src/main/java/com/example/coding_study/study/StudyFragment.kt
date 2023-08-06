@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.common.AddressViewModel
 import com.example.coding_study.R
+import com.example.coding_study.common.Token
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.StudyFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -34,6 +36,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     private lateinit var binding:StudyFragmentBinding
     private lateinit var viewModel: AddressViewModel
     private lateinit var fab: FloatingActionButton
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     // savePostIds 함수 (로컬 저장소에 게시글 번호 저장하는 함수)
     fun savePostIds(context: Context, postIds: List<Long>) {
@@ -183,9 +186,9 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
                 val selectedPostId = postIds.getOrNull(position)// postIds 리스트에서 position에 해당하는 인덱스의 값을 가져옴
                 Log.e("StudyFragment","selectedPostId: $selectedPostId")
 
-                //저장된 토큰값 가져오기
-                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+                // 저장된 토큰값 가져오기
+                val token = tokenManager?.getAccessToken()
+                tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
                 val retrofitBearer = Retrofit.Builder()
                     .baseUrl("http://52.79.53.62:8080/")
@@ -281,6 +284,9 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         binding.studyRecyclerView.layoutManager = LinearLayoutManager(context) // 어떤 layout을 사용할 것인지 결정
 
         binding.floatingActionButton.setOnClickListener { // +버튼 (글쓰기 버튼) 눌렀을 때
+
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
             val studyuploadFragment = StudyUpload() // StudyUploadFragment로 변경
             childFragmentManager.beginTransaction()
                 .addToBackStack("STUDY_FRAGMENT")
@@ -316,8 +322,9 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
     }
 
     private fun loadStudyList() { // 서버에서 게시글 전체를 가져와서 로드하는 함수
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        // 저장된 토큰값 가져오기
+        val token = tokenManager?.getAccessToken()
+        tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -401,13 +408,28 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
         viewModel = ViewModelProvider(requireActivity()).get(AddressViewModel::class.java)
         val searchPostAddress = viewModel.getSelectedAddress().value
 
+        // 저장된 토큰값 가져오기
+        val token = tokenManager?.getAccessToken()
+        tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
         val newSearch = binding.toolbarStudySearch
-        val retrofit = Retrofit.Builder()
+        val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .build()
+                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
             .build()
 
-        val studySearchService = retrofit.create(StudySearchService::class.java)
+        val studySearchService = retrofitBearer.create(StudySearchService::class.java)
 
         newSearch.setOnQueryTextListener(object :SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean { // 검색 버튼을 누를 때 호출

@@ -45,7 +45,7 @@ class TokenManager(context: Context) {
         try {
             val decodedJWT: DecodedJWT = JWT.decode(accessToken) // accessToken을 디코딩하여 decodedJWT 객체 생성
             val expirationTime = decodedJWT.expiresAt?.time ?: 0 // accessToken의 만료시간을 expirationTime에 저장
-            Log.e("Token Manager access Token Decoding currentTime", expirationTime.toString())
+            Log.e("Token Manager access Token Decoding expirationTime", expirationTime.toString())
 
             val currentTime = Date().time
             if (currentTime >= expirationTime) {
@@ -71,7 +71,7 @@ class TokenManager(context: Context) {
                         val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer $accessToken")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: $accessToken")
+                        Log.d("TokenManager_sendTokensToServer", "Token: $accessToken")
                         chain.proceed(request)
                     }
                     .build()
