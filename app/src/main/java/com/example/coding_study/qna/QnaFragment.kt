@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.QnaFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -25,8 +26,9 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
     private lateinit var qnaAdapter: QnaAdapter
     private lateinit var topQnaAdapter: QnaAdapter
     private lateinit var qnaFab: FloatingActionButton
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
-    // saveQnaPostIds 함수 (로컬 저장소에 Qna 게시글Id 저장하는 함수)
+    // saveQnaPostIds 함수 (로컬 저장소에 Qna 게시글 Id 저장하는 함수)
     fun saveQnaPostIds(context: Context, qnaPostIds: List<Long>) {
         val sharedPreferencesQnaPostId = context.getSharedPreferences("QnaPostIds", Context.MODE_PRIVATE)
         val editor = sharedPreferencesQnaPostId.edit()
@@ -38,7 +40,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         }
     }
 
-    // saveQnaPostIds 함수 (로컬 저장소에 Qna 게시글Id 저장하는 함수)
+    // saveTopQnaPostIds 함수 (로컬 저장소에 Top Qna 게시글 Id 저장하는 함수)
     fun saveTopQnaPostIds(context: Context, qnaPostIds: List<Long>) {
         val sharedPreferencesQnaPostId = context.getSharedPreferences("TopQnaPostIds", Context.MODE_PRIVATE)
         val editor = sharedPreferencesQnaPostId.edit()
@@ -97,9 +99,8 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                 val qnaSelectedPostId = qnaPostIds.getOrNull(position)// qnaPostIds 리스트에서 position에 해당하는 인덱스의 값을 가져옴
                 Log.e("QnaFragment","qnaSelectedPostId: $qnaSelectedPostId")
 
-                //저장된 토큰값 가져오기
-                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+                val token = tokenManager.getAccessToken()
+                tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
                 val retrofitBearer = Retrofit.Builder()
                     .baseUrl("http://52.79.53.62:8080/")
@@ -108,9 +109,9 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                         OkHttpClient.Builder()
                             .addInterceptor { chain ->
                                 val request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                    .addHeader("Authorization", "Bearer $token")
                                     .build()
-                                Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                                Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                                 chain.proceed(request)
                             }
                             .build()
@@ -219,9 +220,8 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                 val qnaSelectedPostId = topQnaPostIds.getOrNull(position)// qnaPostIds 리스트에서 position에 해당하는 인덱스의 값을 가져옴
                 Log.e("QnaFragment","qnaSelectedPostId: $qnaSelectedPostId")
 
-                //저장된 토큰값 가져오기
-                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+                val token = tokenManager.getAccessToken()
+                tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
                 val retrofitBearer = Retrofit.Builder()
                     .baseUrl("http://52.79.53.62:8080/")
@@ -230,9 +230,9 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                         OkHttpClient.Builder()
                             .addInterceptor { chain ->
                                 val request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                    .addHeader("Authorization", "Bearer $token")
                                     .build()
-                                Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                                Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                                 chain.proceed(request)
                             }
                             .build()
@@ -332,7 +332,7 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         topQnaRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) // 인기 게시글은 가로로 배열
 
         binding.qnaFloatingActionButton.setOnClickListener { // +버튼 (글쓰기 버튼) 눌렀을 때
-            val qnaUploadFragment = QnaUpload() // StudyUploadFragment로 변경
+            val qnaUploadFragment = QnaUpload()
             childFragmentManager.beginTransaction()
                 .addToBackStack("QNA_FRAGMENT")
                 .replace(R.id.qna_fragment_layout, qnaUploadFragment, "QNA_FRAGMENT")
@@ -357,8 +357,8 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
     }
 
     private fun loadQnaList() {
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -367,9 +367,9 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -424,8 +424,8 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
 
 
     private fun loadTopQnaList() {
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -434,9 +434,9 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -493,12 +493,27 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
         Log.e("qnaSearchView", "onCreateOptionsMenu")
 
         val searchView = binding.toolbarQnaNewSearch
-        val retrofit = Retrofit.Builder()
+
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
+
+        val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer $token")
+                            .build()
+                        Log.d("TokenInterceptor_StudyGuestFragment", "Token: $token")
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
             .build()
 
-        val qnaSearchService = retrofit.create(QnaSearchService::class.java)
+        val qnaSearchService = retrofitBearer.create(QnaSearchService::class.java)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

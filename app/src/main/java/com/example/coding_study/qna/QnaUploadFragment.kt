@@ -18,6 +18,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.WriteQnaBinding
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -30,6 +31,7 @@ import java.io.InputStream
 class QnaUpload : Fragment() {
     private lateinit var binding: WriteQnaBinding
     private var selectedImageUri: Uri? = null
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -135,9 +137,8 @@ class QnaUpload : Fragment() {
     }
 
     fun uploadQna(qnaRequest: QnaRequest) {
-
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -146,10 +147,9 @@ class QnaUpload : Fragment() {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
-                            //.addHeader("Authorization", "Bearer $token")
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -161,7 +161,6 @@ class QnaUpload : Fragment() {
         qnaService.requestQna(qnaRequest).enqueue(object : Callback<QnaResponse> {
             override fun onResponse(call: Call<QnaResponse>, response: Response<QnaResponse>) {
                 Log.e("Qna Upload response code", "is : ${response.code()}")
-                //Log.e("Qna Upload qnaRequest ***********", qnaRequest.toString())
                 if (response.isSuccessful) {
                     val qnaResponse = response.body() // 서버에서 받아온 응답 데이터
                     Log.e("QnaPost" , "is : $qnaResponse")
@@ -172,8 +171,8 @@ class QnaUpload : Fragment() {
                 Toast.makeText(context, "통신에 실패했습니다", Toast.LENGTH_LONG).show()
             }
         })
-        //업로드 후 qna 게시판으로 돌아감
 
+        //업로드 후 qna 게시판으로 돌아감
         val parentFragment = parentFragment
         if (parentFragment is QnAFragment) {
             parentFragment.showFloatingButton()

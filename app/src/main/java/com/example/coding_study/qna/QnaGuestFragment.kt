@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.common.LoadImageTask
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.QnaGuestBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -27,6 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class QnaGuestFragment : Fragment(R.layout.qna_guest) {
     private lateinit var binding: QnaGuestBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -86,8 +88,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
             loadQnaGuest()
         }
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -120,6 +121,8 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         val qnaHeartService = retrofitBearer.create(QnaHeartService::class.java)
 
         binding.noHeartImage.setOnClickListener {// 좋아요 누를 때
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
             qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart>{
                 override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
                     if (response.isSuccessful) {
@@ -147,6 +150,8 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         }
 
         binding.onHeartImage.setOnClickListener { // 좋아요 취소 시
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
             qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart>{
                 override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
                     if (response.isSuccessful) {
@@ -176,6 +181,8 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
         val qnaCommentCreateService = retrofitBearer.create(QnaCommentCreateService::class.java)
 
         binding.guestCommentButton.setOnClickListener { // 댓글 작성 버튼
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
             val comment = binding.guestCommentEdit.text.toString()
             val qnaCommentRequest = QnaCommentRequest(comment)
 
@@ -218,8 +225,8 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
     }
 
     fun loadQnaGuest() {
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -228,9 +235,9 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()

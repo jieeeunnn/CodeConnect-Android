@@ -20,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.WriteQnaBinding
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -33,6 +34,7 @@ import java.io.InputStream
 class QnaEditFragment : Fragment(R.layout.write_qna) {
     private lateinit var binding: WriteQnaBinding
     private var selectedImageUri: Uri? = null
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -139,9 +141,8 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
     }
 
     fun uploadQna(qnaRequest: QnaRequest) {
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -150,9 +151,9 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()

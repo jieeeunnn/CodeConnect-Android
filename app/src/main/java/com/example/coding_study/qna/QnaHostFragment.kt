@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.*
 import com.example.coding_study.common.LoadImageTask
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.QnaHostBinding
 import com.example.coding_study.dialog.DeleteDialog
 import com.example.coding_study.dialog.DeleteDialogInterface
@@ -30,6 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface {
     private lateinit var binding: QnaHostBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
@@ -95,9 +97,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
             loadQnaHost()
         }
 
-        //저장된 토큰값 가져오기
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -106,9 +106,9 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -133,6 +133,8 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
         val qnaHeartService = retrofitBearer.create(QnaHeartService::class.java)
 
         binding.heartImageView.setOnClickListener {// 좋아요 누를 때
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
                 qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart> {
                     override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
                         if (response.isSuccessful) {
@@ -159,6 +161,8 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
         }
 
         binding.heartOnImage.setOnClickListener { // 좋아요 취소
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
                 qnaHeartService.qnaHeartPut(qnaId).enqueue(object : Callback<QnaHeart> {
                     override fun onResponse(call: Call<QnaHeart>, response: Response<QnaHeart>) {
                         if (response.isSuccessful) {
@@ -206,6 +210,8 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
 
         // 댓글 버튼 (댓글 전송)
         binding.hostCommentButton.setOnClickListener {
+            tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
             val comment = binding.hostComment.text.toString()
             val qnaCommentRequest = QnaCommentRequest(comment)
 
@@ -254,9 +260,8 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
     }
 
     override fun onYesButtonClick(id: Long) { // 삭제 다이얼로그 확인 버튼 클릭시 게시글 삭제
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -265,9 +270,9 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyDeleteFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyDeleteFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -302,8 +307,8 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
     }
 
     fun loadQnaHost() {
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -312,15 +317,14 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
             )
             .build()
-
 
         val qnaGson = Gson()
         val qnaJson = arguments?.getString("qnaHostRecruitmentJson")
