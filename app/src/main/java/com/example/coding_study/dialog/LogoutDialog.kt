@@ -25,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class LogoutDialog: DialogFragment() {
     private lateinit var binding: DeleteDialogBinding
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,8 +42,8 @@ class LogoutDialog: DialogFragment() {
         }
 
         binding.dialogYesButton.setOnClickListener {
-            val tokenManager = context?.let { it1 -> TokenManager(it1) }
-            val token = tokenManager?.getAccessToken()
+            val token = tokenManager.getAccessToken()
+            tokenManager.checkAccessTokenExpiration()
 
             val retrofitBearer = Retrofit.Builder()
                 .baseUrl("http://52.79.53.62:8080/")
@@ -51,9 +52,9 @@ class LogoutDialog: DialogFragment() {
                     OkHttpClient.Builder()
                         .addInterceptor { chain ->
                             val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .addHeader("Authorization", "Bearer $token")
                                 .build()
-                            Log.d("TokenInterceptor_memberLogout", "Token: " + token.orEmpty())
+                            Log.d("TokenInterceptor_memberLogout", "Token: $token")
                             chain.proceed(request)
                         }
                         .build()

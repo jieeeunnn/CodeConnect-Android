@@ -1,6 +1,5 @@
 package com.example.coding_study.dialog
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.coding_study.common.MainActivity
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.DeleteDialogBinding
 import com.example.coding_study.mypage.MyPageDeleteMemberService
 import okhttp3.OkHttpClient
@@ -23,6 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class DeleteMemberDialog: DialogFragment() {
     private lateinit var binding: DeleteDialogBinding
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,8 +40,8 @@ class DeleteMemberDialog: DialogFragment() {
         }
 
         binding.dialogYesButton.setOnClickListener {
-            val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-            val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+            val token = tokenManager.getAccessToken()
+            tokenManager.checkAccessTokenExpiration()
 
             val retrofitBearer = Retrofit.Builder()
                 .baseUrl("http://52.79.53.62:8080/")
@@ -49,9 +50,9 @@ class DeleteMemberDialog: DialogFragment() {
                     OkHttpClient.Builder()
                         .addInterceptor { chain ->
                             val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .addHeader("Authorization", "Bearer $token")
                                 .build()
-                            Log.d("TokenInterceptor_StudyDeleteFragment", "Token: " + token.orEmpty())
+                            Log.d("TokenInterceptor_StudyDeleteFragment", "Token: $token")
                             chain.proceed(request)
                         }
                         .build()

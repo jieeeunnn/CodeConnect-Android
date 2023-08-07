@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.DeleteDialogBinding
 import com.example.coding_study.qna.CommentDeleteService
 import okhttp3.OkHttpClient
@@ -22,6 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class CommentDeleteDialog(id:Long) : DialogFragment() {
     private lateinit var binding: DeleteDialogBinding
     private var id : Long = 0
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     init {
         this.id = id
@@ -42,8 +44,8 @@ class CommentDeleteDialog(id:Long) : DialogFragment() {
         }
 
         binding.dialogYesButton.setOnClickListener {
-            val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-            val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+            val token = tokenManager.getAccessToken()
+            tokenManager.checkAccessTokenExpiration()
 
             val retrofitBearer = Retrofit.Builder()
                 .baseUrl("http://52.79.53.62:8080/")
@@ -52,9 +54,9 @@ class CommentDeleteDialog(id:Long) : DialogFragment() {
                     OkHttpClient.Builder()
                         .addInterceptor { chain ->
                             val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .addHeader("Authorization", "Bearer $token")
                                 .build()
-                            Log.d("TokenInterceptor_StudyDeleteFragment", "Token: " + token.orEmpty())
+                            Log.d("TokenInterceptor_StudyDeleteFragment", "Token: $token")
                             chain.proceed(request)
                         }
                         .build()
