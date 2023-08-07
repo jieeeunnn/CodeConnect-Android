@@ -369,7 +369,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
                 return extractedFileName.trim('"')
             }
         }
-        return "" // 파일 이름을 추출할 수 없는 경우 빈 문자열("")을 반환합니다.
+        return "" // 파일 이름을 추출할 수 없는 경우 빈 문자열("")을 반환
     }
 
 }

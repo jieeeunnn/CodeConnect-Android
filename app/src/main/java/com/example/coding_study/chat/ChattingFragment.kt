@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.coding_study.*
 import com.example.coding_study.common.LoadImageTask
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.ChatMemberListBinding
 import com.example.coding_study.databinding.ChattingFragmentBinding
 import com.example.coding_study.dialog.DeleteDialog
@@ -50,6 +51,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
     private lateinit var binding: ChattingFragmentBinding
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var stompClient: StompClient? = null
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     fun saveMyImagePath(context: Context, myImagePath: String?) {
         val sharedPreferences = context.getSharedPreferences("MyImagePath", Context.MODE_PRIVATE)
@@ -119,8 +121,8 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
                     Log.e("chat file upload fileName", fileName)
                 }
 
-                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+                val token = tokenManager.getAccessToken()
+                tokenManager.checkAccessTokenExpiration()
 
                 val retrofitBearer = Retrofit.Builder()
                     .baseUrl("http://52.79.53.62:8080/")
@@ -129,9 +131,9 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
                         OkHttpClient.Builder()
                             .addInterceptor { chain ->
                                 val request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                    .addHeader("Authorization", "Bearer $token")
                                     .build()
-                                Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                                Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                                 chain.proceed(request)
                             }
                             .build()
@@ -234,8 +236,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
         binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
         chattingRecyclerView.adapter = chattingAdapter
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -244,9 +245,9 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -512,9 +513,8 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
     }
 
     override fun onYesButtonClick(id: Long) {
-        val sharedPreferences =
-            requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -523,9 +523,9 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyDeleteFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyDeleteFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()

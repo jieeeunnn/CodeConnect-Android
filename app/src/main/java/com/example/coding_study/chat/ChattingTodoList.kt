@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.ChattingTodolistFragmentBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,7 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
     private lateinit var binding: ChattingTodolistFragmentBinding
     private lateinit var adapter: ChecklistAdapter
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
@@ -62,8 +64,8 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
         adapter = roomId?.let { ChecklistAdapter(stompViewModel, it,checklistItems) }!!
         binding.todoListRecyclerView.adapter = adapter
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -72,14 +74,15 @@ class ChattingTodoList:Fragment(R.layout.chatting_todolist_fragment) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
             )
             .build()
+
         val chatRoomOnlyService = retrofitBearer.create(ChatRoomOnlyService::class.java)
 
         if (roomId != null) {

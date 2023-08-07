@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.ChatFragmentBinding
 import com.example.coding_study.study.ChatRoom
 import okhttp3.OkHttpClient
@@ -24,8 +25,9 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
     private lateinit var chatAdapter: ChatRoomAdapter
     private lateinit var binding: ChatFragmentBinding
     private var chatList: List<ChatRoom> = emptyList() // Declare chatList as a member variable
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
-    fun saveRoomId(context: Context, roomId: Long) { // 토큰 저장 함수
+    fun saveRoomId(context: Context, roomId: Long) {
         val sharedPreferences = context.getSharedPreferences("MyRoomId", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putLong("roomId", roomId)
@@ -43,8 +45,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         binding = ChatFragmentBinding.inflate(inflater, container, false)
         val chatRecyclerView = binding.chatRecyclerView
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -53,9 +54,9 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -67,6 +68,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         var onItemClickListener: ChatRoomAdapter.OnItemClickListener = object :
             ChatRoomAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
+                tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
                 val roomId = chatList[position].roomId
                 Log.e("ChatFragment onItemClickListener roomId", "$roomId")
@@ -108,8 +110,8 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
     }
 
     fun loadChatroomList() {
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -118,9 +120,9 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
