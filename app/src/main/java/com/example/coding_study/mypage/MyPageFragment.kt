@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.dialog.DeleteMemberDialog
 import com.example.coding_study.common.LoadImageTask
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.MypageFragmentBinding
 import com.example.coding_study.dialog.LogoutDialog
 import com.google.gson.Gson
@@ -30,6 +31,7 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
     private lateinit var myPageProfileView: View
     private lateinit var myPageAdapter: MyPageAdapter
     private val myPageViewModel: MyPageViewModel by viewModels()
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -98,8 +100,8 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
     }
 
     private fun loadMyPage() {
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -108,9 +110,9 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()

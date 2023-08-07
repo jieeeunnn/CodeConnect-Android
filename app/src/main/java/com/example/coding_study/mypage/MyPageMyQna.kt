@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.MypageMyStudyBinding
 import com.example.coding_study.qna.*
 import com.google.gson.Gson
@@ -21,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
     private lateinit var qnaAdapter: QnaAdapter
     private lateinit var binding: MypageMyStudyBinding
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     fun saveQnaPostIds(context: Context, qnaPostIds: List<Long>) {
         val sharedPreferencesQnaPostId = context.getSharedPreferences("QnaPostIds", Context.MODE_PRIVATE)
@@ -44,8 +46,8 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
 
         toolbarTitle.text = "내가 작성한 Q&A"
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -54,9 +56,9 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -66,6 +68,7 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
         var onQnaClickListener: QnaAdapter.OnQnaClickListener = object : QnaAdapter.OnQnaClickListener {
             override fun onQnaClick(position: Int) {
                 Log.e("QnaFragment", "onQnaClick!!!")
+                tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
                 // 저장된 Qna 게시글 id 가져오기
                 val sharedPreferencesQnaPostId = requireActivity().getSharedPreferences("QnaPostIds", Context.MODE_PRIVATE) // "MyPostIds" 라는 이름으로 SharedPreferences 객체를 생성
@@ -78,26 +81,6 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
 
                 val qnaSelectedPostId = qnaPostIds.getOrNull(position)// qnaPostIds 리스트에서 position에 해당하는 인덱스의 값을 가져옴
                 Log.e("QnaFragment","qnaSelectedPostId: $qnaSelectedPostId")
-
-                //저장된 토큰값 가져오기
-                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
-
-                val retrofitBearer = Retrofit.Builder()
-                    .baseUrl("http://52.79.53.62:8080/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(
-                        OkHttpClient.Builder()
-                            .addInterceptor { chain ->
-                                val request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "Bearer " + token.orEmpty())
-                                    .build()
-                                Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
-                                chain.proceed(request)
-                            }
-                            .build()
-                    )
-                    .build()
 
                 val qnaOnlyService = retrofitBearer.create(QnaOnlyService::class.java)
 
@@ -146,7 +129,6 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
                                     val commentGuest = qnaOnlyResponse.data[QnaRole.COMMENT_GUEST] as? List<Comment>
                                     Log.e("QnaFragment Guest onlyResponse Bundle commentHost", "$commentHost")
                                     Log.e("QnaFragment Guest onlyResponse Bundle commentGuest", "$commentGuest")
-
 
                                     val qnaGson = Gson()
                                     val qnaBundle = Bundle()
@@ -215,12 +197,10 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
                         if (qnaListResponse?.result == true) {
                             val qnaRecruitmentIds = qnaListResponse.data?.map { it.qnaId } // qna 게시물 아이디 리스트 추출
 
-
                             if (qnaRecruitmentIds != null) {
                                 context?.let { saveQnaPostIds(it, qnaRecruitmentIds) } // 게시물 아이디 리스트 저장
                             }
                             Log.e("StudyFragment", "recruitmentIds: $qnaRecruitmentIds")
-
 
                             if (qnapostListResponse != null) {
                                 qnaAdapter.qnaPostList = qnapostListResponse

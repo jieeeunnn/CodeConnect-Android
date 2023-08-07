@@ -29,6 +29,7 @@ import com.bumptech.glide.request.RequestListener
 import com.example.coding_study.dialog.ConfirmDialog
 import com.example.coding_study.common.LoadImageTask
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.MypageEditBinding
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -42,6 +43,7 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
     private lateinit var binding: MypageEditBinding
     private var selectedFields = mutableListOf<String>() // selectedFields 리스트 정의
     private lateinit var addressViewModel: MyPageAddressViewModel
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     @SuppressLint("CheckResult")
     private fun displaySelectedImage(selectedImageUri: Uri?) {
@@ -334,9 +336,8 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
             val address = binding.myPageNewAddress.text.toString()
             val fieldList = selectedFields.toList()
 
-            val sharedPreferences =
-                requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-            val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+            val token = tokenManager.getAccessToken()
+            tokenManager.checkAccessTokenExpiration()
 
             val retrofitBearer = Retrofit.Builder()
                 .baseUrl("http://52.79.53.62:8080/")
@@ -345,9 +346,9 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
                     OkHttpClient.Builder()
                         .addInterceptor { chain ->
                             val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .addHeader("Authorization", "Bearer $token")
                                 .build()
-                            Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                            Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                             chain.proceed(request)
                         }
                         .build()

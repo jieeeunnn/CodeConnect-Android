@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.MypageMyStudyBinding
 import com.example.coding_study.study.*
 import com.google.gson.Gson
@@ -21,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
     private lateinit var studyAdapter: StudyAdapter
     private lateinit var binding: MypageMyStudyBinding
+    private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
 
     fun savePostIds(context: Context, postIds: List<Long>) {
         val sharedPreferencesPostId = context.getSharedPreferences("MyPostIds", Context.MODE_PRIVATE)
@@ -44,8 +46,8 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
 
         toolbarTitle.text = "신청한 스터디"
 
-        val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-        val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
+        val token = tokenManager.getAccessToken()
+        tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -54,9 +56,9 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -66,7 +68,8 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
         // 게시글을 클릭할 때 서버에 토큰, 게시글 id를 주고 Role과 게시글 정보를 받아옴. 이후 Role에 따라 다른 레이아웃 띄우기
         var onItemClickListener: StudyAdapter.OnItemClickListener = object : StudyAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) { // 게시글 클릭 시
-                // 저장된 게시글 id 가져오기
+                tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
+
                 val sharedPreferencesPostId = requireActivity().getSharedPreferences("MyPostIds", Context.MODE_PRIVATE) // "MyPostIds" 라는 이름으로 SharedPreferences 객체를 생성
                 val size = sharedPreferencesPostId.all.size // SharedPreferences 객체에 저장된 모든 키-값 쌍의 개수를 구함
                 val postIds = (0 until size).mapNotNull { // 0부터 size-1까지의 정수를 순회하면서, 해당하는 키("post_0", "post_1", ...)에 대한 값을 리스트에 추가, 함수를 적용한 결과 중 null이 아닌 값들로만 리스트를 만듬
@@ -77,26 +80,6 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
 
                 val selectedPostId = postIds.getOrNull(position)// postIds 리스트에서 position에 해당하는 인덱스의 값을 가져옴
                 Log.e("StudyFragment","selectedPostId: $selectedPostId")
-
-                //저장된 토큰값 가져오기
-                val sharedPreferences = requireActivity().getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-                val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
-
-                val retrofitBearer = Retrofit.Builder()
-                    .baseUrl("http://52.79.53.62:8080/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(
-                        OkHttpClient.Builder()
-                            .addInterceptor { chain ->
-                                val request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "Bearer " + token.orEmpty())
-                                    .build()
-                                Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
-                                chain.proceed(request)
-                            }
-                            .build()
-                    )
-                    .build()
 
                 val studyOnlyService = retrofitBearer.create(StudyOnlyService::class.java)
 
