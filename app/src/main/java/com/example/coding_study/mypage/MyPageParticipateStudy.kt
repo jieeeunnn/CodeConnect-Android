@@ -145,7 +145,7 @@ class MyPageParticipateStudy: Fragment(R.layout.mypage_my_study) {
             }
         }
 
-        studyAdapter = StudyAdapter(listOf(), onItemClickListener)
+        studyAdapter = StudyAdapter(listOf(), onItemClickListener, tokenManager)
         myPageRecyclerView.adapter = studyAdapter
         binding.myPageMyStudyRecyclerView.layoutManager = LinearLayoutManager(context)
 

@@ -1,7 +1,10 @@
 package com.example.coding_study.common
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import com.auth0.jwt.JWT
 import com.auth0.jwt.interfaces.DecodedJWT
 import okhttp3.OkHttpClient

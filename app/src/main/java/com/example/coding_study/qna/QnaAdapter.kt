@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.common.LoadImageTask
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.QnaPopularLayoutBinding
 import com.example.coding_study.databinding.QnaUploadLayoutBinding
 
@@ -22,11 +23,12 @@ data class QnaPost (
 )
 
 
-class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener: OnQnaClickListener, private var onPopularClickListener: OnPopularClickListener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener: OnQnaClickListener, private var onPopularClickListener: OnPopularClickListener,
+                 private var tokenManager: TokenManager) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_QNA_POST = 1
     private val VIEW_TYPE_POPULAR_POST = 2
+    val token = tokenManager.getAccessToken()
 
     override fun getItemViewType(position: Int): Int {
         // position에 따라서 뷰 유형을 식별하고 반환
@@ -57,7 +59,7 @@ class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener:
 
             val imageUrl: String? = "http://52.79.53.62:8080/"+ qnapost.profileImagePath
             val imageView: ImageView = binding.qnaProfileImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView, token)
             loadImageTask.execute(imageUrl)
 
         }
@@ -73,7 +75,7 @@ class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener:
 
             val imageUrl: String? = "http://52.79.53.62:8080/"+ qnapost.profileImagePath
             val imageView: ImageView = binding.qnaPopularProfileImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView,token)
             loadImageTask.execute(imageUrl)
 
         }

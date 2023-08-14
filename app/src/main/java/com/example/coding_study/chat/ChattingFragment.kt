@@ -232,7 +232,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
         }
 
 
-        chattingAdapter = requireActivity()?.let { ChattingAdapter(it, mutableListOf()) }!!
+        chattingAdapter = requireActivity()?.let { ChattingAdapter(it, mutableListOf(), tokenManager) }!!
         binding.chattingRecyclerView.layoutManager = LinearLayoutManager(context)
         chattingRecyclerView.adapter = chattingAdapter
 
@@ -336,7 +336,7 @@ class ChattingFragment: Fragment(R.layout.chatting_fragment), DeleteDialogInterf
 
                             val imageUrl: String? = "http://52.79.53.62:8080/"+ imageUrl
                             val imageView: ImageView = binding.memberProfileImage
-                            val loadImageTask = LoadImageTask(imageView)
+                            val loadImageTask = LoadImageTask(imageView, token)
                             loadImageTask.execute(imageUrl)
 
                             // 프로필 사진 로딩 및 설정 (예시: Glide 라이브러리 사용)

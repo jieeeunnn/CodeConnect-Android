@@ -209,6 +209,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
         val gson = Gson()
         val json = arguments?.getString("recruitmentJson")
         val recruitment = gson.fromJson(json, RecruitmentDto::class.java)
+        val token = tokenManager.getAccessToken()
 
         binding.guestNicknameText.text = recruitment.nickname
         binding.guestTitleText.text = recruitment.title
@@ -220,7 +221,7 @@ class StudyGuestFragment : Fragment(R.layout.study_guest) {
 
         val imageUrl: String? = "http://52.79.53.62:8080/"+ recruitment.profileImagePath
         val imageView: ImageView = binding.studyGuestImage
-        val loadImageTask = LoadImageTask(imageView)
+        val loadImageTask = LoadImageTask(imageView, token)
         loadImageTask.execute(imageUrl)
     }
 

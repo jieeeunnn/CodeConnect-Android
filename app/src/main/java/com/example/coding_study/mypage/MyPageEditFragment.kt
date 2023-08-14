@@ -167,8 +167,9 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
         val myPageViewModel: MyPageViewModel by viewModels({ requireParentFragment() })
         val myProfile: MyProfile? = myPageViewModel.getMyProfile().value
 
-        addressViewModel = ViewModelProvider(requireActivity()).get(MyPageAddressViewModel::class.java)
+        val token = tokenManager.getAccessToken()
 
+        addressViewModel = ViewModelProvider(requireActivity()).get(MyPageAddressViewModel::class.java)
 
         if (myProfile != null) {
             binding.myPageNewId.setText(myProfile.nickname)
@@ -176,7 +177,7 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
 
             val imageUrl: String? = "http://52.79.53.62:8080/"+ "${myProfile.profileImagePath}"
             val imageView: ImageView = binding.myPageProfileImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView, token)
             loadImageTask.execute(imageUrl)
 
             binding.myPageNewAddress.setOnClickListener {
@@ -194,9 +195,7 @@ class MyPageEditFragment:Fragment(R.layout.mypage_edit) {
                     binding.myPageNewAddress.text = myProfile.address
                 } else {
                     binding.myPageNewAddress.text = address
-
                 }
-
                 Log.e("MyPageEditFragment", "selected address: $address")
             }
 

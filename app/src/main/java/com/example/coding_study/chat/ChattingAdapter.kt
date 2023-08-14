@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.common.LoadImageTask
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.ChatMessageBinding
 import com.example.coding_study.databinding.ChatMessageReceiveBinding
 import com.example.coding_study.databinding.FileMessageBinding
@@ -43,7 +44,10 @@ enum class MessageType {
     FILE
 }
 
-class ChattingAdapter(private val fragment: FragmentActivity, private var chatMessages: MutableList<ChatMessage>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChattingAdapter(private val fragment: FragmentActivity, private var chatMessages: MutableList<ChatMessage>,
+                      private val tokenManager: TokenManager): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val token = tokenManager.getAccessToken()
 
     companion object {
         private const val TYPE_MY_MESSAGE = 0
@@ -70,7 +74,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
 
             val imageUrl: String? = "http://52.79.53.62:8080/"+ chatMessage.profileImagePath
             val imageView: ImageView = binding.chatMyImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView, token)
             loadImageTask.execute(imageUrl)
         }
     }
@@ -83,7 +87,7 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
 
             val imageUrl: String? = "http://52.79.53.62:8080/"+ "${chatMessage.profileImagePath}"
             val imageView: ImageView = binding.chatOtherImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView, token)
             loadImageTask.execute(imageUrl)
         }
     }
@@ -96,11 +100,8 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
 
             val imageUrl: String? = "http://152.79.53.62:8080/"+ fileMessage.profileImagePath
             val imageView: ImageView = binding.myFileMessageProfileImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView, token)
             loadImageTask.execute(imageUrl)
-
-            val sharedPreferences = fragment.getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-            val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
             val retrofitBearer = Retrofit.Builder()
                 .baseUrl("http://52.79.53.62:8080/")
@@ -109,9 +110,9 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
                     OkHttpClient.Builder()
                         .addInterceptor { chain ->
                             val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .addHeader("Authorization", "Bearer $token")
                                 .build()
-                            Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                            Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                             chain.proceed(request)
                         }
                         .build()
@@ -202,11 +203,8 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
 
             val imageUrl: String? = "http://52.79.53.62:8080/"+ fileMessage.profileImagePath
             val imageView: ImageView = binding.otherFileProfileImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView, token)
             loadImageTask.execute(imageUrl)
-
-            val sharedPreferences = fragment.getSharedPreferences("MyToken", Context.MODE_PRIVATE)
-            val token = sharedPreferences?.getString("token", "") // 저장해둔 토큰값 가져오기
 
             val retrofitBearer = Retrofit.Builder()
                 .baseUrl("http://52.79.53.62:8080/")
@@ -215,9 +213,9 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
                     OkHttpClient.Builder()
                         .addInterceptor { chain ->
                             val request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token.orEmpty())
+                                .addHeader("Authorization", "Bearer $token")
                                 .build()
-                            Log.d("TokenInterceptor_StudyFragment", "Token: " + token.orEmpty())
+                            Log.d("TokenInterceptor_StudyFragment", "Token: $token")
                             chain.proceed(request)
                         }
                         .build()

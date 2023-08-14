@@ -1,7 +1,6 @@
 package com.example.coding_study.qna
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,6 +31,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
     private lateinit var binding: QnaHostBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
     private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
+    private val token: String by lazy { tokenManager.getAccessToken() }
 
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
@@ -63,14 +63,14 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
 
         if (commentHost != null || commentGuest != null) {
             val qnaHostRecyclerView = binding.qnaHostRecyclerView
-            qnaCommentAdapter = QnaCommentAdapter( fragmentManager = childFragmentManager, commentList)
+            qnaCommentAdapter = QnaCommentAdapter( fragmentManager = childFragmentManager, commentList, tokenManager)
             qnaHostRecyclerView.adapter = qnaCommentAdapter
             binding.qnaHostRecyclerView.layoutManager = LinearLayoutManager(context)
 
             qnaCommentAdapter.notifyDataSetChanged()
         } else {
             commentList = emptyList()
-            qnaCommentAdapter = QnaCommentAdapter(childFragmentManager, commentList)
+            qnaCommentAdapter = QnaCommentAdapter(childFragmentManager, commentList, tokenManager)
             binding.qnaHostRecyclerView.adapter = qnaCommentAdapter
             binding.qnaHostRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -85,19 +85,17 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
 
         val profileImageUrl: String = "http://52.79.53.62:8080/"+ qnaRecruitment.profileImagePath // 프로필 사진 띄우기
         val profileImageView: ImageView = binding.qnaHostProfileImage
-        val profileLoadImageTask = LoadImageTask(profileImageView)
+        val profileLoadImageTask = LoadImageTask(profileImageView,token)
         profileLoadImageTask.execute(profileImageUrl)
 
         val imageUrl: String? = "http://52.79.53.62:8080/"+ "${qnaRecruitment.imagePath}" // 게시글에 사진 업로드
         val imageView: ImageView = binding.qnaHostImageView
-        val loadImageTask = LoadQnaImageTask(imageView)
+        val loadImageTask = LoadQnaImageTask(imageView, token)
         loadImageTask.execute(imageUrl)
 
         binding.qnaHostSwifeRefreshLayout.setOnRefreshListener {
             loadQnaHost()
         }
-
-        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -260,7 +258,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
     }
 
     override fun onYesButtonClick(id: Long) { // 삭제 다이얼로그 확인 버튼 클릭시 게시글 삭제
-        val token = tokenManager.getAccessToken()
         tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
@@ -307,7 +304,6 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
     }
 
     fun loadQnaHost() {
-        val token = tokenManager.getAccessToken()
         tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
@@ -357,7 +353,7 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
 
                         val imageUrl: String? = "http://52.79.53.62:8080/"+ qnaUploadDto.profileImagePath // 프로필 사진 띄우기
                         val imageView: ImageView = binding.qnaHostProfileImage
-                        val loadImageTask = LoadImageTask(imageView)
+                        val loadImageTask = LoadImageTask(imageView, token)
                         loadImageTask.execute(imageUrl)
 
                         val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? List<Comment>

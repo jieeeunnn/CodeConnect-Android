@@ -8,7 +8,8 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-class LoadQnaImageTask(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
+@Suppress("DEPRECATION")
+class LoadQnaImageTask(private val imageView: ImageView, private val bearerToken: String) : AsyncTask<String, Void, Bitmap?>() {
 
     override fun doInBackground(vararg urls: String): Bitmap? {
         val imageUrl = urls[0]
@@ -17,6 +18,7 @@ class LoadQnaImageTask(private val imageView: ImageView) : AsyncTask<String, Voi
             val url = URL(imageUrl)
             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
             connection.doInput = true
+            connection.setRequestProperty("Authorization", "Bearer $bearerToken")
             connection.connect()
             val inputStream = connection.inputStream
             bitmap = BitmapFactory.decodeStream(inputStream)

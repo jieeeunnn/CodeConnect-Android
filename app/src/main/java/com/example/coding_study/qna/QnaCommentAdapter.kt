@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.dialog.CommentDeleteDialog
 import com.example.coding_study.common.LoadImageTask
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.QnaCommentGuestBinding
 import com.example.coding_study.databinding.QnaCommentHostBinding
 
 
-class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commentList: List<Comment>)
+class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commentList: List<Comment>, private var tokenManager: TokenManager)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    val token = tokenManager.getAccessToken()
 
     companion object {
         private const val VIEW_TYPE_COMMENT_GUEST = 0
@@ -64,7 +67,7 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
 
             val imageUrl: String? = "http://52.79.53.62:8080/"+ comment.profileImagePath
             val imageView: ImageView = binding.commentGuestProfileImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView,token)
             loadImageTask.execute(imageUrl)
         }
     }
@@ -79,7 +82,7 @@ class QnaCommentAdapter(private val fragmentManager: FragmentManager, var commen
 
             val imageUrl: String? = "http://52.79.53.62:8080/"+ comment.profileImagePath
             val imageView: ImageView = binding.commentHostProfileImage
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView,token)
             loadImageTask.execute(imageUrl)
 
                     binding.commentMenuButton.setOnClickListener { view ->

@@ -279,7 +279,7 @@ class StudyFragment : Fragment(R.layout.study_fragment) {
             }
         }
 
-        studyAdapter = StudyAdapter(listOf(), onItemClickListener) // 어댑터 초기화 설정
+        studyAdapter = StudyAdapter(listOf(), onItemClickListener, tokenManager) // 어댑터 초기화 설정
         postRecyclerView.adapter = studyAdapter
         binding.studyRecyclerView.layoutManager = LinearLayoutManager(context) // 어떤 layout을 사용할 것인지 결정
 

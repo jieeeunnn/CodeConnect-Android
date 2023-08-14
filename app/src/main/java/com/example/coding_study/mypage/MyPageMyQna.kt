@@ -169,7 +169,7 @@ class MyPageMyQna: Fragment(R.layout.mypage_my_study) {
             }
         }
 
-        qnaAdapter = QnaAdapter(listOf(), onQnaClickListener, onPopularClickListener)
+        qnaAdapter = QnaAdapter(listOf(), onQnaClickListener, onPopularClickListener, tokenManager)
         myPageRecyclerView.adapter = qnaAdapter
         binding.myPageMyStudyRecyclerView.layoutManager = LinearLayoutManager(context)
 

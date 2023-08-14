@@ -35,6 +35,7 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
     private lateinit var binding: WriteQnaBinding
     private var selectedImageUri: Uri? = null
     private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
+    private val token: String by lazy { tokenManager.getAccessToken() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +58,7 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
 
         val imageUrl: String? = "http://52.79.53.62:8080/"+ "${qnaRecruitment.imagePath}"
         val imageView: ImageView = binding.qnaImageView
-        val loadImageTask = LoadQnaImageTask(imageView)
+        val loadImageTask = LoadQnaImageTask(imageView, token)
         loadImageTask.execute(imageUrl)
 
         binding.qnaButtonUpload.setOnClickListener {
@@ -141,7 +142,6 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
     }
 
     fun uploadQna(qnaRequest: QnaRequest) {
-        val token = tokenManager.getAccessToken()
         tokenManager.checkAccessTokenExpiration() // 액세스 토큰 유효기간 확인
 
         val retrofitBearer = Retrofit.Builder()

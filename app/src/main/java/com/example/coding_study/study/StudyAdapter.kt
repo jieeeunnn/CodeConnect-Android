@@ -8,9 +8,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coding_study.common.LoadImageTask
 import com.example.coding_study.R
+import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
 
-class StudyAdapter(var postList: List<Post>, private var onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<StudyAdapter.StudyUploadViewHolder>() {
+class StudyAdapter(var postList: List<Post>, private var onItemClickListener: OnItemClickListener, private var tokenManager: TokenManager) : RecyclerView.Adapter<StudyAdapter.StudyUploadViewHolder>() {
 
     interface OnItemClickListener { // 아이템 클릭 리스너를 정의
         fun onItemClick(position: Int)
@@ -98,9 +99,10 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
 
             binding.currentTextView.text = post.currentTime
 
+            val token = tokenManager.getAccessToken()
             val imageUrl: String? = "http://52.79.53.62:8080/"+ "${post.profileImagePath}"
             val imageView: ImageView = binding.studyImageView
-            val loadImageTask = LoadImageTask(imageView)
+            val loadImageTask = LoadImageTask(imageView,token)
             loadImageTask.execute(imageUrl)
         }
     }

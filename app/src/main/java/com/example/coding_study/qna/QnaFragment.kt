@@ -323,11 +323,11 @@ class QnAFragment : Fragment(R.layout.qna_fragment) {
             }
         }
 
-        qnaAdapter = QnaAdapter(listOf(), onQnaClickListener, onPopularClickListener) // 어댑터 초기화 설정
+        qnaAdapter = QnaAdapter(listOf(), onQnaClickListener, onPopularClickListener, tokenManager) // 어댑터 초기화 설정
         qnaPostRecyclerView.adapter = qnaAdapter
         binding.qnaRecyclerView.layoutManager = LinearLayoutManager(context) // 어떤 layout을 사용할 것인지 결정
 
-        topQnaAdapter = QnaAdapter(listOf(), onQnaClickListener, onPopularClickListener) // 인기 게시글용 어댑터 초기화 설정
+        topQnaAdapter = QnaAdapter(listOf(), onQnaClickListener, onPopularClickListener, tokenManager) // 인기 게시글용 어댑터 초기화 설정
         topQnaRecyclerView.adapter = topQnaAdapter
         topQnaRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) // 인기 게시글은 가로로 배열
 

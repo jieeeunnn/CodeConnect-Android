@@ -125,7 +125,7 @@ class MyPageMyStudy: Fragment(R.layout.mypage_my_study) { // 내가 작성한 �
             }
         }
 
-        studyAdapter = StudyAdapter(listOf(), onItemClickListener)
+        studyAdapter = StudyAdapter(listOf(), onItemClickListener, tokenManager)
         myPageRecyclerView.adapter = studyAdapter
         binding.myPageMyStudyRecyclerView.layoutManager = LinearLayoutManager(context)
 

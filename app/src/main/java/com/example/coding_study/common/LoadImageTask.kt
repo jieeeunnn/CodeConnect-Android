@@ -25,10 +25,8 @@ fun setCircularImage(imageView: ImageView, bitmap: Bitmap) {
     imageView.setImageDrawable(roundedBitmapDrawable)
 }
 
-
-
 @Suppress("DEPRECATION")
-class LoadImageTask(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
+class LoadImageTask(private val imageView: ImageView, private val bearerToken: String) : AsyncTask<String, Void, Bitmap?>() {
 
     override fun doInBackground(vararg urls: String): Bitmap? {
         val imageUrl = urls[0]
@@ -37,6 +35,7 @@ class LoadImageTask(private val imageView: ImageView) : AsyncTask<String, Void, 
             val url = URL(imageUrl)
             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
             connection.doInput = true
+            connection.setRequestProperty("Authorization", "Bearer $bearerToken")
             connection.connect()
             val inputStream = connection.inputStream
             bitmap = BitmapFactory.decodeStream(inputStream)

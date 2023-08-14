@@ -51,10 +51,11 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val token = tokenManager.getAccessToken()
+
         val parentFragment = parentFragment
         if (parentFragment is StudyFragment) {
             parentFragment.hideFloatingButton()
-
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
@@ -90,7 +91,7 @@ class StudyHostFragment : Fragment(R.layout.study_host), DeleteDialogInterface {
 
         val imageUrl: String? = "http://52.79.53.62:8080/"+ "${recruitment.profileImagePath}"
         val imageView: ImageView = binding.studyHostImageView
-        val loadImageTask = LoadImageTask(imageView)
+        val loadImageTask = LoadImageTask(imageView, token)
         loadImageTask.execute(imageUrl)
 
 

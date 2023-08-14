@@ -1,7 +1,6 @@
 package com.example.coding_study.qna
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,6 +28,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
     private lateinit var binding: QnaGuestBinding
     private lateinit var qnaCommentAdapter: QnaCommentAdapter
     private val tokenManager: TokenManager by lazy { TokenManager(requireContext()) }
+    private val token: String by lazy { tokenManager.getAccessToken() }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -54,14 +54,14 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
 
         if (commentHost != null || commentGuest != null) {
             val qnaGuestRecyclerView = binding.qnaGuestRecyclerView
-            qnaCommentAdapter = QnaCommentAdapter(fragmentManager = childFragmentManager, commentList)
+            qnaCommentAdapter = QnaCommentAdapter(fragmentManager = childFragmentManager, commentList, tokenManager)
             qnaGuestRecyclerView.adapter = qnaCommentAdapter
             binding.qnaGuestRecyclerView.layoutManager = LinearLayoutManager(context)
 
             qnaCommentAdapter.notifyDataSetChanged()
         }else{
             commentList = emptyList()
-            qnaCommentAdapter = QnaCommentAdapter(childFragmentManager, commentList)
+            qnaCommentAdapter = QnaCommentAdapter(childFragmentManager, commentList, tokenManager)
             binding.qnaGuestRecyclerView.adapter = qnaCommentAdapter
             binding.qnaGuestRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -76,19 +76,17 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
 
         val profileImageUrl: String = "http://52.79.53.62:8080/"+ qnaRecruitment.profileImagePath // 프로필 이미지
         val profileImageView: ImageView = binding.qnaGuestProfileImage
-        val profileLoadImageTask = LoadImageTask(profileImageView)
+        val profileLoadImageTask = LoadImageTask(profileImageView, token)
         profileLoadImageTask.execute(profileImageUrl)
 
         val imageUrl: String? = "http://52.79.53.62:8080/"+ "${qnaRecruitment.imagePath}" // 게시글에 이미지 첨부 시
         val imageView: ImageView = binding.qnaGuestImageView
-        val loadImageTask = LoadQnaImageTask(imageView)
+        val loadImageTask = LoadQnaImageTask(imageView, token)
         loadImageTask.execute(imageUrl)
 
         binding.qnaGuestSwifeRefreshLayout.setOnRefreshListener {
             loadQnaGuest()
         }
-
-        val token = tokenManager.getAccessToken()
 
         val retrofitBearer = Retrofit.Builder()
             .baseUrl("http://52.79.53.62:8080/")
@@ -97,9 +95,9 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.orEmpty())
+                            .addHeader("Authorization", "Bearer $token")
                             .build()
-                        Log.d("TokenInterceptor", "Token: " + token.orEmpty())
+                        Log.d("TokenInterceptor", "Token: $token")
                         chain.proceed(request)
                     }
                     .build()
@@ -145,7 +143,6 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                 override fun onFailure(call: Call<QnaHeart>, t: Throwable) {
                     Toast.makeText(context, "qna heart put 서버 연결 실패", Toast.LENGTH_LONG).show()
                 }
-
             })
         }
 
@@ -225,7 +222,6 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
     }
 
     fun loadQnaGuest() {
-        val token = tokenManager.getAccessToken()
         tokenManager.checkAccessTokenExpiration()
 
         val retrofitBearer = Retrofit.Builder()
@@ -270,10 +266,9 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                     binding.qnaGuestCurrentTime.text = qnaUploadDto.currentDateTime
                     binding.guestLikeCountView.text = qnaRecruitment.likeCount.toString()
 
-
                     val imageUrl: String? = "http://52.79.53.62:8080/"+ "${qnaUploadDto.profileImagePath}"
                     val imageView: ImageView = binding.qnaGuestProfileImage
-                    val loadImageTask = LoadImageTask(imageView)
+                    val loadImageTask = LoadImageTask(imageView, token)
                     loadImageTask.execute(imageUrl)
 
                     val commentHost = qnaOnlyResponse.data[QnaRole.COMMENT_HOST] as? List<Comment>

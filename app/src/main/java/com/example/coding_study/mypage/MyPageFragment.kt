@@ -147,7 +147,7 @@ class MyPageFragment: Fragment(R.layout.mypage_fragment) {
 
                             val imageUrl: String? = "http://52.79.53.62:8080/"+ "${myProfile.profileImagePath}"
                             val imageView: ImageView = binding.myPageImage
-                            val loadImageTask = LoadImageTask(imageView)
+                            val loadImageTask = LoadImageTask(imageView, token)
                             loadImageTask.execute(imageUrl)
                         }
                     }
