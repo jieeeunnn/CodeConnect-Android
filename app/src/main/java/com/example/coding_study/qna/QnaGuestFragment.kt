@@ -2,6 +2,7 @@ package com.example.coding_study.qna
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -70,7 +71,12 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
 
         binding.qnaGuestNickname.text = qnaRecruitment.nickname
         binding.qnaGuestTitle.text = qnaRecruitment.title
-        binding.qnaGuestContent.text = qnaRecruitment.content
+
+        val htmlString = qnaRecruitment.content // qnaRecruitment.content에는 HTML 형식의 문자열이 들어있다고 가정
+        binding.qnaGuestContent.text = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY)
+
+        //binding.qnaGuestContent.text = qnaRecruitment.content
+
         binding.qnaGuestCurrentTime.text = qnaRecruitment.currentDateTime
         binding.guestLikeCountView.text = qnaRecruitment.likeCount.toString()
 
@@ -262,7 +268,12 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
 
                     binding.qnaGuestNickname.text = qnaUploadDto.nickname
                     binding.qnaGuestTitle.text = qnaUploadDto.title
-                    binding.qnaGuestContent.text = qnaUploadDto.content
+
+                    val htmlString = qnaRecruitment.content // qnaRecruitment.content에는 HTML 형식의 문자열이 들어있다고 가정
+                    binding.qnaGuestContent.text = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY)
+
+                    //binding.qnaGuestContent.text = qnaUploadDto.content
+
                     binding.qnaGuestCurrentTime.text = qnaUploadDto.currentDateTime
                     binding.guestLikeCountView.text = qnaRecruitment.likeCount.toString()
 

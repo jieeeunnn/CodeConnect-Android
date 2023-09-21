@@ -2,6 +2,7 @@ package com.example.coding_study.chat
 
 import android.content.Context
 import android.os.Environment
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -68,7 +69,11 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
 
     inner class ChatMessageViewHolder(private val binding: ChatMessageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatMessage: ChatMessage) {
-            binding.chatMessageTextView.text = chatMessage.message
+
+            val htmlString = chatMessage.message // qnaRecruitment.content에는 HTML 형식의 문자열이 들어있다고 가정
+            binding.chatMessageTextView.text = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY)
+
+            //binding.chatMessageTextView.text = chatMessage.message
             binding.myMessageNickname.text = chatMessage.nickname
             binding.myMessageCurrentTime.text = chatMessage.currentDateTime
 
@@ -81,7 +86,11 @@ class ChattingAdapter(private val fragment: FragmentActivity, private var chatMe
 
     inner class OtherChatMessageViewHolder(private val binding: ChatMessageReceiveBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chatMessage: ChatMessage) {
-            binding.chatReceiveMessage.text = chatMessage.message
+
+            val htmlString = chatMessage.message // qnaRecruitment.content에는 HTML 형식의 문자열이 들어있다고 가정
+            binding.chatReceiveMessage.text = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY)
+
+            //binding.chatReceiveMessage.text = chatMessage.message
             binding.otherMessageNickname.text = chatMessage.nickname
             binding.otherMessageCurrentTime.text = chatMessage.currentDateTime
 

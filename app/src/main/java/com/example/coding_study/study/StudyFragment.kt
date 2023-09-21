@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coding_study.common.AddressViewModel
 import com.example.coding_study.R
-import com.example.coding_study.common.Token
 import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.StudyFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton

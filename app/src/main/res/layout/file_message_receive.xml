@@ -23,6 +23,7 @@
         android:layout_marginTop="4dp"
         android:text="nickname"
         android:textColor="@color/grey_dark"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/otherFileProfileImage"
         app:layout_constraintTop_toTopOf="parent" />
 

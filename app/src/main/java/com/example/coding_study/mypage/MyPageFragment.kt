@@ -24,7 +24,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.math.log
 
 class MyPageFragment: Fragment(R.layout.mypage_fragment) {
     private lateinit var binding: MypageFragmentBinding

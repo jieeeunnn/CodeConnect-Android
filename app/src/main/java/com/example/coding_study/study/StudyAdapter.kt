@@ -11,6 +11,7 @@ import com.example.coding_study.R
 import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.StudyUploadLayoutBinding
 
+@Suppress("DEPRECATION")
 class StudyAdapter(var postList: List<Post>, private var onItemClickListener: OnItemClickListener, private var tokenManager: TokenManager) : RecyclerView.Adapter<StudyAdapter.StudyUploadViewHolder>() {
 
     interface OnItemClickListener { // 아이템 클릭 리스너를 정의

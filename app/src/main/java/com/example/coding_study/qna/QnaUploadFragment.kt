@@ -3,11 +3,14 @@ package com.example.coding_study.qna
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.Html
+import android.text.SpannableStringBuilder
+import android.text.TextWatcher
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,7 +23,10 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.coding_study.common.TokenManager
 import com.example.coding_study.databinding.WriteQnaBinding
+import io.noties.markwon.Markwon
 import okhttp3.OkHttpClient
+import org.commonmark.parser.Parser
+import org.commonmark.renderer.html.HtmlRenderer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +46,7 @@ class QnaUpload : Fragment() {
     ): View? {
         binding = WriteQnaBinding.inflate(inflater, container, false)
 
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { // secondActivity의 onBackPressed 함수 콜백
             val parentFragmentManager = requireActivity().supportFragmentManager
             parentFragmentManager.popBackStack()
@@ -49,6 +56,40 @@ class QnaUpload : Fragment() {
                 parentFragment.showFloatingButton()
             }
         }
+
+        /*
+        binding.qnaEditContent.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                // 입력된 텍스트 가져오기
+                val text = editable.toString()
+
+                // 구분자로 텍스트 분할
+                val parts = text.split("[markdown]")
+
+                // 일반 텍스트와 마크다운 텍스트를 구분하여 처리
+                val spannableStringBuilder = SpannableStringBuilder()
+                val htmlText = Html.fromHtml(parts[0])
+                spannableStringBuilder.append(htmlText)
+
+                if (parts.size > 1) {
+                    val markdownText = parts[1].substringBefore("[/markdown]")
+                    val markdownHtml = markdownToHtml(markdownText) // 마크다운을 HTML로 변환
+                    val htmlFromMarkdown = Html.fromHtml(markdownHtml)
+                    spannableStringBuilder.append(htmlFromMarkdown)
+                }
+
+                // TextView에 표시
+                binding.qnaEditContent.text = spannableStringBuilder
+            }
+
+        })
+
+         */
+
 
         binding.qnaButtonUpload.setOnClickListener {
             val title = binding.qnaEditTitle.text.toString()
@@ -182,5 +223,17 @@ class QnaUpload : Fragment() {
         val parentFragmentManager = requireActivity().supportFragmentManager
         parentFragmentManager.popBackStackImmediate()
     }
+
+    /*
+    // 마크다운을 HTML로 변환하는 함수
+    private fun markdownToHtml(markdownText: String): String {
+        val parser = Parser.builder().build()
+        val document = parser.parse(markdownText)
+
+        val renderer = HtmlRenderer.builder().build()
+        return renderer.render(document)
+    }
+
+     */
 
 }
