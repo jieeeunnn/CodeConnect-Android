@@ -353,9 +353,8 @@ open class QnaHostFragment : Fragment(R.layout.qna_host), DeleteDialogInterface 
                         binding.qnaHostTitle.text = qnaUploadDto.title
 
                         val htmlString = qnaRecruitment.content // qnaRecruitment.content에는 HTML 형식의 문자열이 들어있다고 가정
-                        binding.qnaHostContent.text = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY)
+                        binding.qnaHostContent.text = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY) // html 형식으로 변환
 
-                        //binding.qnaHostContent.text = qnaUploadDto.content
                         binding.qnaHostCurrentTime.text = qnaUploadDto.currentDateTime
                         binding.likeCountTextView.text = qnaUploadDto.likeCount.toString()
 

@@ -37,19 +37,6 @@
         app:layout_constraintTop_toBottomOf="@+id/qnaProfileImage" />
 
     <TextView
-        android:id="@+id/qnaUploadContent"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="content"
-        android:textColor="#515151"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/qnaUploadTitle"
-        app:layout_constraintTop_toBottomOf="@+id/qnaUploadTitle" />
-
-    <TextView
         android:id="@+id/qnaUploadTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,7 +66,7 @@
         android:text="commentCount"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent" />
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadTitle" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -88,8 +75,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/qnaUploadContent"
-        app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent"
+        app:layout_constraintStart_toStartOf="@+id/qnaUploadTitle"
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadTitle"
         app:srcCompat="@drawable/icon_heart" />
 
     <TextView
@@ -101,7 +88,7 @@
         android:text="likeCount"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/imageView14"
-        app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent" />
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadTitle" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -110,7 +97,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/qnaLikeCount"
-        app:layout_constraintTop_toBottomOf="@+id/qnaUploadContent"
+        app:layout_constraintTop_toBottomOf="@+id/qnaUploadTitle"
         app:srcCompat="@drawable/icon_comment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

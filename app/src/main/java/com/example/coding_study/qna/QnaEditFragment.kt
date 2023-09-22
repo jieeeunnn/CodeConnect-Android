@@ -30,6 +30,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.InputStream
 
+
 class QnaEditFragment : Fragment(R.layout.write_qna) {
     private lateinit var binding: WriteQnaBinding
     private var selectedImageUri: Uri? = null
@@ -199,4 +200,5 @@ class QnaEditFragment : Fragment(R.layout.write_qna) {
         })
 
     }
+
 }

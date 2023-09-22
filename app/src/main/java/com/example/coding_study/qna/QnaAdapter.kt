@@ -52,7 +52,6 @@ class QnaAdapter(var qnaPostList: List<QnaPost>, private var onQnaClickListener:
         fun bind(qnapost: QnaPost) {
             binding.quaUploadId.text = qnapost.nickname
             binding.qnaUploadTitle.text = qnapost.title
-            binding.qnaUploadContent.text = qnapost.content
             binding.qnaUploadTime.text = qnapost.currentTime
             binding.qnaCommentCountTextView.text = qnapost.commentCount.toString()
             binding.qnaLikeCount.text = qnapost.likeCount.toString()

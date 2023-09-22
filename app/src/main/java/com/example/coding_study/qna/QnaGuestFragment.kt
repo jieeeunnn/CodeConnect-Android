@@ -270,9 +270,7 @@ class QnaGuestFragment : Fragment(R.layout.qna_guest) {
                     binding.qnaGuestTitle.text = qnaUploadDto.title
 
                     val htmlString = qnaRecruitment.content // qnaRecruitment.content에는 HTML 형식의 문자열이 들어있다고 가정
-                    binding.qnaGuestContent.text = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY)
-
-                    //binding.qnaGuestContent.text = qnaUploadDto.content
+                    binding.qnaGuestContent.text = Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY) // html 형식으로 변환
 
                     binding.qnaGuestCurrentTime.text = qnaUploadDto.currentDateTime
                     binding.guestLikeCountView.text = qnaRecruitment.likeCount.toString()
