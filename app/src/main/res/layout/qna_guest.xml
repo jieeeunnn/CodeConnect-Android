@@ -48,7 +48,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/qnaGuestConstraintInSwife"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:clickable="true">
 
@@ -124,13 +124,15 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/qnaGuestRecyclerView"
-                    android:layout_width="0dp"
-                    android:layout_height="330dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="380dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintBottom_toTopOf="@+id/guestCommentEdit"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/guestLikeCountView"
+                    app:layout_constraintVertical_bias="1.0"
                     tools:ignore="MissingConstraints" />
 
                 <ImageView
