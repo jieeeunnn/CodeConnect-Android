@@ -47,9 +47,11 @@ class StudyAdapter(var postList: List<Post>, private var onItemClickListener: On
                     fieldText.background = ContextCompat.getDrawable(itemView.context,
                         R.drawable.android_background
                     ) // Android 필드일 경우 배경 변경
-                }                "IOS" -> fieldText.setTextColor(ContextCompat.getColor(itemView.context,
-                R.color.IOS
-            )) // iOS 필드일 경우 회색으로 설정
+                }
+                "IOS" -> {
+                    fieldText.setTextColor(ContextCompat.getColor(itemView.context, R.color.IOS))
+                    fieldText.background = ContextCompat.getDrawable(itemView.context, R.drawable.ios_background)
+                } // iOS 필드일 경우 회색으로 설정
                 "알고리즘" -> {
                     fieldText.setTextColor(ContextCompat.getColor(itemView.context,
                         R.color.algorithm
