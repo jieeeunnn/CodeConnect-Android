@@ -32,6 +32,22 @@
 - 내가 작성한 글들과 신청했던 스터디를 한번에 모아 확인할 수 있습니다
 <br/><br/><br/><br/>
 
+# 👩🏻‍💻 Android
+
+<table width="100%">
+  <tr>
+    <td>
+      <a href="https://github.com/jieeeunnn ">                 
+          <img src="https://avatars.githubusercontent.com/jieeeunnn" width="160" />       
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">이지은</td>
+  </tr>
+</table>
+<br/><br/><br/><br/>
+
 # 📱 Result
 https://github.com/jieeeunnn/CodeConnect-Android/assets/75196460/fe4636e9-d8b5-4bff-9a76-174cc451ae5c
 
