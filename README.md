@@ -4,10 +4,6 @@
 - 또한 코딩 스터디가 주 목적이기 때문에 마크다운 기능, 채팅 시 파일의 종류와 상관없이 전송 등 코딩과 관련된 기능들이 추가되어 있습니다.
 <br/><br/><br/><br/>
 
-# 🧬 Architecture
-<img width="617" alt="image" src="https://github.com/jieeeunnn/CodeConnect-Android/assets/75196460/f41c523a-b350-41e6-aba2-4ff478a05069">
-<br/><br/><br/><br/>
-
 # ✨ Features
 | 스터디 게시판 | Q&A 게시판 | 채팅 | 마이페이지 |
 |:---:|:---:|:---:|:---:|
